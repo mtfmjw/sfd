@@ -1,0 +1,101 @@
+{% load static i18n %}
+
+<div id="popupWindowStatic" class="modal-overlay">
+  <div class="modal-content">
+    <button id="popupWindowStaticCloseBtn" class="close-modal-btn">&times;</button>
+    <div class="modal-header">
+        <h2 id="popupWindowStaticTitle"></h2>
+    </div>
+    <div class="modal-body">
+      <p id="popupWindowStaticMessage"></p>
+    </div>
+    <div class="modal-footer">
+      <button id="popupWindowStaticOkBtn" type="submit" class="button primary">{% translate "Yes" %}</button>
+      <button id="popupWindowStaticCancelBtn"  class="button close">{% translate "No" %}</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Wait for the DOM to be fully loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    // --- Get all the necessary elements ---
+    const popupWindowStaticOverlay = document.getElementById('popupWindowStatic');
+    const popupWindowStaticTitle = document.getElementById('popupWindowStaticTitle');
+    const popupWindowStaticMessage = document.getElementById('popupWindowStaticMessage');
+    const popupWindowStaticOkBtn = document.getElementById('popupWindowStaticOkBtn');
+    const popupWindowStaticCancelBtn = document.getElementById('popupWindowStaticCancelBtn');
+    const popupWindowStaticCloseBtn = document.getElementById('popupWindowStaticCloseBtn'); // The '×' button
+
+    // --- Get all buttons that open the modal ---
+    const openPopupWindowStaticBtns = document.querySelectorAll('.open-popup-window-static-btn');
+
+    // --- Functions to open and close the modal ---
+    function openPopupWindowStatic() {
+        if (popupWindowStaticOverlay) {
+            popupWindowStaticOverlay.classList.add('active');
+        }
+    }
+
+    function closePopupWindowStatic() {
+        if (popupWindowStaticOverlay) {
+            popupWindowStaticOverlay.classList.remove('active');
+        }
+    }
+
+    // --- Add event listeners to all trigger buttons ---
+    openPopupWindowStaticBtns.forEach(button => {
+      button.addEventListener('click', (event) => {
+        // **IMPORTANT**: Prevent the link from navigating immediately
+        event.preventDefault(); 
+
+        const eventElement = event.currentTarget;
+        const eventData = eventElement.dataset;
+        popupWindowStaticTitle.textContent = eventData.modalTitle;
+        popupWindowStaticMessage.textContent = eventData.modalMessage;
+        if (eventData.formId) {
+          popupWindowStaticOkBtn.setAttribute('form', eventData.formId);
+        }
+        
+        popupWindowStaticOkBtn.setAttribute('name', eventElement.name || eventData.buttonName || '');
+        popupWindowStaticOkBtn.setAttribute('value', eventElement.value || eventData.buttonValue || '');
+
+        // Store the link's href to use after popupation
+        popupTargetUrl = eventElement.href;
+        openPopupWindowStatic();
+      });
+    });
+
+    // --- Event listener for the main popup button ---
+    popupWindowStaticOkBtn.addEventListener('click', () => {
+      if (popupTargetUrl) {
+        console.log(`Action popuped. Redirecting to: ${popupTargetUrl}`);
+        window.location.href = popupTargetUrl;
+      }
+
+      // Close the modal after action
+      closePopupWindowStatic();
+    });
+
+    // --- Event listeners for closing the modal ---
+    popupWindowStaticCancelBtn.addEventListener('click', closePopupWindowStatic);
+    popupWindowStaticCloseBtn.addEventListener('click', closePopupWindowStatic);
+
+    // Close the modal when the user clicks on the overlay (outside the content)
+    if (popupWindowStaticOverlay) {
+        popupWindowStaticOverlay.addEventListener('click', (event) => {
+            // Check if the clicked element is the overlay itself
+            if (event.target === popupWindowStaticOverlay) {
+                closePopupWindowStatic();
+            }
+        });
+    }
+
+    // Close the modal when the user presses the 'Escape' key
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && popupWindowStaticOverlay.classList.contains('active')) {
+            closePopupWindowStatic();
+        }
+    });
+  });
+</script>

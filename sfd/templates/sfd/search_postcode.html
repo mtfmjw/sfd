@@ -1,0 +1,15 @@
+{% extends "sfd/search.html" %}
+{% load static %}
+
+{% block row_double_click_data_attributes %}
+    data-postcode="{{ obj.postcode|default:'' }}" 
+    data-municipality="{{ obj.municipality|default:'' }}"
+    data-municipality-id="{{ obj.municipality.id|default:'' }}"
+    data-address-detail="{{ obj.town_name|default:'' }}"
+{% endblock %}
+{% block radio_select_data_attributes %}
+    data-postcode="{{ obj.postcode|default:'' }}" 
+    data-municipality="{{ obj.municipality|default:'' }}"
+    data-municipality-id="{{ obj.municipality.id|default:'' }}"
+    data-address-detail="{{ obj.town_name|default:'' }}"
+{% endblock %}

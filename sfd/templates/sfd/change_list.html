@@ -1,0 +1,184 @@
+{% extends "admin/change_list.html" %}
+{% load static i18n l10n admin_list %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static "sfd/css/change_list.css" %}">
+  <link rel="stylesheet" href="{% static "sfd/css/modal.css" %}">
+{% endblock %}
+
+
+{% block search %}
+  {% if not is_popup %}
+    {{ block.super }}
+  {% endif %}
+{% endblock %}
+
+{% block filters %}
+  {% if not is_popup %}
+    {{ block.super }}
+  {% endif %}
+{% endblock %}
+
+{% block object-tools-items %}
+  {% if not is_popup %}
+    {{ block.super }}
+    {% if download_url %}
+      <li>
+        <a id="fileDownload" href="{{ download_url }}" class="button default open-popup-window-static-btn"
+          data-modal-title="{{ download_title }}"
+          data-modal-message="{{ download_message }}"
+          data-button-name="{{ download_button }}">
+          <span class="material-icons">{{ download_button }}</span>
+        </a>
+      </li>
+    {% endif %}
+    {% if upload_url %}
+      <li>
+        <a id="fileUpload" href="#" class="button default open-popup-modal-dynamic-btn" 
+          hx-get="{{ upload_url }}"
+          hx-target="#popupModalDynamicContent"
+          hx-swap="innerHTML"
+          hx-on::after-swap="openPopupModalDynamic()">
+          {{ upload_button_name|default:"CSV Upload" }}
+        </a>
+      </li>
+    {% endif %}
+    {% if generate_pdf_url %}
+      <li>
+        <a id="generatePdf" href="{{ generate_pdf_url}}" class="button default open-popup-window-static-btn"
+          data-modal-title="{{ pdf_title }}"
+          data-modal-message="{{ pdf_message }}"
+          data-button-name="{{ pdf_button }}">
+          <span class="material-icons">{{ pdf_button }}</span>
+        </a>
+      </li>
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block result_list %}
+  {% if not is_popup %}
+    {{ block.super }}
+  {% else %}
+    {% result_list cl %}
+  {% endif %}
+  
+  <!-- Custom script to disable checkboxes for deleted rows -->
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Find all deleted checkboxes and disable their parent row checkboxes
+      const deletedCheckboxes = document.querySelectorAll('input.deleted-row[type="checkbox"]:checked');
+      
+      deletedCheckboxes.forEach(function(deletedCheckbox) {
+        const row = deletedCheckbox.closest('tr');
+        if (row) {
+          // Add deleted-row class to the entire row
+          row.classList.add('deleted-row');
+          
+          // Find the action checkbox in the same row and disable it
+          const actionCheckbox = row.querySelector('input.action-select[type="checkbox"]');
+          if (actionCheckbox) {
+            actionCheckbox.disabled = true;
+            actionCheckbox.style.opacity = '0.3';
+            actionCheckbox.style.cursor = 'not-allowed';
+          }
+        }
+      });
+      
+      // Update the "Select all" checkbox behavior to skip deleted rows
+      const selectAllCheckbox = document.querySelector('#action-toggle');
+      if (selectAllCheckbox) {
+        const originalHandler = selectAllCheckbox.onclick;
+        selectAllCheckbox.onclick = function() {
+          // Call original handler first
+          if (originalHandler) {
+            originalHandler.call(this);
+          }
+          
+          // Then ensure deleted rows remain unchecked
+          const deletedRowCheckboxes = document.querySelectorAll('tr.deleted-row input.action-select[type="checkbox"]');
+          deletedRowCheckboxes.forEach(function(checkbox) {
+            checkbox.checked = false;
+            checkbox.disabled = true;
+          });
+        };
+      }
+    });
+  </script>
+{% endblock %}
+
+{% block footer %}
+  {{ block.super }}
+  {% include "sfd/popup_window_static.html" %}
+  {% include "sfd/popup_modal_dynamic.html" %}
+  {% include "sfd/popup_window_dynamic.html" %}
+  
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Handle custom delete action with popup confirmation
+    const actionForm = document.querySelector('#changelist-form');
+    if (actionForm) {
+      const formActionUrl = actionForm.getAttribute('action') || window.location.pathname;
+      
+      actionForm.addEventListener('submit', function(event) {
+        const actionSelect = document.querySelector('select[name="action"]');
+        
+        if (actionSelect && (actionSelect.value === 'delete_selected_popup' || actionSelect.value === 'update_selected_popup')) {
+          // Check if items are selected
+          const selectedItems = document.querySelectorAll('input[name="_selected_action"]:checked');
+          if (selectedItems.length === 0) {
+            // 対象未選択の場合はdjango固有の仕組みでエラーメッセージを表示するのでここでは何もしない
+            return;
+          }
+          event.preventDefault();
+          
+          // Create form data and collect timestamps for selected items
+          const formData = new FormData(actionForm);
+          
+          // Collect timestamps from selected rows
+          selectedItems.forEach(function(selectedItem) {
+            const objectId = selectedItem.value;
+            const row = selectedItem.closest('tr');
+            
+            if (row) {
+              // Look for timestamp data in the row
+              const timestampElement = row.querySelector('[data-update-timestamp]');
+              if (timestampElement) {
+                const timestamp = timestampElement.getAttribute('data-update-timestamp');
+                if (timestamp) {
+                  formData.append(`timestamp_${objectId}`, timestamp);
+                }
+              }
+            }
+          });
+          
+          // Make the request to get confirmation popup
+          fetch(formActionUrl, {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+            }
+          })
+          .then(response => response.text())
+          .then(html => {
+            // Insert into popup and show
+            const popupContent = document.getElementById('popupModalDynamicContent');
+            if (popupContent) {
+              popupContent.innerHTML = html;
+              openPopupModalDynamic();
+            }
+          })
+          .catch(error => {
+            console.error('Request failed:', error);
+            alert('An error occurred. Please try again.');
+          });
+        }
+      });
+    }
+  });
+  </script>
+{% endblock %}
+

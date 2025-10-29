@@ -1,0 +1,51 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .status {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ title }}</h1>
+        <div class="status">
+            <strong>✅ {% trans "Django Application Successfully Created!" %}</strong>
+            <ul>
+                <li>{% trans "Project" %}: sfd_prj</li>
+                <li>{% trans "App" %}: sfd</li>
+                <li>{% trans "Database" %}: {% trans "PostgreSQL configured" %}</li>
+                <li>{% trans "Environment" %}: {% trans "Virtual environment active" %}</li>
+                <li>{% trans "Linting" %}: {% trans "Ruff configured" %}</li>
+            </ul>
+        </div>
+        <p>{% trans "Your Django application is ready for development. Don't forget to run migrations!" %}</p>
+    </div>
+</body>
+</html>

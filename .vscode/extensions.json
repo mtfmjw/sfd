@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+        "charliermarsh.ruff",
+        "ms-python.python",
+        "ms-python.debugpy",
+        "batisteo.vscode-django",
+        "ms-vscode.vscode-json",
+        "DavidAnson.vscode-markdownlint",
+        "yzhang.markdown-all-in-one"
+    ]
+}

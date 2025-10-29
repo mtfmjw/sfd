@@ -1,0 +1,57 @@
+h1 {
+    padding-left: 20px;
+    margin-bottom: 5px;
+}
+
+h2 {
+    margin: 4px 10px;
+
+}
+
+td, th {
+    padding: 4px;
+}
+
+table thead th .text span {
+    padding: 4px 5px;
+}
+
+table thead th .text a {
+    padding: 4px 5px;
+}
+
+div.breadcrumbs {
+    padding: 5px 40px;
+}
+
+button.close {
+    background-color: rgb(116, 116, 116);
+    padding: 10px 15px;
+}
+
+.object-tools {
+    margin-top: -32px; /* 行間の余白 */
+}
+
+#content {
+    padding: 5px 10px;
+}
+
+#header {
+    padding: 5px 40px;
+}
+
+.paginator {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.inline-group .tabular td p {
+    white-space: nowrap;
+    position: relative; /* 相対位置を設定 */
+}
+
+.form-row td p.date {
+    margin: 0px 0px 0px 0px; /* 日付フィールドの右側にスペースを追加 */
+    padding: 0px; /* 日付フィールドのパディングをリセット */
+}

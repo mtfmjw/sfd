@@ -1,0 +1,83 @@
+{
+    "python.defaultInterpreterPath": ".venv/Scripts/python.exe",
+    "python.formatting.provider": "none",
+    "python.linting.enabled": false,
+    
+    // Ruff configuration for linting and formatting
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.fixAll.ruff": "explicit",
+            "source.organizeImports.ruff": "explicit"
+        },
+        "editor.defaultFormatter": "charliermarsh.ruff"
+    },
+    
+    // Markdown configuration for formatting and linting
+    "[markdown]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.fixAll.markdownlint": "explicit"
+        },
+        "editor.defaultFormatter": "vscode.markdown-language-features",
+        "editor.wordWrap": "on",
+        "editor.wordWrapColumn": 149,
+        "editor.quickSuggestions": {
+            "comments": "off",
+            "strings": "off",
+            "other": "off"
+        }
+    },
+    
+    // General editor settings
+    "editor.rulers": [149],
+    "editor.wordWrap": "off",
+    "editor.insertFinalNewline": true,
+    "editor.trimTrailingWhitespace": true,
+    
+    // File associations
+    "files.associations": {
+        "*.py": "python"
+    },
+    
+    // Exclude certain directories from file watcher
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/*/**": true,
+        "**/.venv/**": true,
+        "**/staticfiles/**": true,
+        "**/media/**": true,
+        "**/logs/**": true
+    },
+    
+    // Terminal configuration for automatic virtual environment activation
+    "terminal.integrated.profiles.windows": {
+        "Command Prompt": {
+            "path": [
+                "${env:windir}\\System32\\cmd.exe"
+            ],
+            "args": [
+                "/k",
+                "set \"DJANGO_SETTINGS_MODULE=sfd_prj.settings\" && .venv\\Scripts\\activate.bat"
+            ],
+            "icon": "terminal-cmd",
+            "color": "terminal.ansiGreen"
+        },
+        "PowerShell": {
+            "source": "PowerShell",
+            "args": [
+                "-ExecutionPolicy",
+                "Bypass",
+                "-NoExit",
+                "-Command",
+                "$env:DJANGO_SETTINGS_MODULE='sfd_prj.settings'; . .venv\\Scripts\\Activate.ps1"
+            ],
+            "icon": "terminal-powershell",
+            "color": "terminal.ansiBlue"
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "Command Prompt",
+    "python.analysis.typeCheckingMode": "standard",
+    "editor.foldingStrategy": "indentation"
+}

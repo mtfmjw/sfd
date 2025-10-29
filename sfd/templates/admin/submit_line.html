@@ -1,0 +1,32 @@
+{% load i18n admin_urls static %}
+<div class="submit-row">
+  {% block submit-row %}
+    {% url opts|admin_urlname:'changelist' as changelist_url %}
+    <a href="{% add_preserved_filters changelist_url %}" class="closelink">{% translate 'Close' %}</a>
+    {% if original %}
+      {% url opts|admin_urlname:'change' original.pk|admin_urlquote as change_url %}
+      <a href="{% add_preserved_filters change_url %}" class="closelink" >{% translate 'Refresh' %}</a>
+    {% endif %}
+    {% if not original or not original.deleted_flg %}
+      {% if show_save and not is_not_savable %}<input type="submit" value="{% translate 'Save' %}" class="default" name="_save">{% endif %}
+      {% if show_save_and_add_another and not is_not_savable %}<input type="submit" value="{% translate 'Save and add another' %}" name="_addanother">{% endif %}
+      {% if show_save_as_new %}<input type="submit" value={% if show_save %}"{% translate 'Copy' %}"{% else %} {% translate 'Save' %}{% endif %} name="_saveasnew">{% endif %}
+      {% if show_save_and_continue and not is_not_savable %}<input type="submit" value="{% if can_change %}{% translate 'Save and continue editing' %}{% else %}{% translate 'Save and view' %}{% endif %}" name="_continue">{% endif %}
+    {% endif %}
+    {% if show_delete_link and original %}
+      {% comment %} {% url opts|admin_urlname:'delete' original.pk|admin_urlquote as delete_url %}
+      <a href="{% add_preserved_filters delete_url %}" class="deletelink">{% translate "Delete" %}</a> {% endcomment %}
+      <input id="deleteButton" type="button" class="deletelink open-popup-window-static-btn"
+        data-form-id="{{ opts.model_name }}_form"
+        {% if original.deleted_flg %}
+          name="_undelete" value="{% trans 'Undelete' %}"
+          data-modal-title="{% trans 'Confirm undelete' %}"
+          data-modal-message="{% trans 'Are you sure you want to undelete this item?' %}">
+        {% else %}
+          name="_delete" value="{% trans 'Delete' %}"
+          data-modal-title="{% trans 'Confirm deletion' %}"
+          data-modal-message="{% trans 'Are you sure you want to delete this item?' %}">
+        {% endif %}
+    {% endif %}
+  {% endblock %}
+</div>
