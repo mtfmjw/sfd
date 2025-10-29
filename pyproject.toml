@@ -1,0 +1,132 @@
+[tool.ruff]
+# Set line length to 149 as specified in the project requirements
+line-length = 149
+target-version = "py313"
+
+# Exclude directories
+exclude = [
+    ".git",
+    ".venv",
+    "venv",
+    "__pycache__",
+    "migrations",
+    "staticfiles",
+    "media",
+]
+
+[tool.ruff.lint]
+# Enable specific rule sets
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # Pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+
+# Ignore specific rules
+ignore = [
+    "E501",  # Line too long (we set line-length above)
+    "B008",  # Do not perform function calls in argument defaults
+]
+
+[tool.ruff.lint.isort]
+# Django-specific isort configuration
+known-first-party = ["sfd", "sfd_prj"]
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+
+[tool.ruff.format]
+# Use double quotes for strings
+quote-style = "double"
+# Use spaces for indentation
+indent-style = "space"
+# Respect magic trailing commas
+skip-magic-trailing-comma = false
+
+# pytest configuration for SFD project
+[tool.pytest.ini_options]
+# Django settings
+DJANGO_SETTINGS_MODULE = "sfd_prj.settings"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+python_classes = ["Test*", "*Tests", "*Test"]
+python_functions = ["test_*"]
+
+# Test discovery
+testpaths = [
+    "sfd/tests",
+]
+
+# Additional options
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--verbose",
+    "--tb=short",
+    "--reuse-db",
+    "--nomigrations",
+    "--html=tests/pytest_report.html",
+    "--self-contained-html",
+    "--cov=sfd",
+    "--cov-report=html:htmlcov",
+    "--cov-report=term-missing",
+]
+
+# Markers
+markers = [
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "common: marks tests related to common functionality",
+    "models: marks tests related to model functionality",
+    "forms: marks tests related to form functionality",
+    "views: marks tests related to view functionality",
+    "upload: marks tests related to upload functionality",
+    "download: marks tests related to download functionality",
+    "pdf: marks tests related to logging functionality",
+]
+
+# Minimum version
+minversion = "7.0"
+
+# Filter warnings
+filterwarnings = [
+    "error",
+    "ignore::UserWarning",
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+]
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["sfd"]
+omit = [
+    "*/migrations/*",
+    "*/venv/*",
+    "*/.venv/*",
+    "*/tests/*",
+    "manage.py",
+    "*/settings/*",
+    "*/staticfiles/*",
+    "*/media/*",
+    "*/__init__.py",
+    "*/urls.py",
+    "*/db_routers.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.coverage.html]
+directory = "htmlcov"

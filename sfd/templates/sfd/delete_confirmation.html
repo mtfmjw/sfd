@@ -1,0 +1,49 @@
+{% load static i18n %}
+
+<div class="modal-header">
+    <h2 id="popupModalDynamicTitle">{% trans "Confirm Deletion" %}</h2>
+</div>
+<form id="delete-confirmation-form" method="post">{% csrf_token %}
+  <div id="uploadDialogBody" class="modal-body">
+    {% if messages %}
+      <ul class="messagelist">{% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+      {% endfor %}</ul>
+    {% else %}
+      <p>
+          {% blocktrans count counter=selected_count %}You are about to delete {{ counter }} {{ opts.verbose_name }}.{% plural %}You are about to delete {{ counter }} {{ opts.verbose_name_plural }}.{% endblocktrans %}
+      </p>
+      <div class="selected-objects">
+          <h5>{% trans "Selected objects:" %}</h5>
+          <ul class="selected-list">
+              {% for obj in selected_objects %}
+                  <li><strong>{{ obj }}</strong></li>
+              {% endfor %}
+          </ul>
+      </div>
+      <!-- Hidden fields to maintain action context -->
+      <input type="hidden" name="action" value="{{ action_name }}">
+      <input type="hidden" name="confirm_delete" value="1">
+      
+      <!-- Include selected object IDs -->
+      {% for obj in queryset %}
+          <input type="hidden" name="_selected_action" value="{{ obj.pk }}">
+      {% endfor %}
+      
+      <!-- Include timestamps for concurrency control -->
+      {% if object_timestamps %}
+        <!-- object_timestamps is a dict mapping object IDs to their last modified timestamps -->
+        {% for obj_id, timestamp in object_timestamps.items %}
+            <input type="hidden" name="timestamp_{{ obj_id }}" value="{{ timestamp }}">
+        {% endfor %}
+      {% endif %}
+    {% endif %}
+  </div>
+  <div class="modal-footer">
+    {% if not messages %}
+      <input type="submit" class="button primary" value="{% translate "Delete" %}">
+    {% endif %}
+    <button type="button" id="popupModalDynamicCancelBtn" class="button close" onclick="window.closePopupModalDynamic();">{% translate "Cancel" %}</button>
+  </div>
+</form>
+

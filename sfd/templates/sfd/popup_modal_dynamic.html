@@ -1,0 +1,54 @@
+{% load static i18n %}
+
+<div id="popupModalDynamic" class="modal-overlay">
+  <div class="modal-content">
+    <button id="popupModalDynamicCloseBtn" class="close-modal-btn">&times;</button>
+    <div id="popupModalDynamicContent">
+    </div>
+  </div>
+</div>
+
+<script>
+  // Make these functions global so they can be called from HTMX-loaded content
+  window.openPopupModalDynamic = function() {
+    const popupModalDynamicOverlay = document.getElementById('popupModalDynamic');
+    if (popupModalDynamicOverlay) {
+        popupModalDynamicOverlay.classList.add('active');
+    }
+  }
+
+  window.closePopupModalDynamic = function() {
+    const popupModalDynamicOverlay = document.getElementById('popupModalDynamic');
+    if (popupModalDynamicOverlay) {
+        popupModalDynamicOverlay.classList.remove('active');
+    }
+  }
+
+  // Wait for the DOM to be fully loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    // --- Get all the necessary elements ---
+    const popupModalDynamicOverlay = document.getElementById('popupModalDynamic');
+    const popupModalDynamicCloseBtn = document.getElementById('popupModalDynamicCloseBtn'); // The '×' button
+
+    // --- Get all buttons that open the modal ---
+    const openPopupModalDynamicBtns = document.querySelectorAll('.open-popup-modal-dynamic-btn');
+
+    // --- Add event listeners to all trigger buttons ---
+    openPopupModalDynamicBtns.forEach(button => {
+      button.addEventListener('click', (event) => {
+        // **IMPORTANT**: Prevent the link from navigating immediately
+        event.preventDefault();         
+        openPopupModalDynamic();
+      });
+    });
+
+    popupModalDynamicCloseBtn.addEventListener('click', closePopupModalDynamic);
+
+    // Close the modal when the user presses the 'Escape' key
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && popupModalDynamicOverlay.classList.contains('active')) {
+            closePopupModalDynamic();
+        }
+    });
+  });
+</script>

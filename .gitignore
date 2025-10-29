@@ -1,0 +1,82 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+
+# Logs
+logs/*
+
+# Environment variables
+# .env
+.env.*
+
+# Virtual environment
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary files folder (keep folder but ignore contents except .gitkeep)
+tmp/*
+!tmp/.gitkeep
+
+# Test reports and coverage
+htmlcov/
+.coverage
+.pytest_cache/
+/tests/
+batch/tests/
+
+# Centralized test reports (keep structure but ignore HTML files)
+tests/*.html
+tests/sfd/*.html
+tests/seikyu/*.html
+!tests/.gitkeep
+!tests/sfd/.gitkeep
+!tests/seikyu/.gitkeep
+!tests/README.md
+
+node_modules/
+package-lock.json
+
+~$*

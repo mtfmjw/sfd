@@ -1,0 +1,24 @@
+#changelist-form .results {
+    overflow-x: auto; /* 横スクロールを有効にする */
+    max-height: 65vh; 
+    overflow-y: auto;
+}
+
+/* テーブルの幅が固定されている場合や、特定のカラムの幅を調整したい場合 */
+#changelist-form .results table {
+    min-width: 1000px; /* テーブルの最小幅を設定して、スクロールバーを強制的に出す */
+}
+
+#changelist-form .results table th,
+#changelist-form .results table td {
+    white-space: nowrap; /* テキストの折り返しを禁止 */
+}
+
+#toolbar {
+    padding: 4px 10px;
+    margin-bottom: 0px;
+}
+
+a:link, a:visited {
+    text-decoration: underline;
+}

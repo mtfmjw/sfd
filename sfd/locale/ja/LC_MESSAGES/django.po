@@ -1,0 +1,995 @@
+# Django translations for sfd app
+# Copyright (C) 2025 SFD Project
+# This file is distributed under the same license as the SFD package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: SFD 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-04 09:47+0900\n"
+"PO-Revision-Date: 2025-08-05 16:45+0900\n"
+"Last-Translator: SFD Project <dev@sfd.local>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: .\admin.py:34
+msgid "sfd"
+msgstr "sfd"
+
+#: .\admin.py:35
+msgid "sfd Admin"
+msgstr "sfd 管理"
+
+#: .\admin.py:36
+msgid "sfd Administration"
+msgstr "sfd 管理画面"
+
+#: .\forms\person.py:28 .\models\person.py:29 .\models\postcode.py:10
+#: .\models\postcode.py:16 .\views\person.py:111
+msgid "Postcode"
+msgstr "郵便番号"
+
+#: .\forms\person.py:28
+msgid "Search and select postcode, town name, and municipality."
+msgstr ""
+"郵便番号検索、検索結果より郵便番号、市区町村名と住所詳細の一部が自動セットさ"
+"れます。"
+
+#: .\forms\person.py:32 .\forms\postcode.py:64 .\models\municipality.py:22
+#: .\models\person.py:30 .\models\postcode.py:11
+msgid "Municipality"
+msgstr "市区町村"
+
+#: .\forms\person.py:83
+msgid "Search postcode..."
+msgstr "郵便番号の検索"
+
+#: .\forms\person.py:116
+msgid "Selected postcode does not exist."
+msgstr "選択された郵便番号は存在しません。"
+
+#: .\forms\postcode.py:48 .\views\postcode.py:190
+msgid "Prefecture"
+msgstr "都道府県"
+
+#: .\forms\postcode.py:49 .\forms\postcode.py:98
+msgid "Select Prefecture"
+msgstr "都道府県選択"
+
+#: .\forms\postcode.py:158
+msgid "Selected municipality does not belong to the selected prefecture."
+msgstr "入力した市区町村の都道府県が間違っております。"
+
+#: .\forms\postcode.py:164 .\models\municipality.py:15 .\views\person.py:112
+#: .\views\postcode.py:137 .\views\postcode.py:213
+msgid "Municipality Name"
+msgstr "市区町村名"
+
+#: .\forms\postcode.py:165 .\models\municipality.py:16
+msgid "Municipality Name Kana"
+msgstr "市区町村名カナ"
+
+#: .\forms\search.py:12
+msgid "delete"
+msgstr "削除"
+
+#: .\models\base.py:24
+msgid "Created By"
+msgstr "作成者"
+
+#: .\models\base.py:25
+msgid "Created At"
+msgstr "作成日時"
+
+#: .\models\base.py:26
+msgid "Updated By"
+msgstr "更新者"
+
+#: .\models\base.py:27 .\views\common\mixins.py:659
+msgid "Updated At"
+msgstr "更新日時"
+
+#: .\models\base.py:28
+msgid "Delete Flag"
+msgstr "削除フラグ"
+
+#: .\models\base.py:73
+msgid "Valid From"
+msgstr "有効開始日"
+
+#: .\models\base.py:74
+msgid "Valid To"
+msgstr "有効終了日"
+
+#: .\models\base.py:114
+msgid "Valid To must be greater than or equal to Valid From"
+msgstr "有効開始日は有終了日以後を設定してください。"
+
+#: .\models\csv_log.py:11 .\views\common\upload.py:145
+#: .\views\common\upload.py:146 .\views\common\upload.py:499
+msgid "Upload"
+msgstr "アップロード"
+
+#: .\models\csv_log.py:12 .\views\common\download.py:320
+msgid "Download"
+msgstr "ダウンロード"
+
+#: .\models\csv_log.py:18
+msgid "Success"
+msgstr "成功"
+
+#: .\models\csv_log.py:19
+msgid "Failure"
+msgstr "失敗"
+
+#: .\models\csv_log.py:25
+msgid "Process ID"
+msgstr "プロセスID"
+
+#: .\models\csv_log.py:26
+msgid "Process Type"
+msgstr "プロセスタイプ"
+
+#: .\models\csv_log.py:31
+msgid "Process Result"
+msgstr "プロセス結果"
+
+#: .\models\csv_log.py:33
+msgid "App Name"
+msgstr "アプリ名"
+
+#: .\models\csv_log.py:34
+msgid "Processed By"
+msgstr "処理者"
+
+#: .\models\csv_log.py:35
+msgid "Processed At"
+msgstr "処理日時"
+
+#: .\models\csv_log.py:36
+msgid "IP Address"
+msgstr "IPアドレス"
+
+#: .\models\csv_log.py:37
+msgid "File Name"
+msgstr "ファイル名"
+
+#: .\models\csv_log.py:38
+msgid "Total Lines"
+msgstr "合計行数"
+
+#: .\models\csv_log.py:41
+msgid "CSV Log"
+msgstr "CSVログ"
+
+#: .\models\csv_log.py:42
+msgid "CSV Logs"
+msgstr "CSVログ一覧"
+
+#: .\models\holiday.py:10
+msgid "National Holiday"
+msgstr "祝日"
+
+#: .\models\holiday.py:11
+msgid "Substitute Holiday"
+msgstr "振替休日"
+
+#: .\models\holiday.py:12
+msgid "Other Holiday"
+msgstr "その他の休日"
+
+#: .\models\holiday.py:18
+msgid "date"
+msgstr "日付"
+
+#: .\models\holiday.py:19
+msgid "name"
+msgstr "名称"
+
+#: .\models\holiday.py:20
+msgid "holiday type"
+msgstr "休日タイプ"
+
+#: .\models\holiday.py:21
+msgid "comment"
+msgstr "コメント"
+
+#: .\models\holiday.py:21
+msgid "Additional information about the holiday"
+msgstr "祝日・休日の追加説明"
+
+#: .\models\holiday.py:25
+msgid "holiday"
+msgstr "祝日・休日"
+
+#: .\models\holiday.py:26
+msgid "holidays"
+msgstr "祝日・休日"
+
+#: .\models\municipality.py:14
+msgid "Municipality Code"
+msgstr "市区町村コード"
+
+#: .\models\municipality.py:17 .\views\municipality.py:29
+#: .\views\postcode.py:23
+msgid "Prefecture Name"
+msgstr "都道府県名"
+
+#: .\models\municipality.py:18
+msgid "Prefecture Name Kana"
+msgstr "都道府県名カナ"
+
+#: .\models\municipality.py:23
+msgid "Municipalities"
+msgstr "市区町村"
+
+#: .\models\person.py:12
+msgid "Male"
+msgstr "男性"
+
+#: .\models\person.py:13
+msgid "Female"
+msgstr "女性"
+
+#: .\models\person.py:14
+msgid "Other"
+msgstr "その他"
+
+#: .\models\person.py:18
+msgid "Family Name"
+msgstr "苗字"
+
+#: .\models\person.py:19
+msgid "Family Name Kana"
+msgstr "苗字カナ"
+
+#: .\models\person.py:20
+msgid "Family Name Romaji"
+msgstr "苗字ロマ字"
+
+#: .\models\person.py:21
+msgid "Name"
+msgstr "名前"
+
+#: .\models\person.py:22
+msgid "Name Kana"
+msgstr "名前カナ"
+
+#: .\models\person.py:23
+msgid "Name Romaji"
+msgstr "名前ロマ字"
+
+#: .\models\person.py:24
+msgid "Birthday"
+msgstr "誕生日"
+
+#: .\models\person.py:25
+msgid "Gender"
+msgstr "性別"
+
+#: .\models\person.py:26 .\views\user.py:109
+msgid "Email"
+msgstr "Eメール"
+
+#: .\models\person.py:27
+msgid "Phone Number"
+msgstr "電話番号"
+
+#: .\models\person.py:28
+msgid "Mobile Number"
+msgstr "携帯番号"
+
+#: .\models\person.py:31
+msgid "Address Detail"
+msgstr "住所詳細"
+
+#: .\models\person.py:34
+msgid "Person"
+msgstr "個人"
+
+#: .\models\person.py:35
+msgid "People"
+msgstr "個人"
+
+#: .\models\postcode.py:12
+msgid "Town Name"
+msgstr "町域名"
+
+#: .\models\postcode.py:13
+msgid "Town Name Kana"
+msgstr "町域名カナ"
+
+#: .\models\postcode.py:17
+msgid "Postcodes"
+msgstr "郵便番号"
+
+#: .\templates\admin\base.html:29
+#: .\templates\admin\django_original\base.html:28
+msgid "Skip to main content"
+msgstr "メインコンテンツにスキップ"
+
+#: .\templates\admin\base.html:44
+#: .\templates\admin\django_original\base.html:43
+msgid "Welcome,"
+msgstr "ようこそ、"
+
+#: .\templates\admin\base.html:49
+#: .\templates\admin\django_original\base.html:48
+msgid "View site"
+msgstr "サイトを表示"
+
+#: .\templates\admin\base.html:54 .\templates\admin\base_site.html:23
+#: .\templates\admin\django_original\base.html:53
+msgid "Documentation"
+msgstr "ドキュメント"
+
+#: .\templates\admin\base.html:58 .\templates\admin\base_site.html:27
+#: .\templates\admin\django_original\base.html:57
+msgid "Change password"
+msgstr "パスワード変更"
+
+#: .\templates\admin\base.html:62 .\templates\admin\base_site.html:31
+#: .\templates\admin\django_original\base.html:61
+msgid "Log out"
+msgstr "ログアウト"
+
+#: .\templates\admin\base.html:74
+#: .\templates\admin\django_original\base.html:73
+msgid "Breadcrumbs"
+msgstr "パンくずリスト"
+
+#: .\templates\admin\base.html:77 .\templates\admin\change_list.html:32
+#: .\templates\admin\django_original\base.html:76
+#: .\templates\admin\django_original\change_form.html:18
+#: .\templates\admin\django_original\change_list.html:32
+#: .\templates\sfd\change_form.html:24
+msgid "Home"
+msgstr "ホーム"
+
+#: .\templates\admin\base_site.html:10
+#: .\templates\admin\django_original\base_site.html:3
+msgid "Django site admin"
+msgstr "Django サイト管理"
+
+#: .\templates\admin\change_list.html:52
+#: .\templates\admin\django_original\change_form.html:44
+#: .\templates\admin\django_original\change_list.html:52
+#: .\templates\registration\login.html:23 .\templates\sfd\change_form.html:59
+msgid "Please correct the error below."
+msgid_plural "Please correct the errors below."
+msgstr[0] "下記のエラーを修正してください。"
+
+#: .\templates\admin\change_list.html:77
+#: .\templates\admin\django_original\change_list.html:77
+msgid "Filter"
+msgstr "フィルター"
+
+#: .\templates\admin\change_list.html:80
+#: .\templates\admin\django_original\change_list.html:84
+msgid "Clear all filters"
+msgstr "全てのフィルターをクリアする"
+
+#: .\templates\admin\django_original\base_site.html:6
+msgid "Django administration"
+msgstr "Django 管理画面"
+
+#: .\templates\admin\django_original\change_form.html:21
+#: .\templates\sfd\change_form.html:27
+#, python-format
+msgid "Add %(name)s"
+msgstr "%(name)s追加"
+
+#: .\templates\admin\django_original\change_list.html:80
+msgid "Hide counts"
+msgstr "数量を非表示"
+
+#: .\templates\admin\django_original\change_list.html:81
+msgid "Show counts"
+msgstr "数量を表示する"
+
+#: .\templates\admin\django_original\related_widget_wrapper.html:11
+#, python-format
+msgid "Change selected %(model)s"
+msgstr "選択した%(model)sを変更"
+
+#: .\templates\admin\django_original\related_widget_wrapper.html:19
+#, python-format
+msgid "Add another %(model)s"
+msgstr "他の%(model)s追加"
+
+#: .\templates\admin\django_original\related_widget_wrapper.html:27
+#, python-format
+msgid "Delete selected %(model)s"
+msgstr "選択した%(model)sを削除"
+
+#: .\templates\admin\django_original\related_widget_wrapper.html:34
+#, python-format
+msgid "View selected %(model)s"
+msgstr "選択した%(model)sを参照"
+
+#: .\templates\admin\django_original\search_form.html:7
+#: .\templates\admin\search_form.html:8 .\templates\sfd\search.html:21
+#: .\templates\sfd\search.html:29
+msgid "Search"
+msgstr "検索"
+
+#: .\templates\admin\django_original\search_form.html:9
+#: .\templates\admin\search_form.html:10
+#, python-format
+msgid "%(counter)s result"
+msgid_plural "%(counter)s results"
+msgstr[0] "%(counter)s 件の結果"
+
+#: .\templates\admin\django_original\search_form.html:9
+#: .\templates\admin\search_form.html:10
+#, python-format
+msgid "%(full_result_count)s total"
+msgstr "合計 %(full_result_count)s 件"
+
+#: .\templates\admin\django_original\search_form.html:9
+#: .\templates\admin\search_form.html:10
+msgid "Show all"
+msgstr "すべて表示"
+
+#: .\templates\admin\django_original\submit_line.html:4
+#: .\templates\admin\submit_line.html:11 .\templates\admin\submit_line.html:13
+msgid "Save"
+msgstr "保存"
+
+#: .\templates\admin\django_original\submit_line.html:5
+msgid "Save as new"
+msgstr "新規保存"
+
+#: .\templates\admin\django_original\submit_line.html:6
+#: .\templates\admin\submit_line.html:12
+msgid "Save and add another"
+msgstr "保存して続けて追加"
+
+#: .\templates\admin\django_original\submit_line.html:7
+#: .\templates\admin\submit_line.html:14
+msgid "Save and continue editing"
+msgstr "保存して編集を続ける"
+
+#: .\templates\admin\django_original\submit_line.html:7
+#: .\templates\admin\submit_line.html:14
+msgid "Save and view"
+msgstr "保存して表示"
+
+#: .\templates\admin\django_original\submit_line.html:10
+#: .\templates\admin\submit_line.html:5 .\templates\sfd\change_form.html:82
+#: .\templates\sfd\search.html:32
+msgid "Close"
+msgstr "閉じる"
+
+#: .\templates\admin\django_original\submit_line.html:14
+#: .\templates\admin\submit_line.html:27
+#: .\templates\sfd\delete_confirmation.html:44
+msgid "Delete"
+msgstr "削除"
+
+#: .\templates\admin\submit_line.html:8
+msgid "Refresh"
+msgstr "再読込"
+
+#: .\templates\admin\submit_line.html:13
+msgid "Copy"
+msgstr "コピー新規"
+
+#: .\templates\admin\submit_line.html:23
+msgid "Undelete"
+msgstr "削除の取消"
+
+#: .\templates\admin\submit_line.html:24
+msgid "Confirm undelete"
+msgstr "削除取消の確認"
+
+#: .\templates\admin\submit_line.html:25
+msgid "Are you sure you want to undelete this item?"
+msgstr "削除を取消しますか？"
+
+#: .\templates\admin\submit_line.html:28
+msgid "Confirm deletion"
+msgstr "削除の確認"
+
+#: .\templates\admin\submit_line.html:29
+msgid "Are you sure you want to delete this item?"
+msgstr "削除しますか？"
+
+#: .\templates\registration\login.html:39
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this "
+"page. Would you like to login to a different account?"
+msgstr ""
+"%(username)s として認証されていますが、このページにアクセスする権限がありませ"
+"ん。別のアカウントでログインしますか？"
+
+#: .\templates\registration\login.html:59
+msgid "Forgotten your password or username?"
+msgstr "パスワードまたはユーザー名をお忘れですか？"
+
+#: .\templates\registration\login.html:63
+msgid "Log in"
+msgstr "ログイン"
+
+#: .\templates\sfd\delete_confirmation.html:4
+msgid "Confirm Deletion"
+msgstr "削除の確認"
+
+#: .\templates\sfd\delete_confirmation.html:14
+#, python-format
+msgid "You are about to delete %(counter)s %(opts.verbose_name)s."
+msgid_plural ""
+"You are about to delete %(counter)s %(opts.verbose_name_plural)s."
+msgstr[0] ""
+"下記の%(counter)s件の%(opts.verbose_name_plural)sデータを削除しますか？"
+
+#: .\templates\sfd\delete_confirmation.html:17
+#: .\templates\sfd\update_confirmation.html:18
+msgid "Selected objects:"
+msgstr "選択された項目："
+
+#: .\templates\sfd\delete_confirmation.html:46
+#: .\templates\sfd\update_confirmation.html:80 .\templates\sfd\upload.html:20
+msgid "Cancel"
+msgstr "キャンセル"
+
+#: .\templates\sfd\index.html:39
+msgid "Django Application Successfully Created!"
+msgstr "Djangoアプリケーションが正常に作成されました！"
+
+#: .\templates\sfd\index.html:41
+msgid "Project"
+msgstr "プロジェクト"
+
+#: .\templates\sfd\index.html:42
+msgid "App"
+msgstr "アプリ"
+
+#: .\templates\sfd\index.html:43
+msgid "Database"
+msgstr "データベース"
+
+#: .\templates\sfd\index.html:43
+msgid "PostgreSQL configured"
+msgstr "PostgreSQL設定済み"
+
+#: .\templates\sfd\index.html:44
+msgid "Environment"
+msgstr "環境"
+
+#: .\templates\sfd\index.html:44
+msgid "Virtual environment active"
+msgstr "仮想環境アクティブ"
+
+#: .\templates\sfd\index.html:45
+msgid "Linting"
+msgstr "リンティング"
+
+#: .\templates\sfd\index.html:45
+msgid "Ruff configured"
+msgstr "Ruff設定済み"
+
+#: .\templates\sfd\index.html:48
+msgid ""
+"Your Django application is ready for development. Don't forget to run "
+"migrations!"
+msgstr ""
+"Djangoアプリケーションの開発準備が完了しました。マイグレーションの実行をお忘"
+"れなく！"
+
+#: .\templates\sfd\popup_window_static.html:13
+msgid "Yes"
+msgstr "はい"
+
+#: .\templates\sfd\popup_window_static.html:14
+msgid "No"
+msgstr "いいえ"
+
+#: .\templates\sfd\search.html:31 .\views\common\search.py:32
+msgid "Select"
+msgstr "選択"
+
+#: .\templates\sfd\search.html:42
+msgid "Search results:"
+msgstr "検索結果："
+
+#: .\templates\sfd\search.html:98
+msgid "No results found, try adjusting your search criteria."
+msgstr "検索結果がありません、条件を変えて検索してください。"
+
+#: .\templates\sfd\search.html:102
+msgid "Enter search criteria above to search for records."
+msgstr "条件を入力して検索してください。"
+
+#: .\templates\sfd\update_confirmation.html:4
+msgid "Confirm Update"
+msgstr "更新の確認"
+
+#: .\templates\sfd\update_confirmation.html:14
+#, python-format
+msgid "You are about to update %(counter)s %(opts.verbose_name)s."
+msgid_plural ""
+"You are about to update %(counter)s %(opts.verbose_name_plural)s."
+msgstr[0] ""
+"下記の%(counter)s件の%(opts.verbose_name_plural)sデータを更新しますか？"
+
+#: .\templates\sfd\update_confirmation.html:27
+msgid "Update settings:"
+msgstr "更新の設定："
+
+#: .\templates\sfd\update_confirmation.html:31
+msgid "Field to update:"
+msgstr "更新対象項目"
+
+#: .\templates\sfd\update_confirmation.html:34
+msgid "-- Select a field --"
+msgstr "-- 項目を選択 --"
+
+#: .\templates\sfd\update_confirmation.html:43
+msgid "New value:"
+msgstr "新しい値"
+
+#: .\templates\sfd\update_confirmation.html:47
+msgid "Enter the new value"
+msgstr "新しい値を入力してください。"
+
+#: .\templates\sfd\update_confirmation.html:52
+msgid "Note:"
+msgstr "注意："
+
+#: .\templates\sfd\update_confirmation.html:53
+msgid ""
+"The selected field will be updated to the specified value for all selected "
+"objects."
+msgstr "すべての選択行が新しい値に更新されます。"
+
+#: .\templates\sfd\update_confirmation.html:78
+msgid "Update"
+msgstr "更新"
+
+#: .\templates\sfd\update_confirmation.html:92 .\views\common\mixins.py:336
+msgid "Please select a field to update."
+msgstr "更新対象項目を選択してください。"
+
+#: .\templates\sfd\update_confirmation.html:98 .\views\common\mixins.py:339
+msgid "Please provide a value."
+msgstr "新しい値を入力してください。"
+
+#: .\templates\sfd\update_confirmation.html:103
+msgid "Are you sure you want to update the selected objects?"
+msgstr "選択行を更新しますか？"
+
+#: .\templates\sfd\upload.html:34
+msgid "Uploading..."
+msgstr "アップロード中..."
+
+#: .\views\common\download.py:16
+msgid "Download Selected Rows"
+msgstr "選択行をダウンロード"
+
+#: .\views\common\download.py:318
+#, python-brace-format
+msgid "Download {label} File"
+msgstr "{label}ファイルダウンロード"
+
+#: .\views\common\download.py:319
+msgid "Are you sure you want to download the file?"
+msgstr "ファイルをダウンロードしてもよろしいですか？"
+
+#: .\views\common\mixins.py:50 .\views\common\mixins.py:51
+#: .\views\common\mixins.py:497
+msgid "No changes detected."
+msgstr "変更がありません。"
+
+#: .\views\common\mixins.py:82
+msgid "Delete selected items"
+msgstr "選択行を削除"
+
+#: .\views\common\mixins.py:87
+msgid "Update selected items"
+msgstr "選択行を更新"
+
+#: .\views\common\mixins.py:114
+#, python-brace-format
+msgid "You have no permission to delete the following {model_name}: {objects}."
+msgstr "削除する権限がありません。{model_name}: {objects}"
+
+#: .\views\common\mixins.py:123
+#, python-brace-format
+msgid ""
+"Cannot delete the following {model_name} due to related objects: {objects}"
+msgstr "{model_name}は{objects}より参照されているので削除できません。"
+
+#: .\views\common\mixins.py:130 .\views\common\mixins.py:287
+#, python-brace-format
+msgid ""
+"Some data of {model_name} could be updated by other users, please refresh "
+"the page."
+msgstr ""
+"一部の{model_name}データが他のユーザーにより更新されたようです。一覧画面を再"
+"読み込みしてください。"
+
+#: .\views\common\mixins.py:153
+#, python-brace-format
+msgid "Successfully deleted {count} {model_name}."
+msgstr "{model_name}データを{count}件削除しました。"
+
+#: .\views\common\mixins.py:161
+msgid "No data was deleted."
+msgstr "データは削除されませんでした。"
+
+#: .\views\common\mixins.py:210 .\views\common\mixins.py:780
+#, python-brace-format
+msgid "Concurrent update detected for {obj}."
+msgstr ""
+"他のユーザーが{obj}を更新した可能性があります。処理を再実行してください。"
+
+#: .\views\common\mixins.py:216
+#, python-brace-format
+msgid "Field '{field_name}' does not exist."
+msgstr "'{field_name}'という項目はありません。"
+
+#: .\views\common\mixins.py:279
+#, python-brace-format
+msgid "You have no permission to update the following {model_name}: {objects}."
+msgstr "更新する権限がありません。{model_name}: {objects}"
+
+#: .\views\common\mixins.py:350
+#, python-brace-format
+msgid "Invalid value for field '{field_name}': {error}"
+msgstr "無効な値です。'{field_name}': {error}"
+
+#: .\views\common\mixins.py:357
+#, python-brace-format
+msgid "Successfully updated {count} {model_name}."
+msgstr "{model_name}データを{count}件更新しました。"
+
+#: .\views\common\mixins.py:368
+#, python-brace-format
+msgid "Error updating records: {error}"
+msgstr "データ更新エラー：{error}"
+
+#: .\views\common\mixins.py:435 .\views\person.py:116
+msgid "Basic Information"
+msgstr "基本情報"
+
+#: .\views\common\mixins.py:541
+#, python-brace-format
+msgid "You can search and filter by {fields}."
+msgstr "{fields}で検索できます。"
+
+#: .\views\common\mixins.py:545
+#, python-brace-format
+msgid "List of {model_name}"
+msgstr "{model_name}一覧"
+
+#: .\views\common\mixins.py:575 .\views\common\mixins.py:581
+#: .\views\common\mixins.py:646
+msgid "Deleted"
+msgstr "削除済"
+
+#: .\views\common\mixins.py:580
+msgid "Not Deleted"
+msgstr "未削除"
+
+#: .\views\common\mixins.py:692
+msgid ""
+"This record has been modified by another user. Please reload and try again."
+msgstr ""
+"他のユーザーによりデータが変更されています。もう一回読み込んでください。"
+
+#: .\views\common\mixins.py:695
+msgid "This record has been deleted by another user."
+msgstr "他のユーザーにより当該データが削除されました。"
+
+#: .\views\common\mixins.py:714 .\views\common\mixins.py:718
+#: .\views\common\mixins.py:876
+msgid "Edit Info"
+msgstr "編集情報"
+
+#: .\views\common\mixins.py:889
+msgid "Validation Info"
+msgstr "有効状態"
+
+#: .\views\common\mixins.py:917
+msgid ""
+"Master data that has already been effective cannot be edited but we can "
+"update it by copying to a new record with a future start date."
+msgstr ""
+"すでに運用中のマスタデータは変更できませんが、発効日を新たに設定することで内"
+"容を変更することができます。"
+
+#: .\views\common\mixins.py:929
+msgid "Master data that has already been effective cannot be deleted."
+msgstr "すでに運用中（有効開始日が今日以前）のマスタデータは削除できません。"
+
+#: .\views\common\mixins.py:933
+msgid "Master data that has already been effective cannot be changed."
+msgstr "すでに運用中（有効開始日が今日以前）のマスタデータは変更できません。"
+
+#: .\views\common\mixins.py:941
+msgid ""
+"There is already master data effective in the past. Please set a future "
+"start date."
+msgstr ""
+"既に有効なマスタデータが存在します。有効開始は未来日を設定してください。"
+
+#: .\views\common\mixins.py:989
+#, python-brace-format
+msgid "The {obj_name} was deleted successfully."
+msgstr "{obj_name}を削除しました。"
+
+#: .\views\common\pdf.py:25
+msgid "Generate PDF for selected rows"
+msgstr "選択された行のPDFを生成"
+
+#: .\views\common\pdf.py:394
+msgid "No data available for PDF generation."
+msgstr "PDF作成対象となるデータがありません。"
+
+#: .\views\common\pdf.py:402
+msgid "No PDFs were created. Please check the related data."
+msgstr ""
+"PDFファイルが作成されませんでした。作成対象データの有無を再確認してください。"
+
+#: .\views\common\pdf.py:439
+#, python-format
+msgid "Issue Date: %s"
+msgstr "印刷日: %s"
+
+#: .\views\common\pdf.py:440
+#, python-format
+msgid "Page: %s"
+msgstr "ページ: %s"
+
+#: .\views\common\pdf.py:586
+#, python-brace-format
+msgid "Generate {model_name} PDF"
+msgstr "{model_name}のPDFファイル生成"
+
+#: .\views\common\pdf.py:587
+msgid "Are you sure you want to generate the PDF file?"
+msgstr "PDFファイルを生成してもよろしいですか？"
+
+#: .\views\common\pdf.py:588
+msgid "Generate PDF"
+msgstr "PDF生成"
+
+#: .\views\common\upload.py:27
+msgid "CSV"
+msgstr "CSV"
+
+#: .\views\common\upload.py:28
+msgid "Excel"
+msgstr "Excel"
+
+#: .\views\common\upload.py:29
+msgid "ZIP"
+msgstr "ZIP"
+
+#: .\views\common\upload.py:38
+msgid "Select File"
+msgstr "ファイル選択"
+
+#: .\views\common\upload.py:39
+msgid "Upload Type"
+msgstr "アップロードタイプ"
+
+#: .\views\common\upload.py:40
+msgid "Encoding"
+msgstr "エンコーディング"
+
+#: .\views\common\upload.py:194
+#, python-format
+msgid ""
+"Uploaded %(file_name)s successfully.\n"
+" Inserted: %(inserted)s rows, Updated: %(updated)s rows."
+msgstr ""
+"%(file_name)s のアップロードが完了しました。\n"
+"挿入: %(inserted)s 行、更新: %(updated)s 行。"
+
+#: .\views\common\upload.py:221
+#, python-format
+msgid ""
+"An unexpected error has occurred. Please contact your system administrator "
+"and provide this error key [%(error_key)s]."
+msgstr ""
+"予期しないエラーが発生しました。システム管理者に連絡し、このエラーキー "
+"[%(error_key)s] をお伝えください。"
+
+#: .\views\common\upload.py:281
+msgid "No CSV files found in the ZIP archive."
+msgstr "ZIPファイルの中に処理対象となるCSVファイルがありません。"
+
+#: .\views\common\upload.py:337
+msgid "No valid data found in the row."
+msgstr "読み込んだ行データに対象データが含まれておりません。"
+
+#: .\views\holiday.py:24
+msgid "year"
+msgstr "年"
+
+#: .\views\holiday.py:46
+msgid "year, name"
+msgstr "年、名称"
+
+#: .\views\index.py:70
+msgid "SFD - Django Application"
+msgstr "SFD - Djangoアプリケーション"
+
+#: .\views\municipality.py:189
+msgid "Select Prefecture first"
+msgstr "都道府県を先に選択してください。"
+
+#: .\views\municipality.py:199
+msgid "Select Municipality"
+msgstr "市区町村選択"
+
+#: .\views\person.py:108
+msgid "Full Name"
+msgstr "名前"
+
+#: .\views\person.py:109
+msgid "Full Name (Kana)"
+msgstr "名前(カナ)"
+
+#: .\views\person.py:110
+msgid "Full Name (Romaji)"
+msgstr "名前(ロマ字)"
+
+#: .\views\postcode.py:216
+msgid "Postcode, Municipality Name, Town Name."
+msgstr "郵便番号、市区町村名、町域名"
+
+#: .\views\user.py:105
+msgid "Username"
+msgstr "ユーザー名"
+
+#: .\views\user.py:106
+msgid "First Name"
+msgstr "名前"
+
+#: .\views\user.py:107
+msgid "Last Name"
+msgstr "苗字"
+
+#: .\views\user.py:108
+msgid "Last Login"
+msgstr "最終ログイン"
+
+#: .\views\user.py:110
+msgid "Is Superuser"
+msgstr "スーパーユーザー"
+
+#: .\views\user.py:111
+msgid "Is Staff"
+msgstr "スタッフ"
+
+#: .\views\user.py:112
+msgid "Is Active"
+msgstr "有効状態"
+
+#: .\views\user.py:113
+msgid "Date Joined"
+msgstr "加入日付"
+
+#: .\views\user.py:114
+msgid "Group Name"
+msgstr "グループ名"
+
+#: .\views\user.py:115
+msgid "Permission Codename"
+msgstr "権限コード"
+
+#: .\views\user.py:116
+msgid "App Label"
+msgstr "アプリ名"
+
+#: .\views\user.py:117
+msgid "Model"
+msgstr "データモデル"

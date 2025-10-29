@@ -1,0 +1,109 @@
+{% load static i18n %}
+
+<div class="modal-header">
+    <h2 id="popupModalDynamicTitle">{% trans "Confirm Update" %}</h2>
+</div>
+<form id="update-confirmation-form" method="post">{% csrf_token %}
+  <div id="uploadDialogBody" class="modal-body">
+    {% if messages %}
+      <ul class="messagelist">{% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+      {% endfor %}</ul>
+    {% else %}
+      <p>
+          {% blocktrans count counter=selected_count %}You are about to update {{ counter }} {{ opts.verbose_name }}.{% plural %}You are about to update {{ counter }} {{ opts.verbose_name_plural }}.{% endblocktrans %}
+      </p>
+      
+      <div class="selected-objects">
+          <h5>{% trans "Selected objects:" %}</h5>
+          <ul class="selected-list">
+              {% for obj in selected_objects %}
+                  <li><strong>{{ obj }}</strong></li>
+              {% endfor %}
+          </ul>
+      </div>
+      
+      <div class="update-fields" style="margin-top: 20px;">
+          <h5>{% trans "Update settings:" %}</h5>
+          
+          <div class="form-row" style="margin-bottom: 15px;">
+              <label for="field_name" style="display: block; font-weight: bold; margin-bottom: 5px;">
+                  {% trans "Field to update:" %}
+              </label>
+              <select name="field_name" id="field_name" required style="width: 100%; padding: 5px;">
+                  <option value="">{% trans "-- Select a field --" %}</option>
+                  {% for field_name, field_label in updateable_fields %}
+                      <option value="{{ field_name }}">{{ field_label }}</option>
+                  {% endfor %}
+              </select>
+          </div>
+          
+          <div class="form-row" style="margin-bottom: 15px;">
+              <label for="field_value" style="display: block; font-weight: bold; margin-bottom: 5px;">
+                  {% trans "New value:" %}
+              </label>
+              <input type="text" name="field_value" id="field_value" required 
+                     style="width: 100%; padding: 5px;" 
+                     placeholder="{% trans "Enter the new value" %}">
+          </div>
+          
+          <div class="help-text" style="margin-top: 10px; padding: 10px; background-color: #f0f0f0; border-left: 3px solid #ffc107;">
+              <p style="margin: 0;">
+                  <strong>{% trans "Note:" %}</strong> 
+                  {% trans "The selected field will be updated to the specified value for all selected objects." %}
+              </p>
+          </div>
+      </div>
+      
+      <!-- Hidden fields to maintain action context -->
+      <input type="hidden" name="action" value="{{ action_name }}">
+      <input type="hidden" name="confirm_update" value="1">
+      
+      <!-- Include selected object IDs -->
+      {% for obj in queryset %}
+          <input type="hidden" name="_selected_action" value="{{ obj.pk }}">
+      {% endfor %}
+      
+      <!-- Include timestamps for concurrency control -->
+      {% if object_timestamps %}
+        <!-- object_timestamps is a dict mapping object IDs to their last modified timestamps -->
+        {% for obj_id, timestamp in object_timestamps.items %}
+            <input type="hidden" name="timestamp_{{ obj_id }}" value="{{ timestamp }}">
+        {% endfor %}
+      {% endif %}
+    {% endif %}
+  </div>
+  <div class="modal-footer">
+    {% if not messages %}
+      <input type="submit" class="button primary" value="{% translate "Update" %}">
+    {% endif %}
+    <button type="button" id="popupModalDynamicCancelBtn" class="button close" onclick="window.closePopupModalDynamic();">{% translate "Cancel" %}</button>
+  </div>
+</form>
+
+<script>
+  // Add client-side validation
+  document.getElementById('update-confirmation-form').addEventListener('submit', function(e) {
+    const fieldName = document.getElementById('field_name').value;
+    const fieldValue = document.getElementById('field_value').value.trim();
+    
+    if (!fieldName) {
+      e.preventDefault();
+      alert('{% trans "Please select a field to update." %}');
+      return false;
+    }
+    
+    if (!fieldValue) {
+      e.preventDefault();
+      alert('{% trans "Please provide a value." %}');
+      return false;
+    }
+    
+    // Confirm before submission
+    const confirmMessage = '{% trans "Are you sure you want to update the selected objects?" %}';
+    if (!confirm(confirmMessage)) {
+      e.preventDefault();
+      return false;
+    }
+  });
+</script>
