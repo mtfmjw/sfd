@@ -1,0 +1,146 @@
+{% extends "admin/base_site.html" %}
+{% load static i18n common_filters %}
+
+{% block extrahead %}{{ block.super }}
+<script src="{% url 'admin:jsi18n' %}"></script>
+{{ media }}
+{% endblock %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static "admin/css/changelists.css" %}">
+  <link rel="stylesheet" href="{% static "admin/css/forms.css" %}">
+  {{ media.css }}
+{% endblock %}
+
+{% block title %}Search Results{% endblock %}
+
+
+{% block content %}
+  <div class="search-container">
+    <h1>{% translate 'Search' %}</h1>
+    <div id="search-content">
+      <form id="search-form-htmx" action="{{ search_url }}" method="get">
+        <div>
+          {% for fieldset in adminform %}
+            {% include "admin/includes/fieldset.html" with fieldset=fieldset %}
+          {% endfor %}
+          <div class="submit-row" style="display: flex; justify-content: space-between; align-items: center;">
+            <input type="submit" value="{% translate 'Search' %}" class="default" {% include "sfd/search_htmx_attr.html" with paged_url=search_url %}>
+            <div>
+              <input type="button" value="{% translate 'Select' %}" class="default" id="selectBtn" onclick="selectRecord()">
+              <a class="closelink" id="popupModalDynamicCancelBtn">{% translate 'Close' %}</a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    
+    <!-- Search Results -->
+    {% if object_list %}
+      <div class="results-count">
+        {% translate 'Search results:' %} <strong>{{ paginator.count }}</strong>
+      </div>
+      
+      <table class="results-table">
+        {% if headers %}
+          <thead>
+            <tr>
+              {% for header in headers %}
+                <th>{{ header }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+        {% endif %}
+        <tbody>
+          {% for obj in object_list %}
+            <tr class="search-result-row" data-pk="{{ obj.pk }}" 
+                {% block row_double_click_data_attributes %}{% endblock %}>
+              <td>
+                <input type="radio" name="selected_pk" value="{{ obj.pk }}" 
+                      {% block radio_select_data_attributes %}{% endblock %}>
+              </td>
+
+              {% for field_name in list_display %}
+                <td>
+                  {% if field_name == 'id' %}
+                    {{ obj.id }}
+                  {% else %}
+                    {{ obj|get_attr:field_name|default:"-" }}
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      
+      <!-- Pagination -->
+      {% if is_paginated %}
+        <div class="paginator">
+          {% for item in elided_page_range %}
+            {% if item == page_obj.number %}
+              <span class="current">{{ item }}</span>
+            {% elif item == paginator.ELLIPSIS %}
+              <span class="ellipsis">{{ paginator.ELLIPSIS }}</span>
+            {% else %}
+              {% with paged_url_prefix=search_url|add:"?page=" page_num=item|stringformat:"s" %}
+                <a href="#" {% include "sfd/search_htmx_attr.html" with paged_url=paged_url_prefix|add:page_num %}>{{ item }}</a>
+              {% endwith %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+      
+    {% else %}
+      {% if request.GET %}
+        <div class="no-results">
+          <p>{% translate 'No results found, try adjusting your search criteria.' %}</p>
+        </div>
+      {% else %}
+        <div class="no-results">
+          <p>{% translate 'Enter search criteria above to search for records.' %}</p>
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+
+  <script>
+    // Immediate execution - no need to wait for DOM events since content is already loaded
+    (function() {
+      // Add event listener for the cancel button
+      const popupModalDynamicCancelBtn = document.getElementById('popupModalDynamicCancelBtn');
+      if (popupModalDynamicCancelBtn) {
+        popupModalDynamicCancelBtn.addEventListener('click', (event) => {
+          event.preventDefault();
+          if (typeof window.closePopupModalDynamic === 'function') {
+            window.closePopupModalDynamic();
+          }
+        });
+      }
+
+      // Add double-click event listeners to table rows
+      const searchResultRows = document.querySelectorAll('.search-result-row');
+      searchResultRows.forEach(row => {
+        row.addEventListener('dblclick', function() {
+          // Select the radio button in this row
+          const radio = this.querySelector('input[name="selected_pk"]');
+          if (radio) {
+            radio.checked = true;
+            // Trigger selection
+            selectRecordFromRow(this);
+          }
+        });
+
+        // Add hover effect for better UX
+        row.style.cursor = 'pointer';
+        row.addEventListener('mouseenter', function() {
+          this.style.backgroundColor = '#f0f0f0';
+        });
+        row.addEventListener('mouseleave', function() {
+          this.style.backgroundColor = '';
+        });
+      });
+    })();
+  </script>
+{% endblock %}

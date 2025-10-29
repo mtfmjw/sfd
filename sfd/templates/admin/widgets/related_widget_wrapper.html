@@ -1,0 +1,51 @@
+{% load i18n static %}
+<div class="related-widget-wrapper" {% if not model_has_limit_choices_to %}data-model-ref="{{ model }}"{% endif %}>
+    {{ rendered_widget }}
+    {% block links %}
+        {% spaceless %}
+        {% if not is_hidden %}
+          {% if can_view_related %}
+            <a class="related-widget-wrapper-link view-related open-popup-window-dynamic-btn" id="view_id_{{ name }}"
+              data-href-template="{{ change_related_template_url }}?_popup=1&is_readonly=true"
+              hx-get="#"
+              hx-target="#popupWindowDynamicContent"
+              hx-swap="innerHTML"
+              hx-on::after-swap="openPopupWindowDynamic()">
+              <img src="{% static 'admin/img/icon-viewlink.svg' %}" alt="" width="20" height="20">
+            </a>
+          {% endif %}
+        {% endif %}
+        {% endspaceless %}
+    {% endblock %}
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const select = document.getElementById("id_{{ name }}");
+    const link = document.getElementById("view_id_{{ name }}");
+    const template = link.getAttribute("data-href-template"); // "/admin/sfd/municipality/__fk__/change/?_to_field=id"
+
+    function updateForeignKeyLink() {
+      const value = select.value;
+      if (value) {
+        const newUrl = template.replace("__fk__", value);
+        link.href = newUrl;
+        link.setAttribute("hx-get", newUrl);
+        if (window.htmx) {
+          htmx.process(link);
+        }
+
+      } else {
+        link.removeAttribute("href");
+        link.removeAttribute("hx-get");
+      }
+    }
+
+    // Update when select changes
+    select.addEventListener("change", updateForeignKeyLink);
+
+    // Update once on page load
+    updateForeignKeyLink();
+  });
+</script>
+

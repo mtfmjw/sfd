@@ -1,0 +1,749 @@
+# Django translations for sfd app
+# Copyright (C) 2025 SFD Project
+# This file is distributed under the same license as the SFD package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: SFD 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-06 08:30+0900\n"
+"PO-Revision-Date: 2025-08-05 16:45+0900\n"
+"Last-Translator: SFD Project <dev@sfd.local>\n"
+"Language-Team: Japanese <ja@li.org>\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "sfd"
+msgstr "sfd"
+
+msgid "sfd Admin"
+msgstr "sfd 管理"
+
+msgid "sfd Administration"
+msgstr "sfd 管理画面"
+
+msgid "Postcode"
+msgstr "郵便番号"
+
+msgid "Search and select postcode, town name, and municipality."
+msgstr ""
+"郵便番号検索、検索結果より郵便番号、市区町村名と住所詳細の一部が自動セットさ"
+"れます。"
+
+msgid "Municipality"
+msgstr "市区町村"
+
+msgid "Search postcode..."
+msgstr "郵便番号の検索"
+
+msgid "Selected postcode does not exist."
+msgstr "選択された郵便番号は存在しません。"
+
+msgid "Prefecture"
+msgstr "都道府県"
+
+msgid "Select Prefecture"
+msgstr "都道府県選択"
+
+msgid "Selected municipality does not belong to the selected prefecture."
+msgstr "入力した市区町村の都道府県が間違っております。"
+
+msgid "Municipality Name"
+msgstr "市区町村名"
+
+msgid "Municipality Name Kana"
+msgstr "市区町村名カナ"
+
+msgid "delete"
+msgstr "削除"
+
+msgid "Created By"
+msgstr "作成者"
+
+msgid "Created At"
+msgstr "作成日時"
+
+msgid "Updated By"
+msgstr "更新者"
+
+msgid "Updated At"
+msgstr "更新日時"
+
+msgid "Delete Flag"
+msgstr "削除フラグ"
+
+msgid "Valid From"
+msgstr "有効開始日"
+
+msgid "Valid To"
+msgstr "有効終了日"
+
+msgid "Valid To must be greater than or equal to Valid From"
+msgstr "有効開始日は有終了日以後を設定してください。"
+
+msgid "Upload"
+msgstr "アップロード"
+
+msgid "Download"
+msgstr "ダウンロード"
+
+msgid "Success"
+msgstr "成功"
+
+msgid "Failure"
+msgstr "失敗"
+
+msgid "No Data"
+msgstr "データなし"
+
+msgid "Process ID"
+msgstr "プロセスID"
+
+msgid "Process Type"
+msgstr "プロセスタイプ"
+
+msgid "Process Result"
+msgstr "プロセス結果"
+
+msgid "App Name"
+msgstr "アプリ名"
+
+msgid "Processed By"
+msgstr "処理者"
+
+msgid "Processed At"
+msgstr "処理日時"
+
+msgid "IP Address"
+msgstr "IPアドレス"
+
+msgid "File Name"
+msgstr "ファイル名"
+
+msgid "Total Lines"
+msgstr "合計行数"
+
+msgid "Comment"
+msgstr "コメント"
+
+msgid "CSV Log"
+msgstr "CSVログ"
+
+msgid "CSV Logs"
+msgstr "CSVログ一覧"
+
+msgid "National Holiday"
+msgstr "祝日"
+
+msgid "Substitute Holiday"
+msgstr "振替休日"
+
+msgid "Other Holiday"
+msgstr "その他の休日"
+
+msgid "date"
+msgstr "日付"
+
+msgid "name"
+msgstr "名称"
+
+msgid "holiday type"
+msgstr "休日タイプ"
+
+msgid "comment"
+msgstr "コメント"
+
+msgid "Additional information about the holiday"
+msgstr "祝日・休日の追加説明"
+
+msgid "holiday"
+msgstr "祝日・休日"
+
+msgid "holidays"
+msgstr "祝日・休日"
+
+msgid "Municipality Code"
+msgstr "市区町村コード"
+
+msgid "Prefecture Name"
+msgstr "都道府県名"
+
+msgid "Prefecture Name Kana"
+msgstr "都道府県名カナ"
+
+msgid "Municipalities"
+msgstr "市区町村"
+
+msgid "Male"
+msgstr "男性"
+
+msgid "Female"
+msgstr "女性"
+
+msgid "Other"
+msgstr "その他"
+
+msgid "Family Name"
+msgstr "苗字"
+
+msgid "Family Name Kana"
+msgstr "苗字カナ"
+
+msgid "Family Name Romaji"
+msgstr "苗字ロマ字"
+
+msgid "Name"
+msgstr "名前"
+
+msgid "Name Kana"
+msgstr "名前カナ"
+
+msgid "Name Romaji"
+msgstr "名前ロマ字"
+
+msgid "Birthday"
+msgstr "誕生日"
+
+msgid "Gender"
+msgstr "性別"
+
+msgid "Email"
+msgstr "Eメール"
+
+msgid "Phone Number"
+msgstr "電話番号"
+
+msgid "Mobile Number"
+msgstr "携帯番号"
+
+msgid "Address Detail"
+msgstr "住所詳細"
+
+msgid "Person"
+msgstr "個人"
+
+msgid "People"
+msgstr "個人"
+
+msgid "Town Name"
+msgstr "町域名"
+
+msgid "Town Name Kana"
+msgstr "町域名カナ"
+
+msgid "Postcodes"
+msgstr "郵便番号"
+
+msgid "Skip to main content"
+msgstr "メインコンテンツにスキップ"
+
+msgid "Welcome,"
+msgstr "ようこそ、"
+
+msgid "View site"
+msgstr "サイトを表示"
+
+msgid "Documentation"
+msgstr "ドキュメント"
+
+msgid "Change password"
+msgstr "パスワード変更"
+
+msgid "Log out"
+msgstr "ログアウト"
+
+msgid "Breadcrumbs"
+msgstr "パンくずリスト"
+
+msgid "Home"
+msgstr "ホーム"
+
+msgid "Django site admin"
+msgstr "Django サイト管理"
+
+msgid "Please correct the error below."
+msgid_plural "Please correct the errors below."
+msgstr[0] "下記のエラーを修正してください。"
+
+msgid "Filter"
+msgstr "フィルター"
+
+msgid "Clear all filters"
+msgstr "全てのフィルターをクリアする"
+
+msgid "Django administration"
+msgstr "Django 管理画面"
+
+#, python-format
+msgid "Add %(name)s"
+msgstr "%(name)s追加"
+
+msgid "Hide counts"
+msgstr "数量を非表示"
+
+msgid "Show counts"
+msgstr "数量を表示する"
+
+#, python-format
+msgid "Change selected %(model)s"
+msgstr "選択した%(model)sを変更"
+
+#, python-format
+msgid "Add another %(model)s"
+msgstr "他の%(model)s追加"
+
+#, python-format
+msgid "Delete selected %(model)s"
+msgstr "選択した%(model)sを削除"
+
+#, python-format
+msgid "View selected %(model)s"
+msgstr "選択した%(model)sを参照"
+
+msgid "Search"
+msgstr "検索"
+
+#, python-format
+msgid "%(counter)s result"
+msgid_plural "%(counter)s results"
+msgstr[0] "%(counter)s 件の結果"
+
+#, python-format
+msgid "%(full_result_count)s total"
+msgstr "合計 %(full_result_count)s 件"
+
+msgid "Show all"
+msgstr "すべて表示"
+
+msgid "Save"
+msgstr "保存"
+
+msgid "Save as new"
+msgstr "新規保存"
+
+msgid "Save and add another"
+msgstr "保存して続けて追加"
+
+msgid "Save and continue editing"
+msgstr "保存して編集を続ける"
+
+msgid "Save and view"
+msgstr "保存して表示"
+
+msgid "Close"
+msgstr "閉じる"
+
+msgid "Delete"
+msgstr "削除"
+
+msgid "Refresh"
+msgstr "再読込"
+
+msgid "Copy"
+msgstr "コピー新規"
+
+msgid "Undelete"
+msgstr "削除の取消"
+
+msgid "Confirm undelete"
+msgstr "削除取消の確認"
+
+msgid "Are you sure you want to undelete this item?"
+msgstr "削除を取消しますか？"
+
+msgid "Confirm deletion"
+msgstr "削除の確認"
+
+msgid "Are you sure you want to delete this item?"
+msgstr "削除しますか？"
+
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this "
+"page. Would you like to login to a different account?"
+msgstr ""
+"%(username)s として認証されていますが、このページにアクセスする権限がありませ"
+"ん。別のアカウントでログインしますか？"
+
+msgid "Forgotten your password or username?"
+msgstr "パスワードまたはユーザー名をお忘れですか？"
+
+msgid "Log in"
+msgstr "ログイン"
+
+msgid "Confirm Deletion"
+msgstr "削除の確認"
+
+#, python-format
+msgid "You are about to delete %(counter)s %(opts.verbose_name)s."
+msgid_plural ""
+"You are about to delete %(counter)s %(opts.verbose_name_plural)s."
+msgstr[0] ""
+"下記の%(counter)s件の%(opts.verbose_name_plural)sデータを削除しますか？"
+
+msgid "Selected objects:"
+msgstr "選択された項目："
+
+msgid "Cancel"
+msgstr "キャンセル"
+
+msgid "Django Application Successfully Created!"
+msgstr "Djangoアプリケーションが正常に作成されました！"
+
+msgid "Project"
+msgstr "プロジェクト"
+
+msgid "App"
+msgstr "アプリ"
+
+msgid "Database"
+msgstr "データベース"
+
+msgid "PostgreSQL configured"
+msgstr "PostgreSQL設定済み"
+
+msgid "Environment"
+msgstr "環境"
+
+msgid "Virtual environment active"
+msgstr "仮想環境アクティブ"
+
+msgid "Linting"
+msgstr "リンティング"
+
+msgid "Ruff configured"
+msgstr "Ruff設定済み"
+
+msgid ""
+"Your Django application is ready for development. Don't forget to run "
+"migrations!"
+msgstr ""
+"Djangoアプリケーションの開発準備が完了しました。マイグレーションの実行をお忘"
+"れなく！"
+
+msgid "Yes"
+msgstr "はい"
+
+msgid "No"
+msgstr "いいえ"
+
+msgid "Select"
+msgstr "選択"
+
+msgid "Search results:"
+msgstr "検索結果："
+
+msgid "No results found, try adjusting your search criteria."
+msgstr "検索結果がありません、条件を変えて検索してください。"
+
+msgid "Enter search criteria above to search for records."
+msgstr "条件を入力して検索してください。"
+
+msgid "Confirm Update"
+msgstr "更新の確認"
+
+#, python-format
+msgid "You are about to update %(counter)s %(opts.verbose_name)s."
+msgid_plural ""
+"You are about to update %(counter)s %(opts.verbose_name_plural)s."
+msgstr[0] ""
+"下記の%(counter)s件の%(opts.verbose_name_plural)sデータを更新しますか？"
+
+msgid "Update settings:"
+msgstr "更新の設定："
+
+msgid "Field to update:"
+msgstr "更新対象項目"
+
+msgid "-- Select a field --"
+msgstr "-- 項目を選択 --"
+
+msgid "New value:"
+msgstr "新しい値"
+
+msgid "Enter the new value"
+msgstr "新しい値を入力してください。"
+
+msgid "Note:"
+msgstr "注意："
+
+msgid ""
+"The selected field will be updated to the specified value for all selected "
+"objects."
+msgstr "すべての選択行が新しい値に更新されます。"
+
+msgid "Update"
+msgstr "更新"
+
+msgid "Please select a field to update."
+msgstr "更新対象項目を選択してください。"
+
+msgid "Please provide a value."
+msgstr "新しい値を入力してください。"
+
+msgid "Are you sure you want to update the selected objects?"
+msgstr "選択行を更新しますか？"
+
+msgid "Uploading..."
+msgstr "アップロード中..."
+
+msgid "Generate PDF for selected rows"
+msgstr "選択された行のPDFを生成"
+
+msgid "No data available for PDF generation."
+msgstr "PDF作成対象となるデータがありません。"
+
+msgid "No PDFs were created. Please check the related data."
+msgstr ""
+"PDFファイルが作成されませんでした。作成対象データの有無を再確認してください。"
+
+msgid "year, name"
+msgstr "年、名称"
+
+msgid "SFD - Django Application"
+msgstr "SFD - Djangoアプリケーション"
+
+msgid "Select Prefecture first"
+msgstr "都道府県を先に選択してください。"
+
+msgid "Select Municipality"
+msgstr "市区町村選択"
+
+msgid "Postcode, Municipality Name, Town Name."
+msgstr "郵便番号、市区町村名、町域名"
+
+msgid "Username"
+msgstr "ユーザー名"
+
+msgid "First Name"
+msgstr "名前"
+
+msgid "Last Name"
+msgstr "苗字"
+
+msgid "Last Login"
+msgstr "最終ログイン"
+
+msgid "Is Superuser"
+msgstr "スーパーユーザー"
+
+msgid "Is Staff"
+msgstr "スタッフ"
+
+msgid "Is Active"
+msgstr "有効状態"
+
+msgid "Date Joined"
+msgstr "加入日付"
+
+msgid "Group Name"
+msgstr "グループ名"
+
+msgid "Permission Codename"
+msgstr "権限コード"
+
+msgid "App Label"
+msgstr "アプリ名"
+
+msgid "Model"
+msgstr "データモデル"
+
+msgid "Download Selected Rows"
+msgstr "選択行をダウンロード"
+
+msgid "No data rows were written to the CSV file."
+msgstr "CSVファイルにデータ行が書き込まれませんでした。"
+
+#, python-brace-format
+msgid "Total {total_lines} data rows were written to the {log_file_name} file."
+msgstr "合計{total_lines}行のデータが{log_file_name}ファイルに書き込まれました。"
+
+#, python-brace-format
+msgid "Download {label} File"
+msgstr "{label}ファイルダウンロード"
+
+msgid "Are you sure you want to download the file?"
+msgstr "ファイルをダウンロードしてもよろしいですか？"
+
+msgid "No changes detected."
+msgstr "変更がありません。"
+
+msgid "Delete selected items"
+msgstr "選択行を削除"
+
+msgid "Update selected items"
+msgstr "選択行を更新"
+
+#, python-brace-format
+msgid "You have no permission to delete the following {model_name}: {objects}."
+msgstr "削除する権限がありません。{model_name}: {objects}"
+
+#, python-brace-format
+msgid ""
+"Cannot delete the following {model_name} due to related objects: {objects}"
+msgstr "{model_name}は{objects}より参照されているので削除できません。"
+
+#, python-brace-format
+msgid ""
+"Some data of {model_name} could be updated by other users, please refresh "
+"the page."
+msgstr ""
+"一部の{model_name}データが他のユーザーにより更新されたようです。一覧画面を再"
+"読み込みしてください。"
+
+#, python-brace-format
+msgid "Successfully deleted {count} {model_name}."
+msgstr "{model_name}データを{count}件削除しました。"
+
+msgid "No data was deleted."
+msgstr "データは削除されませんでした。"
+
+#, python-brace-format
+msgid "Concurrent update detected for {obj}."
+msgstr ""
+"他のユーザーが{obj}を更新した可能性があります。処理を再実行してください。"
+
+#, python-brace-format
+msgid "Field '{field_name}' does not exist."
+msgstr "'{field_name}'という項目はありません。"
+
+#, python-brace-format
+msgid "You have no permission to update the following {model_name}: {objects}."
+msgstr "更新する権限がありません。{model_name}: {objects}"
+
+#, python-brace-format
+msgid "Invalid value for field '{field_name}': {error}"
+msgstr "無効な値です。'{field_name}': {error}"
+
+#, python-brace-format
+msgid "Successfully updated {count} {model_name}."
+msgstr "{model_name}データを{count}件更新しました。"
+
+#, python-brace-format
+msgid "Error updating records: {error}"
+msgstr "データ更新エラー：{error}"
+
+msgid "Basic Information"
+msgstr "基本情報"
+
+#, python-brace-format
+msgid "You can search and filter by {fields}."
+msgstr "{fields}で検索できます。"
+
+#, python-brace-format
+msgid "List of {model_name}"
+msgstr "{model_name}一覧"
+
+msgid "Deleted"
+msgstr "削除済"
+
+msgid "Not Deleted"
+msgstr "未削除"
+
+msgid ""
+"This record has been modified by another user. Please reload and try again."
+msgstr ""
+"他のユーザーによりデータが変更されています。もう一回読み込んでください。"
+
+msgid "This record has been deleted by another user."
+msgstr "他のユーザーにより当該データが削除されました。"
+
+msgid "Edit Info"
+msgstr "編集情報"
+
+msgid "Validation Info"
+msgstr "有効状態"
+
+msgid ""
+"Master data that has already been effective cannot be edited but we can "
+"update it by copying to a new record with a future start date."
+msgstr ""
+"すでに運用中のマスタデータは変更できませんが、発効日を新たに設定することで内"
+"容を変更することができます。"
+
+msgid "Master data that has already been effective cannot be deleted."
+msgstr "すでに運用中（有効開始日が今日以前）のマスタデータは削除できません。"
+
+msgid "Master data that has already been effective cannot be changed."
+msgstr "すでに運用中（有効開始日が今日以前）のマスタデータは変更できません。"
+
+msgid ""
+"There is already master data effective in the past. Please set a future "
+"start date."
+msgstr ""
+"既に有効なマスタデータが存在します。有効開始は未来日を設定してください。"
+
+#, python-brace-format
+msgid "The {obj_name} was deleted successfully."
+msgstr "{obj_name}を削除しました。"
+
+#, python-format
+msgid "Issue Date: %s"
+msgstr "印刷日: %s"
+
+#, python-format
+msgid "Page: %s"
+msgstr "ページ: %s"
+
+#, python-brace-format
+msgid "Generate {model_name} PDF"
+msgstr "{model_name}のPDFファイル生成"
+
+msgid "Are you sure you want to generate the PDF file?"
+msgstr "PDFファイルを生成してもよろしいですか？"
+
+msgid "Generate PDF"
+msgstr "PDF生成"
+
+msgid "CSV"
+msgstr "CSV"
+
+msgid "Excel"
+msgstr "Excel"
+
+msgid "ZIP"
+msgstr "ZIP"
+
+msgid "Select File"
+msgstr "ファイル選択"
+
+msgid "Upload Type"
+msgstr "アップロードタイプ"
+
+msgid "Encoding"
+msgstr "エンコーディング"
+
+#, python-format
+msgid ""
+"Upload completed. Inserted: %(inserted)s rows, Updated: %(updated)s rows."
+msgstr ""
+"アップロードが完了しました。挿入: %(inserted)s 行、更新: %(updated)s 行。"
+
+#, python-format
+msgid ""
+"An unexpected error has occurred. Please contact your system administrator "
+"and provide this error key [%(error_key)s]."
+msgstr ""
+"予期しないエラーが発生しました。システム管理者に連絡し、このエラーキー "
+"[%(error_key)s] をお伝えください。"
+
+msgid "No CSV files found in the ZIP archive."
+msgstr "ZIPファイルの中に処理対象となるCSVファイルがありません。"
+
+msgid "No valid data found in the row."
+msgstr "読み込んだ行データに対象データが含まれておりません。"
+
+msgid "year"
+msgstr "年"
+
+msgid "Full Name"
+msgstr "名前"
+
+msgid "Full Name (Kana)"
+msgstr "名前(カナ)"
+
+msgid "Full Name (Romaji)"
+msgstr "名前(ロマ字)"

@@ -1,0 +1,64 @@
+{% load static i18n %}
+
+<div id="popupWindowDynamic" class="modal-overlay">
+  <div class="modal-content">
+    <button id="popupWindowDynamicCloseBtn" class="close-modal-btn">&times;</button>
+    <div id="popupWindowDynamicContent">
+    </div>
+  </div>
+</div>
+
+<script>
+  // Make these functions global so they can be called from HTMX-loaded content
+  window.openPopupWindowDynamic = function() {
+    const popupWindowDynamicOverlay = document.getElementById('popupWindowDynamic');
+    if (popupWindowDynamicOverlay) {
+        popupWindowDynamicOverlay.classList.add('active');
+    }
+  }
+
+  window.closePopupWindowDynamic = function() {
+    const popupWindowDynamicOverlay = document.getElementById('popupWindowDynamic');
+    if (popupWindowDynamicOverlay) {
+        popupWindowDynamicOverlay.classList.remove('active');
+    }
+  }
+
+  // Wait for the DOM to be fully loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    // --- Get all the necessary elements ---
+    const popupWindowDynamicOverlay = document.getElementById('popupWindowDynamic');
+    const popupWindowDynamicCloseBtn = document.getElementById('popupWindowDynamicCloseBtn'); // The '×' button
+
+    // --- Get all buttons that open the modal ---
+    const openPopupWindowDynamicBtns = document.querySelectorAll('.open-popup-window-dynamic-btn');
+
+    // --- Add event listeners to all trigger buttons ---
+    openPopupWindowDynamicBtns.forEach(button => {
+      button.addEventListener('click', (event) => {
+        // **IMPORTANT**: Prevent the link from navigating immediately
+        event.preventDefault();         
+        openPopupWindowDynamic();
+      });
+    });
+
+    popupWindowDynamicCloseBtn.addEventListener('click', closePopupWindowDynamic);
+
+    // Close the modal when the user clicks on the overlay (outside the content)
+    if (popupWindowDynamicOverlay) {
+        popupWindowDynamicOverlay.addEventListener('click', (event) => {
+            // Check if the clicked element is the overlay itself
+            if (event.target === popupWindowDynamicOverlay) {
+                closePopupWindowDynamic();
+            }
+        });
+    }
+
+    // Close the modal when the user presses the 'Escape' key
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && popupWindowDynamicOverlay.classList.contains('active')) {
+            closePopupWindowDynamic();
+        }
+    });
+  });
+</script>

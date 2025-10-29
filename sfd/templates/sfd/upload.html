@@ -1,0 +1,82 @@
+{% load static i18n %}
+
+<div class="modal-header">
+    <h2 id="popupModalDynamicTitle">{{ upload_title|default:"File Upload" }}</h2>
+</div>
+<form id="file-upload-form" 
+    hx-post="{{ upload_url }}"
+    hx-target="#popupModalDynamicContent"
+    hx-encoding="multipart/form-data">{% csrf_token %}
+  <div id="uploadDialogBody" class="modal-body">
+    {{ form.as_p }}
+    {% if messages %}
+      <ul class="messagelist">{% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+      {% endfor %}</ul>
+    {% endif %}
+  </div>
+  <div class="modal-footer">
+    <input type="submit" class="button primary" value="{{ upload_button_name|default:'Upload' }}">
+    <button id="popupModalDynamicCancelBtn"  class="button close" onclick="window.closePopupModalDynamic();">{% translate "Cancel" %}</button>
+  </div>
+</form>
+
+<script>
+  // Immediate execution - no need to wait for DOM events since content is already loaded
+  (function() {   
+    // Handle form submission for better UX
+    const fileUploadForm = document.getElementById('file-upload-form');
+    if (fileUploadForm) {
+      fileUploadForm.addEventListener('submit', (event) => {
+        // Show loading state
+        const submitBtn = fileUploadForm.querySelector('input[type="submit"]');
+        if (submitBtn) {
+          submitBtn.value = '{% translate "Uploading..." %}';
+          submitBtn.disabled = true;
+        }
+      });
+    }
+  })();
+  
+  // Listen for HTMX events for upload completion
+  document.body.addEventListener('htmx:afterSwap', (event) => {
+    if (event.target.id === 'popupModalDynamicContent') {
+      const popupModalDynamicCancelBtn = document.getElementById('popupModalDynamicCancelBtn');
+      if (popupModalDynamicCancelBtn && !popupModalDynamicCancelBtn.hasAttribute('data-listener-added')) {
+        popupModalDynamicCancelBtn.setAttribute('data-listener-added', 'true');
+        popupModalDynamicCancelBtn.addEventListener('click', (event) => {
+          event.preventDefault();
+          if (typeof window.closePopupModalDynamic === 'function') {
+            window.closePopupModalDynamic();
+          }
+        });
+      }
+    }
+  });
+
+  // Handle upload success - close modal and refresh page
+  document.body.addEventListener('uploadSuccess', (event) => {
+    // Close the modal
+    if (typeof window.closePopupModalDynamic === 'function') {
+      window.closePopupModalDynamic();
+    }
+    
+    // Simply refresh the page to show the success message
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+  });
+
+  // Handle upload error - keep modal open
+  document.body.addEventListener('uploadError', (event) => {
+    // Re-enable the submit button
+    const fileUploadForm = document.getElementById('file-upload-form');
+    if (fileUploadForm) {
+      const submitBtn = fileUploadForm.querySelector('input[type="submit"]');
+      if (submitBtn) {
+        submitBtn.value = '{{ upload_button_name|default:"Upload" }}';
+        submitBtn.disabled = false;
+      }
+    }
+  });
+</script>

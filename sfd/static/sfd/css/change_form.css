@@ -1,0 +1,178 @@
+/* フォームの行全体にFlexboxを適用して、子要素の配置を制御 */
+.form-row {
+    /* display: flex; */
+    flex-wrap: wrap; /* 必要に応じて折り返す */
+    align-items: flex-center; /* 中央揃え */
+    padding: 5px 5px 0px;
+    margin-bottom: 0px; /* 行間の余白 */
+    border-bottom: 0px; /* 行の下に境界線を追加 */
+}
+
+/* ラベルの幅を固定または揃える */
+.form-row label {
+    flex: 0 0 150px; /* ラベルの幅を固定（例: 150px）。必要に応じて調整 */
+    max-width: 200px; /* 最大幅も設定 */
+    padding-right: 10px; /* ラベルと入力フィールドの間の余白 */
+    box-sizing: border-box; /* パディングを幅に含める */
+    text-align: right; /* ラベルを右寄せにする（任意） */
+    margin-top: 2px; /* 入力フィールドとラベルの垂直位置を揃えるための微調整 */
+}
+
+.aligned label + div.readonly {
+    /* 読み取り専用フィールドのラベルと値の間の余白を調整 */
+    margin-top: 2px; /* ラベルと値の間の余白 */  
+}
+
+.aligned label{
+    width: 100px; /* ラベルの幅を固定 */
+    max-width: 200px; /* 最大幅も設定 */
+    padding: 2px 10px; /* ラベルと値の間の余白 */  
+}
+
+/* 入力フィールドのコンテナ（.field-box や .vTextField など）の幅を調整 */
+.form-row .fieldBox,
+.form-row .vTextField, /* CharField/TextFieldなど */
+.form-row .vDateField, /* DateFieldなど */
+.form-row .vIntegerField { /* 外部キーなどのウィジェット */
+    flex: 1; /* 残りのスペースを埋める */
+    height: 1.1875rem;
+    padding: 2px 5px;
+    align-items: center;
+    /* 必要に応じて最大幅を設定して、入力フィールドの幅を制限 */
+    max-width: 400px;
+}
+
+.form-row .fieldBox {
+    width: 400px; * flexアイテムの最小幅 */
+}
+
+/* 同じ行に複数のフィールドがある場合の調整 */
+.form-row .aligned .form-row {
+    /* ネストされたform-row（同じ行に複数のフィールドがある場合）の調整 */
+    margin-bottom: 0; /* ネストされた行の不要なマージンを削除 */
+}
+
+/* CheckboxInput の特殊な調整 */
+.form-row label.vCheckboxLabel {
+    order: -1; /* チェックボックスをラベルの前に配置 */
+    flex: 1;
+    display: block;
+    padding: 2px 10px; /* チェックボックスとラベルの間の余白 */
+    align-items: center; /* チェックボックスとラベルを垂直中央揃え */
+}
+
+.form-row .fieldBox input[type="checkbox"] {
+    margin-right: 228.182px;
+    margin-top: 0; /* デフォルトのマージンをリセット */
+}
+
+.form-row > select {
+    flex: 1; /* 残りのスペースを埋める */
+    width: 228.182px; /* flexアイテムの最小幅 */
+    /* height: 1.3rem; */
+    margin: 0;
+    padding: 0px 5px; /* セレクトボックスのパディングを調整 */
+    align-items: center;
+    vertical-align: middle; /* セル内のコンテンツを垂直中央揃え */   
+}
+
+.form-row a.view-related {
+    margin: 5px 5px 0 0; /* 関連オブジェクトリンクの余白 */
+}
+
+.form-row p.date {
+    width: 228.182px; /* flexアイテムの最小幅 */
+    margin-right: 15px; /* 日付フィールドの右側にスペースを追加 */
+}
+
+.form-row div.readonly {
+    flex: 1; /* 残りのスペースを埋める */
+    width: 228.182px; /* flexアイテムの最小幅 */
+    padding: 2px 5px; /* 読み取り専用フィールドのパディング */
+    align-items: center;
+    margin-right: 15px; /* 読み取り専用フィールドの右側にスペースを追加 */
+}
+
+.form-multiline > div {
+    margin: 5px 0; /* 各行の間の余白 */
+    padding-bottom: 0px;
+}
+
+fieldset .fieldBox {
+    margin-right: 0px;
+}
+
+.module {
+    margin-bottom: 5px;
+}
+
+.submit-row .deletelink {
+    margin-left: auto; /* 削除リンクの左側にスペースを追加 */
+    margin-right: 10px; /* 左側にスペースを押しやる */
+    background-color: #ba2121;
+}
+
+.inline-group .tabular tr.form-row td.original p {
+    position: relative; /* 相対位置を設定 */
+    font-size: 0.8125rem; /* フォントサイズを設定 */
+}
+
+.inline-group .tabular tr.form-row td {
+    line-height: 1.2; /* フォントサイズに対して適切な倍率に調整（例: 1.2〜1.5） */
+    padding: 3px 8px; 
+    vertical-align: middle; /* セル内のコンテンツを垂直中央揃え */
+}
+
+/* インラインテーブル内の入力フィールドの高さも明示的に設定（もし必要なら） */
+/* これにより、<td>の高さとinputの高さのミスマッチをさらに減らせます */
+.inline-group .tabular tr.form-row td input[type="text"],
+.inline-group .tabular tr.form-row td input[type="number"],
+.inline-group .tabular tr.form-row td input[type="date"],
+.inline-group .tabular tr.form-row td textarea {
+    height: 28px; /* 入力フィールドの高さ */
+    padding: 4px 6px; /* 入力フィールドのパディング */
+    box-sizing: border-box; /* パディングとボーダーをheight/widthに含める */
+    vertical-align: middle; /* 入力フィールドを垂直中央揃え */
+}
+
+/* 削除チェックボックスのラッパー（高さが合わない場合） */
+.inline-group .tabular tr.form-row td .delete-checkbox-wrapper {
+    height: 28px; /* inputの高さに合わせる */
+    align-items: center; /* 垂直中央揃えを維持 */
+}
+
+.inline-group thead th:last-child {
+  white-space: nowrap;
+}
+
+.inline-group .tabular td.original p {
+    position: relative; /* 相対位置を設定 */
+    font-size: 0.8125rem; /* フォントサイズを設定 */
+    white-space: nowrap; /* テキストの折り返しを防ぐ */
+}
+
+/* Readonly field input styling */
+.readonly-datetime-field,
+.readonly-text-field {
+    background-color: #f8f9fa !important;
+    border: 1px solid #ced4da !important;
+    color: #495057 !important;
+    cursor: not-allowed !important;
+    opacity: 0.9 !important;
+}
+
+.readonly-datetime-field:focus,
+.readonly-text-field:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Ensure readonly fields maintain proper sizing */
+.form-row .readonly-datetime-field,
+.form-row .readonly-text-field {
+    flex: 1;
+    max-width: 400px;
+    height: 1.1875rem;
+    padding: 2px 5px;
+    box-sizing: border-box;
+}
