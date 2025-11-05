@@ -5,7 +5,7 @@ concurrent-log-handler==0.9.28
 coverage==7.10.7
 defusedxml==0.7.1
 diff-match-patch==20241021
-Django==5.2.7
+Django==5.2.8
 et_xmlfile==2.0.0
 iniconfig==2.1.0
 Jinja2==3.1.6
