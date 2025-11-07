@@ -215,3 +215,7 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5 MB
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5 MB
 
 LOGGING = LOGGING
+
+# Field-level encryption settings for django-fernet-fields
+# IMPORTANT: Store this key securely in your .env file, never commit to git
+FERNET_KEYS = [config("FIELD_ENCRYPTION_KEY").encode()]
