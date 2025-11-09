@@ -8,9 +8,12 @@ Compatible with Django 5.x and PostgreSQL.
 """
 
 import base64
+import hashlib
 import logging
 
 from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives import padding
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from django.conf import settings
 from django.db import models
 
@@ -25,10 +28,95 @@ def get_fernet():
     return Fernet(key)
 
 
+def get_deterministic_key():
+    """Get deterministic encryption key from settings."""
+    # Use a separate key for deterministic encryption
+    key = getattr(settings, "DETERMINISTIC_ENCRYPTION_KEY", settings.FERNET_KEYS[0])
+    if isinstance(key, str):
+        key = key.encode()
+    # Ensure key is 32 bytes for AES-256
+    if len(key) < 32:
+        key = key.ljust(32, b"\0")[:32]
+    elif len(key) > 32:
+        key = key[:32]
+    return key
+
+
+def deterministic_encrypt(value):
+    """Deterministic encryption for searchable fields using AES."""
+    if value is None or value == "":
+        return value
+
+    if not isinstance(value, str):
+        value = str(value)
+
+    key = get_deterministic_key()
+    # Use a fixed IV for deterministic encryption
+    iv = b"\0" * 16  # Fixed IV for deterministic behavior
+
+    # Pad the value
+    padder = padding.PKCS7(128).padder()
+    padded_data = padder.update(value.encode()) + padder.finalize()
+
+    # Encrypt
+    cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
+    encryptor = cipher.encryptor()
+    encrypted = encryptor.update(padded_data) + encryptor.finalize()
+
+    # Base64 encode for storage
+    encrypted_str = base64.b64encode(encrypted).decode()
+    return encrypted_str
+
+
+def deterministic_decrypt(encrypted_value):
+    """Decrypt deterministically encrypted value."""
+    if encrypted_value is None or encrypted_value == "":
+        return encrypted_value
+
+    try:
+        key = get_deterministic_key()
+        iv = b"\0" * 16  # Same fixed IV
+
+        # Base64 decode
+        encrypted = base64.b64decode(encrypted_value.encode())
+
+        # Decrypt
+        cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
+        decryptor = cipher.decryptor()
+        padded_data = decryptor.update(encrypted) + decryptor.finalize()
+
+        # Unpad
+        unpadder = padding.PKCS7(128).unpadder()
+        data = unpadder.update(padded_data) + unpadder.finalize()
+
+        return data.decode()
+    except Exception:
+        return encrypted_value
+
+
+def generate_search_hash(value):
+    """Generate a SHA-256 hash for searching."""
+    if value is None or value == "":
+        return None
+
+    if not isinstance(value, str):
+        value = str(value)
+
+    # Use a consistent salt/key for hashing
+    key = get_deterministic_key()
+    hash_obj = hashlib.sha256(key + value.encode())
+    return hash_obj.hexdigest()
+
+
 class EncryptedMixin:
     """Mixin to add encryption/decryption to Django fields."""
 
     original_max_length = None  # Store original unencrypted max_length
+    searchable = False  # Whether this field supports searching/indexing
+
+    def __init__(self, *args, **kwargs):
+        self.searchable = kwargs.pop("searchable", False)
+        super().__init__(*args, **kwargs)
 
     def get_prep_value(self, value):
         """Encrypt the value before saving to database."""
@@ -39,10 +127,14 @@ class EncryptedMixin:
         if not isinstance(value, str):
             value = str(value)
 
-        # Encrypt the value
-        fernet = get_fernet()
-        encrypted = fernet.encrypt(value.encode())
-        encrypted_str = base64.b64encode(encrypted).decode()
+        # Choose encryption method based on searchable flag
+        if self.searchable:
+            encrypted_str = deterministic_encrypt(value)
+        else:
+            # Encrypt the value
+            fernet = get_fernet()
+            encrypted = fernet.encrypt(value.encode())
+            encrypted_str = base64.b64encode(encrypted).decode()
 
         # Check if encrypted value exceeds max_length
         max_length = getattr(self, "max_length", None)  # type: ignore
@@ -67,10 +159,13 @@ class EncryptedMixin:
             return value
 
         try:
-            # Decode and decrypt
-            fernet = get_fernet()
-            encrypted = base64.b64decode(value.encode())
-            decrypted = fernet.decrypt(encrypted).decode()
+            if self.searchable:
+                decrypted = deterministic_decrypt(value)
+            else:
+                # Decode and decrypt
+                fernet = get_fernet()
+                encrypted = base64.b64decode(value.encode())
+                decrypted = fernet.decrypt(encrypted).decode()
             return self._convert_from_db(decrypted)
         except Exception:
             # If decryption fails, return as-is (might be unencrypted data)
@@ -89,9 +184,12 @@ class EncryptedMixin:
 
         # Try to decrypt if it looks encrypted (base64)
         try:
-            fernet = get_fernet()
-            encrypted = base64.b64decode(value.encode())
-            decrypted = fernet.decrypt(encrypted).decode()
+            if self.searchable:
+                decrypted = deterministic_decrypt(value)
+            else:
+                fernet = get_fernet()
+                encrypted = base64.b64decode(value.encode())
+                decrypted = fernet.decrypt(encrypted).decode()
             return self._convert_from_db(decrypted)
         except Exception:
             # If decryption fails, try to convert directly
@@ -132,6 +230,8 @@ class EncryptedCharField(EncryptedMixin, models.CharField):
         name, path, args, kwargs = super().deconstruct()
         if self.original_max_length:
             kwargs["original_max_length"] = self.original_max_length
+        if self.searchable:
+            kwargs["searchable"] = self.searchable
         return name, path, args, kwargs
 
     def formfield(self, **kwargs):
