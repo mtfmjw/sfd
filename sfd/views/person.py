@@ -111,6 +111,39 @@ class PersonAdmin(MasterModelAdmin):
     postcode_link.short_description = _("Postcode")  # type: ignore[attr-defined]
     municipality_link.short_description = _("Municipality Name")  # type: ignore[attr-defined]
     municipality_link.admin_order_field = "municipality__municipality_name"  # type: ignore[attr-defined]
+
+    def get_search_results(self, request, queryset, search_term):
+        """Override search to use hash-based search for encrypted fields.
+
+        Note: Encrypted fields only support exact match searches.
+        To search, enter the exact value (e.g., exact family name, name, kana, or email).
+        """
+        if not search_term:
+            return queryset, False
+
+        # Generate hash for the search term
+        from sfd.common.encrypted import generate_search_hash
+
+        search_hash = generate_search_hash(search_term)
+
+        # Search across all hash fields for exact matches
+        from django.db.models import Q
+
+        search_query = (
+            Q(family_name_hash=search_hash)
+            | Q(name_hash=search_hash)
+            | Q(family_name_kana_hash=search_hash)
+            | Q(name_kana_hash=search_hash)
+            | Q(family_name_romaji_hash=search_hash)
+            | Q(name_romaji_hash=search_hash)
+            | Q(email_hash=search_hash)
+        )
+
+        # Apply the search to the queryset
+        filtered_queryset = queryset.filter(search_query)
+
+        return filtered_queryset, filtered_queryset.exists()
+
     fieldsets = [
         (
             _("Basic Information"),

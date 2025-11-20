@@ -3,6 +3,7 @@ charset-normalizer==3.4.3
 colorama==0.4.6
 concurrent-log-handler==0.9.28
 coverage==7.10.7
+cryptography==46.0.3
 defusedxml==0.7.1
 diff-match-patch==20241021
 Django==5.2.7

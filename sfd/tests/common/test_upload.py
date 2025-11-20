@@ -20,9 +20,10 @@ from django.contrib.messages.storage.fallback import FallbackStorage
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db import models
 from django.http import HttpResponse
+from django.test import RequestFactory
 from django.utils import timezone, translation
 
-from sfd.tests.unittest import BaseTestMixin, TestBaseModel, TestMasterModel, TestModel
+from sfd.tests.unittest import BaseTestMixin, TestBaseModel, TestEncryptedModel, TestMasterModel, TestModel
 from sfd.views.common.upload import BaseModelUploadMixin, Encoding, MasterModelUploadMixin, UploadForm, UploadMixin, UploadType
 
 
@@ -2022,3 +2023,134 @@ class MasterModelUploadMixinTest(BaseTestMixin, TestCase):
         self.assertNotIn("valid_to", result)
         self.assertIn("name", result)
         self.assertIn("email", result)
+
+
+@pytest.mark.unit
+@pytest.mark.upload
+class UploadEncryptedFieldsTest(BaseTestMixin, TestCase):
+    """Test upload handling of encrypted fields."""
+
+    databases = {"default", "postgres"}
+
+    def setUp(self):
+        """Set up test fixtures."""
+        super().setUp()
+        self.site = AdminSite()
+        self.model_admin = TestModelAdmin(TestEncryptedModel, self.site)
+        self.factory = RequestFactory()
+        self.request = self.factory.get("/")
+        self.request.user = self.user
+
+    def test_convert2upload_fields_with_encrypted_char_field(self):
+        """Test that encrypted char fields are handled correctly during upload."""
+        upload_fields = {
+            "name": TestEncryptedModel._meta.get_field("name"),
+        }
+        row_dict = {"name": "Test Name"}
+
+        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+
+        # The value should be passed as-is to be encrypted later by the field's get_prep_value
+        self.assertEqual(result["name"], "Test Name")
+
+    def test_convert2upload_fields_with_encrypted_email_field(self):
+        """Test that encrypted email fields are handled correctly during upload."""
+        upload_fields = {
+            "email": TestEncryptedModel._meta.get_field("email"),
+        }
+        row_dict = {"email": "test@example.com"}
+
+        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+
+        # The value should be passed as-is to be encrypted later
+        self.assertEqual(result["email"], "test@example.com")
+
+    def test_convert2upload_fields_with_encrypted_text_field(self):
+        """Test that encrypted text fields are handled correctly during upload."""
+        upload_fields = {
+            "notes": TestEncryptedModel._meta.get_field("notes"),
+        }
+        row_dict = {"notes": "This is a secret note"}
+
+        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+
+        # The value should be passed as-is to be encrypted later
+        self.assertEqual(result["notes"], "This is a secret note")
+
+    def test_convert2upload_fields_with_encrypted_field_none_value(self):
+        """Test that None values in encrypted fields are preserved."""
+        upload_fields = {
+            "email": TestEncryptedModel._meta.get_field("email"),
+            "notes": TestEncryptedModel._meta.get_field("notes"),
+        }
+        row_dict = {"email": None, "notes": ""}
+
+        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+
+        # None and empty values should be passed as-is
+        self.assertIsNone(result["email"])
+        self.assertEqual(result["notes"], "")
+
+    def test_convert2upload_fields_with_multiple_encrypted_fields(self):
+        """Test converting multiple encrypted fields in a single row."""
+        upload_fields = {
+            "name": TestEncryptedModel._meta.get_field("name"),
+            "email": TestEncryptedModel._meta.get_field("email"),
+            "notes": TestEncryptedModel._meta.get_field("notes"),
+        }
+        row_dict = {
+            "name": "John Doe",
+            "email": "john@example.com",
+            "notes": "Sensitive information",
+        }
+
+        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+
+        # All values should be passed as-is, ready for encryption by the field
+        self.assertEqual(result["name"], "John Doe")
+        self.assertEqual(result["email"], "john@example.com")
+        self.assertEqual(result["notes"], "Sensitive information")
+
+    def test_convert2upload_fields_with_mixed_field_types(self):
+        """Test converting a mix of encrypted and regular fields."""
+        upload_fields = {
+            "name": TestEncryptedModel._meta.get_field("name"),
+            "email": TestEncryptedModel._meta.get_field("email"),
+        }
+        row_dict = {
+            "name": "John Doe",
+            "email": "john@example.com",
+        }
+
+        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+
+        # Both fields should be converted correctly
+        self.assertIn("name", result)
+        self.assertIn("email", result)
+        self.assertEqual(result["name"], "John Doe")
+        self.assertEqual(result["email"], "john@example.com")
+
+    def test_encrypted_field_is_instance_of_encrypted_mixin(self):
+        """Test that encrypted fields are instances of EncryptedMixin."""
+        from sfd.common.encrypted import EncryptedMixin
+
+        name_field = TestEncryptedModel._meta.get_field("name")
+        email_field = TestEncryptedModel._meta.get_field("email")
+        notes_field = TestEncryptedModel._meta.get_field("notes")
+
+        self.assertIsInstance(name_field, EncryptedMixin)
+        self.assertIsInstance(email_field, EncryptedMixin)
+        self.assertIsInstance(notes_field, EncryptedMixin)
+
+    def test_convert2upload_fields_preserves_special_characters_in_encrypted_fields(self):
+        """Test that special characters are preserved in encrypted field values."""
+        upload_fields = {
+            "notes": TestEncryptedModel._meta.get_field("notes"),
+        }
+        special_text = "Special chars: !@#$%^&*() Unicode: 日本語 中文"
+        row_dict = {"notes": special_text}
+
+        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+
+        # The value should be preserved exactly as-is
+        self.assertEqual(result["notes"], special_text)

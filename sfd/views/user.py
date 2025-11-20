@@ -54,6 +54,10 @@ class SfdUserAdmin(UploadMixin, DownloadMixin, ModelAdminMixin, UserAdmin):
     upload_model = UserUpload
     is_skip_existing = False  # Allow updates to existing users
 
+    # List display configuration
+    list_display = ("username", "email", "last_name", "first_name", "is_superuser", "is_staff", "is_active")
+    list_filter = ("is_staff", "is_superuser", "is_active", "groups")
+
     add_fieldsets = (
         (
             None,

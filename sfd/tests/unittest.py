@@ -11,6 +11,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.db import models
 from django.test import RequestFactory
 
+from sfd.common.encrypted import EncryptedCharField, EncryptedEmailField, EncryptedTextField
 from sfd.models.base import BaseModel, MasterModel
 
 
@@ -194,3 +195,17 @@ class TestMasterModel(MasterModel):
         app_label = "sfd"
 
         constraints = [models.UniqueConstraint(fields=["name", "valid_from"], name="unique_mastermodel_name_valid_from")]
+
+
+class TestEncryptedModel(models.Model):
+    """Test model with encrypted fields for testing encryption during upload."""
+
+    name = EncryptedCharField(max_length=255, original_max_length=100, verbose_name="Encrypted Name")
+    email = EncryptedEmailField(max_length=385, original_max_length=254, verbose_name="Encrypted Email", null=True, blank=True)
+    notes = EncryptedTextField(verbose_name="Encrypted Notes", null=True, blank=True)
+
+    class Meta:
+        db_table = "test_encrypted_model"
+        verbose_name = "Test Encrypted Model"
+        verbose_name_plural = "Test Encrypted Models"
+        app_label = "sfd"

@@ -18,6 +18,7 @@ from django.urls import path, reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from sfd.common.encrypted import EncryptedMixin
 from sfd.models.base import BaseModel, MasterModel, default_valid_from_date, default_valid_to_date
 from sfd.models.csv_log import CsvLog, CsvProcessResult, CsvProcessType
 
@@ -441,10 +442,20 @@ class UploadMixin:
         """Convert CSV row_dict data to model field type
         外部キーIDはDBシーケンスになるので、Table再作成によって異なる可能性があるため、ダウン・アップロードに使用しない。
         ダウン・アップロードでは、外部キーのUnique Keyを使用し、本メソッドをOverrideして対応する。
+
+        For encrypted fields, we pass the raw value as-is, and let the field's get_prep_value()
+        method handle the encryption during the save operation.
         """
         converted = {}
         for key, value in row_dict.items():
             if key not in upload_fields.keys():
+                continue
+
+            # Check if field is encrypted first - if so, pass raw value as-is
+            if isinstance(upload_fields[key], EncryptedMixin):
+                # For encrypted fields, just pass the raw value
+                # The field's get_prep_value method will encrypt it during save
+                converted[key] = value
                 continue
 
             if upload_fields[key].get_internal_type() == "DateField":

@@ -32,7 +32,7 @@ media/
 logs/*
 
 # Environment variables
-# .env
+.env
 .env.*
 
 # Virtual environment

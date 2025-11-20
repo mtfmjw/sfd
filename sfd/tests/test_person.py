@@ -803,3 +803,252 @@ class PersonAdminFormTest(TestCase):
         # Check that postcode is formatted with hyphen (123-4567)
         self.assertEqual(form.initial["postcode_search"], "123-4567")
         self.assertNotEqual(form.initial["postcode_search"], "1234567")
+
+
+@pytest.mark.unit
+@pytest.mark.models
+@pytest.mark.django_db
+class PersonManagerTest(BaseTestMixin, TestCase):
+    """Test cases for PersonManager custom manager methods."""
+
+    databases = {"default", "postgres"}
+
+    def setUp(self):
+        """Set up test environment with sample person data."""
+        self.municipality = Municipality.objects.create(
+            municipality_code="131016",
+            municipality_name="世田谷区",
+            municipality_name_kana="セタガヤク",
+            prefecture_name="東京都",
+            prefecture_name_kana="トウキョウト",
+        )
+        self.postcode = Postcode.objects.create(postcode="1234567", municipality=self.municipality, town_name="Central", town_name_kana="セントラル")
+
+        # Create test persons
+        self.person1 = Person.objects.create(
+            family_name="山田",
+            family_name_kana="ヤマダ",
+            name="太郎",
+            name_kana="タロウ",
+            email="yamada@example.com",
+            phone_number="03-1234-5678",
+            mobile_number="090-1234-5678",
+        )
+        self.person2 = Person.objects.create(
+            family_name="佐藤",
+            family_name_kana="サトウ",
+            name="花子",
+            name_kana="ハナコ",
+            email="sato@example.com",
+            phone_number="03-9876-5432",
+            mobile_number="080-9876-5432",
+        )
+
+    def test_search_by_name_with_family_name(self):
+        """Test search_by_name method with family name."""
+        results = Person.objects.search_by_name("山田")
+        self.assertEqual(results.count(), 1)
+        self.assertEqual(results.first(), self.person1)
+
+    def test_search_by_name_with_name(self):
+        """Test search_by_name method with given name."""
+        results = Person.objects.search_by_name("花子")
+        self.assertEqual(results.count(), 1)
+        self.assertEqual(results.first(), self.person2)
+
+    def test_search_by_name_with_empty_string(self):
+        """Test search_by_name method with empty string returns none."""
+        results = Person.objects.search_by_name("")
+        self.assertEqual(results.count(), 0)
+
+    def test_search_by_name_with_none(self):
+        """Test search_by_name method with None returns none."""
+        results = Person.objects.search_by_name(None)
+        self.assertEqual(results.count(), 0)
+
+    def test_search_by_email_with_valid_email(self):
+        """Test search_by_email method with valid email."""
+        results = Person.objects.search_by_email("yamada@example.com")
+        self.assertEqual(results.count(), 1)
+        self.assertEqual(results.first(), self.person1)
+
+    def test_search_by_email_with_empty_string(self):
+        """Test search_by_email method with empty string returns none."""
+        results = Person.objects.search_by_email("")
+        self.assertEqual(results.count(), 0)
+
+    def test_search_by_email_with_none(self):
+        """Test search_by_email method with None returns none."""
+        results = Person.objects.search_by_email(None)
+        self.assertEqual(results.count(), 0)
+
+    def test_search_by_phone_with_phone_number(self):
+        """Test search_by_phone method with phone number."""
+        results = Person.objects.search_by_phone("03-1234-5678")
+        self.assertEqual(results.count(), 1)
+        self.assertEqual(results.first(), self.person1)
+
+    def test_search_by_phone_with_mobile_number(self):
+        """Test search_by_phone method with mobile number."""
+        results = Person.objects.search_by_phone("090-1234-5678")
+        self.assertEqual(results.count(), 1)
+        self.assertEqual(results.first(), self.person1)
+
+    def test_search_by_phone_with_empty_string(self):
+        """Test search_by_phone method with empty string returns none."""
+        results = Person.objects.search_by_phone("")
+        self.assertEqual(results.count(), 0)
+
+    def test_search_by_phone_with_none(self):
+        """Test search_by_phone method with None returns none."""
+        results = Person.objects.search_by_phone(None)
+        self.assertEqual(results.count(), 0)
+
+    def test_search_exact_single_field(self):
+        """Test search_exact method with single field."""
+        results = Person.objects.search_exact(family_name="山田")
+        self.assertEqual(results.count(), 1)
+        self.assertEqual(results.first(), self.person1)
+
+    def test_search_exact_multiple_fields(self):
+        """Test search_exact method with multiple fields."""
+        results = Person.objects.search_exact(family_name="佐藤", name="花子")
+        self.assertEqual(results.count(), 1)
+        self.assertEqual(results.first(), self.person2)
+
+    def test_search_exact_with_none_value(self):
+        """Test search_exact method ignores None values."""
+        results = Person.objects.search_exact(family_name="山田", email=None)
+        self.assertEqual(results.count(), 1)
+        self.assertEqual(results.first(), self.person1)
+
+    def test_search_exact_no_match(self):
+        """Test search_exact method with no matching results."""
+        results = Person.objects.search_exact(family_name="存在しない名前")
+        self.assertEqual(results.count(), 0)
+
+
+@pytest.mark.unit
+@pytest.mark.views
+@pytest.mark.django_db
+class PersonAdminSearchTest(BaseTestMixin, TestCase):
+    """Test cases for PersonAdmin get_search_results method."""
+
+    databases = {"default", "postgres"}
+
+    def setUp(self):
+        """Set up test environment."""
+        super().setUp()
+
+        self.site = AdminSite()
+        self.admin = PersonAdmin(Person, self.site)
+        self.request = self.factory.get("/admin/")
+        self.request.user = self.user
+
+        self.municipality = Municipality.objects.create(
+            municipality_code="131016",
+            municipality_name="世田谷区",
+            municipality_name_kana="セタガヤク",
+            prefecture_name="東京都",
+            prefecture_name_kana="トウキョウト",
+        )
+        self.postcode = Postcode.objects.create(postcode="1234567", municipality=self.municipality, town_name="Central", town_name_kana="セントラル")
+
+        # Create test persons
+        self.person1 = Person.objects.create(
+            family_name="田中",
+            family_name_kana="タナカ",
+            family_name_romaji="Tanaka",
+            name="一郎",
+            name_kana="イチロウ",
+            name_romaji="Ichiro",
+            email="tanaka@example.com",
+        )
+        self.person2 = Person.objects.create(
+            family_name="鈴木",
+            family_name_kana="スズキ",
+            family_name_romaji="Suzuki",
+            name="二郎",
+            name_kana="ジロウ",
+            name_romaji="Jiro",
+            email="suzuki@example.com",
+        )
+
+    def test_get_search_results_empty_search_term(self):
+        """Test get_search_results with empty search term."""
+        queryset = Person.objects.all()
+        results, use_distinct = self.admin.get_search_results(self.request, queryset, "")
+
+        self.assertEqual(results.count(), 2)
+        self.assertFalse(use_distinct)
+
+    def test_get_search_results_by_family_name(self):
+        """Test get_search_results by family name."""
+        queryset = Person.objects.all()
+        results, use_distinct = self.admin.get_search_results(self.request, queryset, "田中")
+
+        self.assertEqual(results.count(), 1)
+        self.assertEqual(results.first(), self.person1)
+        self.assertTrue(use_distinct)
+
+    def test_get_search_results_by_name(self):
+        """Test get_search_results by given name."""
+        queryset = Person.objects.all()
+        results, use_distinct = self.admin.get_search_results(self.request, queryset, "二郎")
+
+        self.assertEqual(results.count(), 1)
+        self.assertEqual(results.first(), self.person2)
+        self.assertTrue(use_distinct)
+
+    def test_get_search_results_by_family_name_kana(self):
+        """Test get_search_results by family name kana."""
+        queryset = Person.objects.all()
+        results, use_distinct = self.admin.get_search_results(self.request, queryset, "タナカ")
+
+        self.assertEqual(results.count(), 1)
+        self.assertEqual(results.first(), self.person1)
+        self.assertTrue(use_distinct)
+
+    def test_get_search_results_by_name_kana(self):
+        """Test get_search_results by given name kana."""
+        queryset = Person.objects.all()
+        results, use_distinct = self.admin.get_search_results(self.request, queryset, "ジロウ")
+
+        self.assertEqual(results.count(), 1)
+        self.assertEqual(results.first(), self.person2)
+        self.assertTrue(use_distinct)
+
+    def test_get_search_results_by_family_name_romaji(self):
+        """Test get_search_results by family name romaji."""
+        queryset = Person.objects.all()
+        results, use_distinct = self.admin.get_search_results(self.request, queryset, "Tanaka")
+
+        self.assertEqual(results.count(), 1)
+        self.assertEqual(results.first(), self.person1)
+        self.assertTrue(use_distinct)
+
+    def test_get_search_results_by_name_romaji(self):
+        """Test get_search_results by given name romaji."""
+        queryset = Person.objects.all()
+        results, use_distinct = self.admin.get_search_results(self.request, queryset, "Jiro")
+
+        self.assertEqual(results.count(), 1)
+        self.assertEqual(results.first(), self.person2)
+        self.assertTrue(use_distinct)
+
+    def test_get_search_results_by_email(self):
+        """Test get_search_results by email."""
+        queryset = Person.objects.all()
+        results, use_distinct = self.admin.get_search_results(self.request, queryset, "tanaka@example.com")
+
+        self.assertEqual(results.count(), 1)
+        self.assertEqual(results.first(), self.person1)
+        self.assertTrue(use_distinct)
+
+    def test_get_search_results_no_match(self):
+        """Test get_search_results with no matching results."""
+        queryset = Person.objects.all()
+        results, use_distinct = self.admin.get_search_results(self.request, queryset, "存在しない検索語")
+
+        self.assertEqual(results.count(), 0)
+        self.assertFalse(use_distinct)

@@ -25,7 +25,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY", default="django-insecure-18rk8_o+to+!qntp559&r-as9k3x%#&g!089psm=e4bzr-mszb")
+# SECRET_KEY must be set in .env file - no default value for security
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=True, cast=bool)
@@ -215,3 +216,7 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5 MB
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # 5 MB
 
 LOGGING = LOGGING
+
+# Field-level encryption settings for django-fernet-fields
+# IMPORTANT: Store this key securely in your .env file, never commit to git
+FERNET_KEYS = [config("FIELD_ENCRYPTION_KEY").encode()]  # type: ignore
