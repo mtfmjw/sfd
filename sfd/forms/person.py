@@ -52,9 +52,7 @@ class PersonAdminForm(forms.ModelForm):
             "municipality",
             "address_detail",
         ]
-        widgets = {
-            "birthday": forms.DateInput(attrs={"type": "date"}),
-        }
+        # Note: widgets removed to allow encrypted fields to use their own formfield definitions
 
     class Media:
         """Media files for the form.
