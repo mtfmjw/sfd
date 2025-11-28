@@ -83,32 +83,45 @@ WSGI_APPLICATION = "sfd_prj.wsgi.application"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 # Base configuration - PostgreSQL as default database
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("DB_NAME"),
-        "USER": config("DB_USER"),
-        "PASSWORD": config("DB_PASSWORD"),
-        "HOST": config("DB_HOST", default="localhost"),
-        "PORT": config("DB_PORT", default="5432"),
-        "CONN_MAX_AGE": 60,  # Keep connections alive for 60 seconds
-        "TEST": {
-            "NAME": "test_default",
+if "DATABASE_URL" in os.environ:
+    # 1. Use the environment variable if it exists (i.e., when on Render)
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=config("DATABASE_URL"),
+            conn_max_age=600,  # Optional: Sets connection age for persistent connections
+            ssl_require=True,  # Crucial for Render's PostgreSQL connection
+        )
+    }
+    # Optional: If you want to log the connection being used
+    print("Using Production Database from DATABASE_URL")
+else:
+    # 2. Fallback to local settings from .env for development
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": config("DB_NAME"),
+            "USER": config("DB_USER"),
+            "PASSWORD": config("DB_PASSWORD"),
+            "HOST": config("DB_HOST", default="localhost"),
+            "PORT": config("DB_PORT", default="5432"),
+            "CONN_MAX_AGE": 60,  # Keep connections alive for 60 seconds
+            "TEST": {
+                "NAME": "test_default",
+            },
         },
-    },
-    "postgres": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("DB_NAME"),
-        "USER": config("DB_USER"),
-        "PASSWORD": config("DB_PASSWORD"),
-        "HOST": config("DB_HOST", default="localhost"),
-        "PORT": config("DB_PORT", default="5432"),
-        "CONN_MAX_AGE": 60,  # Keep connections alive for 60 seconds
-        "TEST": {
-            "NAME": "test_default",
+        "postgres": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": config("DB_NAME"),
+            "USER": config("DB_USER"),
+            "PASSWORD": config("DB_PASSWORD"),
+            "HOST": config("DB_HOST", default="localhost"),
+            "PORT": config("DB_PORT", default="5432"),
+            "CONN_MAX_AGE": 60,  # Keep connections alive for 60 seconds
+            "TEST": {
+                "NAME": "test_default",
+            },
         },
-    },
-}
+    }
 
 DATABASE_ROUTERS = ["sfd_prj.db_routers.DbRouter"]
 
