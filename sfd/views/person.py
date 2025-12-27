@@ -160,9 +160,9 @@ class PersonAdmin(MasterModelAdmin):
         ),
     ]
 
-    def convert2upload_fields(self, request, row_dict, upload_fields) -> dict[str, object]:
+    def convert2upload_fields(self, row_dict, upload_fields, request, cleaned_data=None) -> dict[str, object]:
         """Convert row data to match the upload fields."""
-        converted = super().convert2upload_fields(request, row_dict, upload_fields)
+        converted = super().convert2upload_fields(row_dict, upload_fields, request, cleaned_data)
 
         if converted.get("gender") not in GenderType.values:
             converted["gender"] = GenderType.OTHER

@@ -531,7 +531,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
     def test_upload_file_excel_upload_not_implemented(self):
         """Test excel_upload raises NotImplementedError."""
         with self.assertRaises(NotImplementedError):
-            self.model_admin.excel_upload(self.request, Mock())
+            self.model_admin.excel_upload(Mock(), self.request)
 
     @pytest.mark.django_db(databases=["default", "postgres"])
     @patch("sfd.views.common.upload.reverse", return_value="/admin/testmodel/upload/")
@@ -556,7 +556,12 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         self.model_admin.upload_file(request)
 
         # Verify excel upload is called
-        mock_excel_upload.assert_called_once_with(request, csv_file)
+        mock_excel_upload.assert_called_once()
+        args, kwargs = mock_excel_upload.call_args
+        self.assertEqual(args[0], csv_file)
+        self.assertEqual(args[1], request)
+        self.assertIn("upload_type", args[2])
+        self.assertIn("encoding", args[2])
 
     @pytest.mark.django_db(databases=["default", "postgres"])
     @patch("sfd.views.common.upload.reverse", return_value="/admin/testmodel/upload/")
@@ -605,7 +610,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         request._messages = storage  # type: ignore[attr-defined]
 
         # Setup mock side effect to simulate inserting records
-        def side_effect(request, upload_fields):
+        def side_effect(upload_fields):
             self.model_admin._total_inserted += 1
 
         mock_process.side_effect = side_effect
@@ -845,7 +850,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         zip_file = SimpleUploadedFile("test.zip", zip_buffer.read(), content_type="application/zip")
 
         # Call zip_upload
-        csv_files = self.model_admin.zip_upload(self.request, zip_file)
+        csv_files = self.model_admin.zip_upload(zip_file, self.request)
 
         # Verify results
         self.assertEqual(len(csv_files), 2, "Should extract exactly 2 CSV files")
@@ -877,7 +882,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         with translation.override("en"):
             # Call zip_upload and expect ValueError
             with self.assertRaises(ValueError) as context:
-                self.model_admin.zip_upload(self.request, zip_file)
+                self.model_admin.zip_upload(zip_file, self.request)
 
             self.assertIn("No CSV files found", str(context.exception))
 
@@ -902,7 +907,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         zip_file = SimpleUploadedFile("test.zip", zip_buffer.read(), content_type="application/zip")
 
         # Call zip_upload
-        csv_files = self.model_admin.zip_upload(self.request, zip_file)
+        csv_files = self.model_admin.zip_upload(zip_file, self.request)
 
         # Verify results
         self.assertEqual(len(csv_files), 3, "Should extract all CSV files from nested directories")
@@ -962,7 +967,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         csv_file = create_test_csv_file(csv_content)
 
         # Call upload_data
-        self.model_admin.upload_data(self.request, self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
+        self.model_admin.upload_data(self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
 
         # Verify records were added to bulk_create_list
         self.assertEqual(len(self.model_admin._bulk_create_list), 2)
@@ -986,7 +991,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         csv_file = create_test_csv_file(csv_content)
 
         # Call upload_data
-        self.model_admin.upload_data(self.request, self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
+        self.model_admin.upload_data(self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
 
         # Verify record was added to bulk_create_list
         self.assertEqual(len(self.model_admin._bulk_create_list), 1)
@@ -1009,7 +1014,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         csv_file = create_test_csv_file(csv_content)
 
         # Call upload_data
-        self.model_admin.upload_data(self.request, self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
+        self.model_admin.upload_data(self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
 
         # Verify record was added to bulk_update_list
         self.assertEqual(len(self.model_admin._bulk_update_list), 1)
@@ -1033,7 +1038,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         csv_file = create_test_csv_file(csv_content)
 
         # Call upload_data
-        self.model_admin.upload_data(self.request, self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
+        self.model_admin.upload_data(self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
 
         # Verify no records were added to either list
         self.assertEqual(len(self.model_admin._bulk_create_list), 0)
@@ -1051,7 +1056,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         csv_file = create_test_csv_file(csv_content)
 
         # Call upload_data
-        self.model_admin.upload_data(self.request, self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
+        self.model_admin.upload_data(self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
 
         # Verify record was created with upload_model
         self.assertEqual(len(self.model_admin._bulk_create_list), 1)
@@ -1072,7 +1077,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         csv_file = create_test_csv_file(csv_content)
 
         # Call upload_data
-        self.model_admin.upload_data(self.request, self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
+        self.model_admin.upload_data(self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
 
         # Verify _process_bulk_operations was called multiple times (for chunks + final)
         # With 5 records and chunk_size=2: called at 2, 4, and final
@@ -1089,7 +1094,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         csv_file = create_test_csv_file(csv_content)
 
         # Call upload_data
-        self.model_admin.upload_data(self.request, self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
+        self.model_admin.upload_data(self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
 
         # Verify all rows were processed (even those with empty values)
         # CSV DictReader treats empty lines as rows with empty string values
@@ -1110,7 +1115,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
 
         # Call upload_data and expect ValueError
         with self.assertRaises(ValueError) as context:
-            self.model_admin.upload_data(self.request, self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
+            self.model_admin.upload_data(self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
 
         self.assertIn("missing required unique fields", str(context.exception))
 
@@ -1126,7 +1131,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
 
             # Call upload_data and expect ValueError
             with self.assertRaises(ValueError) as context, translation.override("en"):
-                self.model_admin.upload_data(self.request, self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
+                self.model_admin.upload_data(self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
 
                 self.assertIn("No valid data found in the row", str(context.exception))
 
@@ -1142,7 +1147,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         csv_file = create_test_csv_file(csv_content)
 
         # Call upload_data
-        self.model_admin.upload_data(self.request, self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
+        self.model_admin.upload_data(self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
 
         # Verify only first occurrence was added (second is skipped due to _uploaded_unique_values)
         self.assertEqual(len(self.model_admin._bulk_create_list), 1)
@@ -1162,7 +1167,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         ]
 
         # Call _process_bulk_operations
-        self.model_admin._process_bulk_operations(self.request, upload_fields)
+        self.model_admin._process_bulk_operations(upload_fields)
 
         # Verify records were inserted
         self.assertEqual(self.model_admin._total_inserted, 2)
@@ -1189,7 +1194,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         self.model_admin._bulk_update_list = [record1, record2]
 
         # Call _process_bulk_operations
-        self.model_admin._process_bulk_operations(self.request, upload_fields)
+        self.model_admin._process_bulk_operations(upload_fields)
 
         # Verify records were updated
         self.assertEqual(self.model_admin._total_inserted, 0)
@@ -1218,7 +1223,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         self.model_admin._bulk_update_list = [existing]
 
         # Call _process_bulk_operations
-        self.model_admin._process_bulk_operations(self.request, upload_fields)
+        self.model_admin._process_bulk_operations(upload_fields)
 
         # Verify counts
         self.assertEqual(self.model_admin._total_inserted, 1)
@@ -1236,7 +1241,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         self.model_admin._bulk_create_list = [TestModel(name="Test1", email="test1@example.com")]
 
         # Call _process_bulk_operations
-        self.model_admin._process_bulk_operations(self.request, upload_fields)
+        self.model_admin._process_bulk_operations(upload_fields)
 
         # Verify record was created using upload_model
         self.assertEqual(self.model_admin._total_inserted, 1)
@@ -1249,7 +1254,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
 
         row_dict = {"name": "John Doe", "email": "john@example.com", "extra_field": "ignored"}
 
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
 
         self.assertEqual(result, {"name": "John Doe", "email": "john@example.com"})
         self.assertNotIn("extra_field", result)
@@ -1262,17 +1267,17 @@ class UploadMixinTest(BaseTestMixin, TestCase):
 
         # Test with string date
         row_dict = {"name": "Test", "date": "2024-12-25"}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertEqual(result["date"], date(2024, 12, 25))
 
         # Test with slash format
         row_dict = {"name": "Test", "date": "2024/12/25"}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertEqual(result["date"], date(2024, 12, 25))
 
         # Test with empty value
         row_dict = {"name": "Test", "date": ""}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertIsNone(result["date"])
 
     def test_convert2upload_fields_date_field_error(self):
@@ -1284,7 +1289,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         row_dict = {"name": "Test", "date": "invalid-date"}
 
         with self.assertRaises(ValueError) as context:
-            self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+            self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
 
         self.assertIn("Invalid value", str(context.exception))
         self.assertIn("should be a datetime", str(context.exception))
@@ -1297,32 +1302,32 @@ class UploadMixinTest(BaseTestMixin, TestCase):
 
         # Test with string "true"
         row_dict = {"name": "Test", "is_active": "true"}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertTrue(result["is_active"])
 
         # Test with string "false"
         row_dict = {"name": "Test", "is_active": "false"}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertFalse(result["is_active"])
 
         # Test with string "0"
         row_dict = {"name": "Test", "is_active": "0"}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertFalse(result["is_active"])
 
         # Test with empty string
         row_dict = {"name": "Test", "is_active": ""}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertFalse(result["is_active"])
 
         # Test with integer 1
         row_dict = {"name": "Test", "is_active": 1}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertTrue(result["is_active"])
 
         # Test with integer 0
         row_dict = {"name": "Test", "is_active": 0}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertFalse(result["is_active"])
 
     def test_convert2upload_fields_ignores_unknown_fields(self):
@@ -1332,7 +1337,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
 
         row_dict = {"name": "Test", "email": "test@example.com", "unknown": "value"}
 
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
 
         self.assertEqual(result, {"name": "Test"})
         self.assertNotIn("email", result)
@@ -1448,18 +1453,18 @@ class UploadMixinTest(BaseTestMixin, TestCase):
 
         # Test with string datetime
         row_dict = {"datetime_field": "2024-12-25 10:30:00"}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertEqual(result["datetime_field"], datetime(2024, 12, 25, 10, 30, 0))
 
         # Test with empty value
         row_dict = {"datetime_field": ""}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertIsNone(result["datetime_field"])
 
         # Test with datetime object
         dt = datetime(2024, 12, 25, 10, 30, 0)
         row_dict = {"datetime_field": dt}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertEqual(result["datetime_field"], dt)
 
         # Test with various datetime formats
@@ -1470,7 +1475,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         ]
         for date_str, expected in test_formats:
             row_dict = {"datetime_field": date_str}
-            result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+            result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
             self.assertEqual(result["datetime_field"], expected)
 
     def test_convert2upload_fields_datetime_field_error(self):
@@ -1484,13 +1489,13 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         # Test with invalid datetime string
         row_dict = {"datetime_field": "invalid-datetime"}
         with self.assertRaises(ValueError) as context:
-            self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+            self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertIn("Invalid value", str(context.exception))
 
         # Test with invalid type
         row_dict = {"datetime_field": 12345}
         with self.assertRaises(ValueError) as context:
-            self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+            self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertIn("Invalid value", str(context.exception))
 
     def test_convert2upload_fields_time_field(self):
@@ -1505,23 +1510,23 @@ class UploadMixinTest(BaseTestMixin, TestCase):
 
         # Test with string time
         row_dict = {"time_field": "10:30:45"}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertEqual(result["time_field"], time(10, 30, 45))
 
         # Test with empty value
         row_dict = {"time_field": ""}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertIsNone(result["time_field"])
 
         # Test with time object
         t = time(10, 30, 45)
         row_dict = {"time_field": t}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertEqual(result["time_field"], t)
 
         # Test with short format
         row_dict = {"time_field": "10:30"}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertEqual(result["time_field"], time(10, 30, 0))
 
     def test_convert2upload_fields_time_field_error(self):
@@ -1535,13 +1540,13 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         # Test with invalid time string
         row_dict = {"time_field": "invalid-time"}
         with self.assertRaises(ValueError) as context:
-            self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+            self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertIn("Invalid value", str(context.exception))
 
         # Test with invalid type
         row_dict = {"time_field": 12345}
         with self.assertRaises(ValueError) as context:
-            self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+            self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertIn("Invalid value", str(context.exception))
 
     def test_convert2upload_fields_duration_field(self):
@@ -1556,18 +1561,18 @@ class UploadMixinTest(BaseTestMixin, TestCase):
 
         # Test with string duration
         row_dict = {"duration_field": "10:30:45"}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertEqual(result["duration_field"], timedelta(hours=10, minutes=30, seconds=45))
 
         # Test with empty value
         row_dict = {"duration_field": ""}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertIsNone(result["duration_field"])
 
         # Test with timedelta object
         td = timedelta(hours=10, minutes=30, seconds=45)
         row_dict = {"duration_field": td}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertEqual(result["duration_field"], td)
 
     def test_convert2upload_fields_duration_field_error(self):
@@ -1581,7 +1586,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         # Test with invalid type
         row_dict = {"duration_field": 12345}
         with self.assertRaises(ValueError) as context:
-            self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+            self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertIn("Invalid value", str(context.exception))
 
     def test_convert2upload_fields_boolean_field_none(self):
@@ -1592,7 +1597,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
 
         # Test with None value
         row_dict = {"name": "Test", "is_active": None}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertIsNone(result["is_active"])
 
     def test_convert2upload_fields_date_instance_and_errors(self):
@@ -1604,13 +1609,13 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         # Test with date instance
         test_date = date(2024, 12, 25)
         row_dict = {"name": "Test", "date": test_date}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertEqual(result["date"], test_date)
 
         # Test with invalid type
         row_dict = {"name": "Test", "date": 12345}
         with self.assertRaises(ValueError) as context:
-            self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+            self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertIn("Invalid value", str(context.exception))
 
     @pytest.mark.django_db(databases=["default", "postgres"])
@@ -1630,7 +1635,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
             yield {"name": "Charlie", "email": "charlie@example.com"}
 
         # Call upload_data with mock reader
-        self.model_admin.upload_data(self.request, mock_csv_reader, None, Encoding.UTF8, self.request)
+        self.model_admin.upload_data(mock_csv_reader, None, Encoding.UTF8, self.request)
 
         # Only non-empty rows should be processed (3 records)
         self.assertEqual(len(self.model_admin._bulk_create_list), 3)
@@ -1654,7 +1659,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         self.model_admin._bulk_update_list = [record1]
 
         # Call _process_bulk_operations
-        self.model_admin._process_bulk_operations(self.request, upload_fields)
+        self.model_admin._process_bulk_operations(upload_fields)
 
         # Verify record was updated
         self.assertEqual(self.model_admin._total_updated, 1)
@@ -1752,7 +1757,7 @@ class BaseModelUploadMixinTest(BaseTestMixin, TestCase):
         self.assertIn("created_by", upload_fields, "created_by should be in upload_fields")
 
         row_dict = {"name": "Test User", "email": "test@example.com"}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
 
         self.assertEqual(result["name"], "Test User")
         self.assertEqual(result["email"], "test@example.com")
@@ -1766,7 +1771,7 @@ class BaseModelUploadMixinTest(BaseTestMixin, TestCase):
         upload_fields = self.model_admin.get_upload_db_fields(self.request)
 
         row_dict = {"name": "Test User", "email": "test@example.com"}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
 
         self.assertEqual(result["updated_by"], self.user.username)
 
@@ -1776,7 +1781,7 @@ class BaseModelUploadMixinTest(BaseTestMixin, TestCase):
         upload_fields = self.model_admin.get_upload_db_fields(self.request)
 
         row_dict = {"name": "Test User", "email": "test@example.com", "created_by": "original_user"}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
 
         # Should preserve the original created_by value
         self.assertEqual(result["created_by"], "original_user")
@@ -1787,7 +1792,7 @@ class BaseModelUploadMixinTest(BaseTestMixin, TestCase):
         upload_fields = self.model_admin.get_upload_db_fields(self.request)
 
         row_dict = {"name": "Test User", "email": "test@example.com", "updated_by": "original_updater"}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
 
         # Should overwrite with the current user (not preserve original value)
         self.assertEqual(result["updated_by"], self.user.username)
@@ -1800,7 +1805,7 @@ class BaseModelUploadMixinTest(BaseTestMixin, TestCase):
         upload_fields = self.model_admin.get_upload_db_fields(self.request)
 
         row_dict = {"name": "Test User", "date": "2024-12-25"}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
 
         self.assertEqual(result["date"], date(2024, 12, 25))
         self.assertEqual(result["created_by"], self.user.username)
@@ -1814,7 +1819,7 @@ class BaseModelUploadMixinTest(BaseTestMixin, TestCase):
         upload_fields = self.model_admin.get_upload_db_fields(self.request)
 
         row_dict = {"name": "Test User", "is_active": "true"}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
 
         self.assertTrue(result["is_active"])
         self.assertEqual(result["created_by"], self.user.username)
@@ -1830,7 +1835,7 @@ class BaseModelUploadMixinTest(BaseTestMixin, TestCase):
         csv_file = create_test_csv_file(csv_content)
 
         # Call upload_data
-        self.model_admin.upload_data(self.request, self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
+        self.model_admin.upload_data(self.model_admin.get_csv_reader, csv_file, Encoding.UTF8, self.request)
 
         # Verify record was created with user information
         self.assertEqual(len(self.model_admin._bulk_create_list), 1)
@@ -1921,7 +1926,7 @@ class MasterModelUploadMixinTest(BaseTestMixin, TestCase):
             "is_active": "true",
             "date": "2024-12-31",
         }
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertEqual(result["name"], "Master Test")
         self.assertEqual(result["email"], "master@example.com")
         self.assertEqual(result["is_active"], True)
@@ -1939,7 +1944,7 @@ class MasterModelUploadMixinTest(BaseTestMixin, TestCase):
             "valid_from": "2024-01-01",
             "valid_to": "2024-12-31",
         }
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertEqual(result["name"], "Master Test")
         self.assertEqual(result["valid_from"], date(2024, 1, 1))
         self.assertEqual(result["valid_to"], date(2024, 12, 31))
@@ -1950,7 +1955,7 @@ class MasterModelUploadMixinTest(BaseTestMixin, TestCase):
         upload_fields = self.model_admin.get_upload_db_fields(self.request)
 
         row_dict = {"name": "Master Test"}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
 
         # valid_from should be tomorrow
         expected_valid_from = timezone.now().date() + timedelta(days=1)
@@ -1982,12 +1987,12 @@ class MasterModelUploadMixinTest(BaseTestMixin, TestCase):
 
         # Test with list (triggers else branch -> bool())
         row_dict = {"is_active": [1, 2, 3]}  # Non-empty list is truthy
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertTrue(result["is_active"])
 
         # Test with empty list (triggers else branch -> bool())
         row_dict = {"is_active": []}  # Empty list is falsy
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertFalse(result["is_active"])
 
     def test_convert2upload_fields_other_field_type(self):
@@ -2000,12 +2005,12 @@ class MasterModelUploadMixinTest(BaseTestMixin, TestCase):
 
         # Test with string value
         row_dict = {"other_field": "some value"}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertEqual(result["other_field"], "some value")
 
         # Test with integer value
         row_dict = {"other_field": 42}
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertEqual(result["other_field"], 42)
 
     def test_get_upload_column_names_with_non_master_model_upload_model(self):
@@ -2048,7 +2053,7 @@ class UploadEncryptedFieldsTest(BaseTestMixin, TestCase):
         }
         row_dict = {"name": "Test Name"}
 
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
 
         # The value should be passed as-is to be encrypted later by the field's get_prep_value
         self.assertEqual(result["name"], "Test Name")
@@ -2060,7 +2065,7 @@ class UploadEncryptedFieldsTest(BaseTestMixin, TestCase):
         }
         row_dict = {"email": "test@example.com"}
 
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
 
         # The value should be passed as-is to be encrypted later
         self.assertEqual(result["email"], "test@example.com")
@@ -2072,7 +2077,7 @@ class UploadEncryptedFieldsTest(BaseTestMixin, TestCase):
         }
         row_dict = {"notes": "This is a secret note"}
 
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
 
         # The value should be passed as-is to be encrypted later
         self.assertEqual(result["notes"], "This is a secret note")
@@ -2085,7 +2090,7 @@ class UploadEncryptedFieldsTest(BaseTestMixin, TestCase):
         }
         row_dict = {"email": None, "notes": ""}
 
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
 
         # None and empty values should be passed as-is
         self.assertIsNone(result["email"])
@@ -2104,7 +2109,7 @@ class UploadEncryptedFieldsTest(BaseTestMixin, TestCase):
             "notes": "Sensitive information",
         }
 
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
 
         # All values should be passed as-is, ready for encryption by the field
         self.assertEqual(result["name"], "John Doe")
@@ -2122,7 +2127,7 @@ class UploadEncryptedFieldsTest(BaseTestMixin, TestCase):
             "email": "john@example.com",
         }
 
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
 
         # Both fields should be converted correctly
         self.assertIn("name", result)
@@ -2150,7 +2155,7 @@ class UploadEncryptedFieldsTest(BaseTestMixin, TestCase):
         special_text = "Special chars: !@#$%^&*() Unicode: 日本語 中文"
         row_dict = {"notes": special_text}
 
-        result = self.model_admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        result = self.model_admin.convert2upload_fields(row_dict, upload_fields, self.request)
 
         # The value should be preserved exactly as-is
         self.assertEqual(result["notes"], special_text)

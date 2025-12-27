@@ -47,6 +47,7 @@ class UploadMixin:
     Mixin to handle file uploads in views.
     """
 
+    upload_form_class = UploadForm
     upload_type = UploadType.CSV  # Default upload type
     encoding = Encoding.UTF8  # Default encoding
     delimiter = ","  # Default CSV delimiter
@@ -62,14 +63,15 @@ class UploadMixin:
         opts = self.model._meta  # type: ignore[attr-defined]
         self.upload_url_name = f"{opts.app_label}_{opts.model_name}_upload_file"  # type: ignore[attr-defined]
 
-    def get_upload_column_names(self, request) -> list[str]:
+    def get_upload_column_names(self, request, cleaned_data=None) -> list[str]:
         """
         Returns the list of column names to be used for uploading.
         This should be overridden in subclasses to specify the columns.
         """
         upload_column_names = []
         if self.upload_model is not None:
-            upload_column_names = [f.name for f in self.upload_model._meta.get_fields() if f.concrete and not f.auto_created]  # type: ignore
+            upload_model_fields = self.upload_model._meta.get_fields()
+            upload_column_names = [f.name for f in upload_model_fields if f.concrete and not f.auto_created]  # type: ignore
         elif self.upload_column_names:
             upload_column_names = list(self.upload_column_names)
         elif hasattr(self, "download_column_names") and self.download_column_names:  # type: ignore
@@ -84,7 +86,7 @@ class UploadMixin:
         logger.debug(f"Upload Column Names: {upload_column_names}")
         return upload_column_names
 
-    def get_upload_db_fields(self, request) -> dict[str, models.Field]:
+    def get_upload_db_fields(self, request, cleaned_data=None) -> dict[str, models.Field]:
         """
         Returns the fields of the target database table to be used for uploading.
         This should be overridden in subclasses to specify the fields.
@@ -93,7 +95,7 @@ class UploadMixin:
         upload_model = self.upload_model if self.upload_model is not None else self.model  # type: ignore[attr-defined]
 
         model_field_names = [f.name for f in upload_model._meta.get_fields() if f.concrete and not f.auto_created]  # type: ignore
-        db_fields = {name: upload_model._meta.get_field(name) for name in upload_column_names if name in model_field_names}  # type: ignore
+        db_fields = {name: upload_model._meta.get_field(name) for name in upload_column_names if name in model_field_names}
 
         logger.debug(f"Upload DB Fields: {list(db_fields.keys())}")
         return db_fields
@@ -131,7 +133,7 @@ class UploadMixin:
 
     def get_context_data(self, form=None) -> dict[str, Any]:
         if form is None:
-            form = UploadForm(
+            form = self.upload_form_class(
                 initial={
                     "upload_type": self.upload_type,
                     "encoding": self.encoding,
@@ -159,12 +161,12 @@ class UploadMixin:
 
     def upload_file(self, request) -> HttpResponse:
         if request.method == "POST":
-            form = UploadForm(request.POST, request.FILES)
+            form = self.upload_form_class(request.POST, request.FILES)
             if form.is_valid():
                 cleaned_data = form.cleaned_data
                 file = cleaned_data["upload_file"]
-                upload_type = cleaned_data["upload_type"]
-                encoding = cleaned_data["encoding"]
+                upload_type = cleaned_data.get("upload_type", self.upload_type)
+                encoding = cleaned_data.get("encoding", self.encoding)
 
                 self._bulk_create_list = []
                 self._bulk_update_list = []
@@ -175,22 +177,25 @@ class UploadMixin:
                 self._process_id = uuid.uuid4()  # Generate unique process ID for this upload
                 self._total_lines = 0  # Track total lines processed
 
-                model_name = self.upload_model._meta.verbose_name if self.upload_model is not None else self.model._meta.verbose_name  # type: ignore[attr-defined]
+                if self.upload_model is not None:
+                    model_name = self.upload_model._meta.verbose_name
+                else:
+                    model_name = self.model._meta.verbose_name  # type: ignore[attr-defined]
 
                 try:
-                    self.pre_upload(request)
+                    self.pre_upload(request, cleaned_data)
 
                     if upload_type == UploadType.EXCEL:
-                        self.excel_upload(request, file)
+                        self.excel_upload(file, request, cleaned_data)
                     elif upload_type == UploadType.ZIP:
-                        csv_files = self.zip_upload(request, file)
+                        csv_files = self.zip_upload(file, request, cleaned_data)
                         for csv_file in csv_files:
                             logger.info(f"Processing CSV file: {csv_file}")
-                            self.upload_data(request, self.get_csv_reader, csv_file, encoding, request)
+                            self.upload_data(self.get_csv_reader, csv_file, encoding, request, cleaned_data)
                     else:
-                        self.upload_data(request, self.get_csv_reader, file, encoding, request)
+                        self.upload_data(self.get_csv_reader, file, encoding, request, cleaned_data)
 
-                    self.post_upload(request)
+                    self.post_upload(request=request, cleaned_data=cleaned_data)
 
                     upload_message = _("Upload completed. Inserted: %(inserted)s rows, Updated: %(updated)s rows.") % {
                         "inserted": self._total_inserted,
@@ -267,20 +272,20 @@ class UploadMixin:
             response = render(request, "sfd/upload.html", self.get_context_data())
             return response
 
-    def pre_upload(self, request) -> None:
+    def pre_upload(self, request, cleaned_data=None) -> None:
         """Handle pre-upload processing."""
         if self.upload_model is not None:
             self.upload_model.objects.all().delete()
 
-    def post_upload(self, request) -> None:
+    def post_upload(self, request, cleaned_data=None) -> None:
         """Handle post-upload processing."""
         pass
 
-    def excel_upload(self, request, excel_file) -> None:
+    def excel_upload(self, excel_file, request, cleaned_data=None) -> None:
         """Get Excel reader object."""
         raise NotImplementedError
 
-    def zip_upload(self, request, zip_file) -> list:
+    def zip_upload(self, zip_file, request, cleaned_data=None) -> list:
         """Extract ZIP file and return paths to CSV files.
 
         Args:
@@ -314,7 +319,7 @@ class UploadMixin:
 
         return csv_files
 
-    def get_csv_reader(self, csv_file, encoding, request):
+    def get_csv_reader(self, csv_file, encoding, request, cleaned_data=None) -> Any:
         """Get CSV reader object.
 
         Args:
@@ -343,23 +348,24 @@ class UploadMixin:
 
         yield from reader
 
-    def upload_data(self, request, upload_func, *args, **kwargs) -> None:
+    def upload_data(self, upload_func, csv_file, encoding, request, cleaned_data=None) -> None:
         """Simple implementation of CSV upload. Only inserts new rows."""
 
         # Initialize _total_lines if not already set (for direct calls to upload_data)
         if not hasattr(self, "_total_lines"):
             self._total_lines = 0
 
-        upload_fields = self.get_upload_db_fields(request)
+        upload_fields = self.get_upload_db_fields(request, cleaned_data)
         unique_fields = self.get_model_unique_field_names()
+        username = request.user.username  # type: ignore
         if issubclass(self.model, BaseModel):  # type: ignore
-            creator_info = {"created_by": request.user.username, "created_at": self._upload_datetime}
-            updater_info = {"updated_by": request.user.username, "updated_at": self._upload_datetime}
+            creator_info = {"created_by": username, "created_at": self._upload_datetime}
+            updater_info = {"updated_by": username, "updated_at": self._upload_datetime}
         else:
             creator_info = {}
             updater_info = {}
 
-        reader = upload_func(*args, **kwargs)
+        reader = upload_func(csv_file, encoding, request, cleaned_data)
 
         # Process data in chunks to avoid memory issues with large files
         processed_count = 0
@@ -369,7 +375,7 @@ class UploadMixin:
                 continue
             logger.debug(f"Processing row: {row}")
             self._total_lines += 1  # Track total lines processed
-            row_dict = self.convert2upload_fields(request, row, upload_fields)
+            row_dict = self.convert2upload_fields(row, upload_fields, request, cleaned_data)
             if not row_dict:
                 raise ValueError(_("No valid data found in the row."))
             if self.upload_model is not None:
@@ -406,14 +412,14 @@ class UploadMixin:
 
             # Process in chunks to avoid memory issues
             if processed_count % self.chunk_size == 0:
-                self._process_bulk_operations(request, upload_fields)
+                self._process_bulk_operations(upload_fields)
                 logger.debug(f"Processed {processed_count} records so far...")
 
         # Process any remaining records
         if self._bulk_create_list or self._bulk_update_list:
-            self._process_bulk_operations(request, upload_fields)
+            self._process_bulk_operations(upload_fields)
 
-    def _process_bulk_operations(self, request, upload_fields) -> None:
+    def _process_bulk_operations(self, upload_fields) -> None:
         """Process bulk create and update operations in chunks."""
         from django.db import transaction
 
@@ -438,7 +444,7 @@ class UploadMixin:
                 self._total_updated += update_count
                 self._bulk_update_list.clear()  # Clear the list to free memory
 
-    def convert2upload_fields(self, request, row_dict, upload_fields) -> dict[str, Any]:
+    def convert2upload_fields(self, row_dict, upload_fields, request, cleaned_data=None) -> dict[str, Any]:
         """Convert CSV row_dict data to model field type
         外部キーIDはDBシーケンスになるので、Table再作成によって異なる可能性があるため、ダウン・アップロードに使用しない。
         ダウン・アップロードでは、外部キーのUnique Keyを使用し、本メソッドをOverrideして対応する。
@@ -548,7 +554,7 @@ class UploadMixin:
 
 
 class BaseModelUploadMixin(UploadMixin):
-    def get_upload_column_names(self, request) -> list[str]:
+    def get_upload_column_names(self, request, cleaned_data=None) -> list[str]:
         column_names = super().get_upload_column_names(request)
         # Only add base model fields if uploading to a BaseModel (not to a different upload_model)
         upload_model = self.upload_model if self.upload_model is not None else self.model  # type: ignore[attr-defined]
@@ -557,8 +563,8 @@ class BaseModelUploadMixin(UploadMixin):
             return [name for name in column_names if name not in base_model_field_names] + base_model_field_names
         return column_names
 
-    def convert2upload_fields(self, request, row_dict, upload_fields):
-        converted = super().convert2upload_fields(request, row_dict, upload_fields)
+    def convert2upload_fields(self, row_dict, upload_fields, request, cleaned_data=None):
+        converted = super().convert2upload_fields(row_dict, upload_fields, request, cleaned_data)
 
         # Only add base model fields if uploading to a BaseModel (not to a different upload_model)
         upload_model = self.upload_model if self.upload_model is not None else self.model  # type: ignore[attr-defined]
@@ -576,7 +582,7 @@ class BaseModelUploadMixin(UploadMixin):
 
 
 class MasterModelUploadMixin(UploadMixin):
-    def get_upload_column_names(self, request) -> list[str]:
+    def get_upload_column_names(self, request, cleaned_data=None) -> list[str]:
         column_names = super().get_upload_column_names(request)
         # Only add master model fields if uploading to a MasterModel (not to a different upload_model)
         upload_model = self.upload_model if self.upload_model is not None else self.model  # type: ignore[attr-defined]
@@ -585,7 +591,7 @@ class MasterModelUploadMixin(UploadMixin):
             return [name for name in column_names if name not in master_model_field_names and name != "deleted_flg"] + master_model_field_names
         return column_names
 
-    def convert2upload_fields(self, request, row_dict, upload_fields):
+    def convert2upload_fields(self, row_dict, upload_fields, request, cleaned_data=None):
         """Convert row dictionary to upload fields for MasterModel.
 
         This method processes the row dictionary to convert it into a format
@@ -599,7 +605,7 @@ class MasterModelUploadMixin(UploadMixin):
         Returns:
             dict: A dictionary containing the converted upload fields
         """
-        converted = super().convert2upload_fields(request, row_dict, upload_fields)  # type: ignore
+        converted = super().convert2upload_fields(row_dict, upload_fields, request, cleaned_data)  # type: ignore
 
         # Only add master model fields if uploading to a MasterModel (not to a different upload_model)
         upload_model = self.upload_model if self.upload_model is not None else self.model  # type: ignore[attr-defined]

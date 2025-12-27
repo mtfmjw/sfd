@@ -270,7 +270,7 @@ class PostcodeAdminTest(BaseTestMixin, TestCase):
 
         upload_fields = {"town_name": Mock(), "town_name_kana": Mock()}
 
-        converted = self.admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        converted = self.admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertEqual(converted["town_name"], "")
         self.assertEqual(converted["town_name_kana"], "")
 
@@ -280,7 +280,7 @@ class PostcodeAdminTest(BaseTestMixin, TestCase):
 
         upload_fields = {"town_name": Mock(), "town_name_kana": Mock()}
 
-        converted = self.admin.convert2upload_fields(self.request, row_dict, upload_fields)
+        converted = self.admin.convert2upload_fields(row_dict, upload_fields, self.request)
         self.assertEqual(converted["town_name"], "以下")
         self.assertEqual(converted["town_name_kana"], "イカニ")
 

@@ -215,9 +215,9 @@ class PostcodeAdmin(BaseModelAdmin):
     def get_search_field_names(self) -> str:
         return _("Postcode, Municipality Name, Town Name.")
 
-    def convert2upload_fields(self, request, row_dict, upload_fields) -> dict[str, Any]:
+    def convert2upload_fields(self, row_dict, upload_fields, request, cleaned_data=None) -> dict[str, Any]:
         """Convert CSV row data to model field type"""
-        converted = super().convert2upload_fields(request, row_dict, upload_fields)
+        converted = super().convert2upload_fields(row_dict, upload_fields, request, cleaned_data)
         if converted["town_name"] == "以下に掲載がない場合":
             converted["town_name"] = ""
             converted["town_name_kana"] = ""
