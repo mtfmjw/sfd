@@ -23,6 +23,7 @@ from django.http import HttpResponse
 from django.test import RequestFactory
 from django.utils import timezone, translation
 
+from sfd.models.csv_log import CsvLog
 from sfd.tests.unittest import BaseTestMixin, TestBaseModel, TestEncryptedModel, TestMasterModel, TestModel
 from sfd.views.common.upload import BaseModelUploadMixin, Encoding, MasterModelUploadMixin, UploadForm, UploadMixin, UploadType
 
@@ -726,7 +727,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
     @patch.object(TestModelAdmin, "_process_bulk_operations")
     def test_upload_file_creates_csv_log_success(self, mock_process, mock_reverse):
         """Test that upload_file creates a CSV log record on successful upload."""
-        from sfd.models.csv_log import CsvLog, CsvProcessResult, CsvProcessType
+        from sfd.models.csv_log import CsvProcessResult, CsvProcessType
 
         self.model_admin.upload_column_names = ["name", "email"]
 
@@ -773,7 +774,7 @@ class UploadMixinTest(BaseTestMixin, TestCase):
     @patch.object(TestModelAdmin, "upload_data")
     def test_upload_file_creates_csv_log_failure(self, mock_upload_data, mock_reverse):
         """Test that upload_file creates a CSV log record on failed upload."""
-        from sfd.models.csv_log import CsvLog, CsvProcessResult, CsvProcessType
+        from sfd.models.csv_log import CsvProcessResult, CsvProcessType
 
         self.model_admin.upload_column_names = ["name", "email"]
 
@@ -1668,6 +1669,50 @@ class UploadMixinTest(BaseTestMixin, TestCase):
         # Verify database changes
         record1.refresh_from_db()
         self.assertEqual(record1.email, "new1@example.com")
+
+    @patch("sfd.views.common.upload.reverse", return_value="/admin/testmodel/upload/")
+    def test_upload_file_with_upload_model_set(self, mock_reverse):
+        """Test upload_file uses upload_model verbose_name when upload_model is set."""
+
+        # Define a dummy upload model
+        class DummyUploadModel(models.Model):
+            class Meta:
+                verbose_name = "Dummy Upload Model"
+                app_label = "sfd"
+
+        self.model_admin.upload_model = DummyUploadModel
+
+        # Prepare request
+        file_content = b"header\nvalue"
+        uploaded_file = SimpleUploadedFile("test.csv", file_content, content_type="text/csv")
+        data = {
+            "upload_type": UploadType.CSV,
+            "encoding": Encoding.UTF8,
+        }
+        request = self.factory.post("/admin/upload/", data=data, format="multipart")
+        request.FILES["upload_file"] = uploaded_file
+        request.user = self.user
+
+        # Setup message storage for the request
+        request.session = {}  # type: ignore[attr-defined]
+        storage = FallbackStorage(request)
+        request._messages = storage  # type: ignore[attr-defined]
+
+        # Mock methods to avoid DB operations on non-existent table
+        self.model_admin.pre_upload = Mock()
+        self.model_admin.upload_data = Mock()
+        self.model_admin.post_upload = Mock()
+
+        # Mock CsvLog to verify the comment
+        with patch("sfd.views.common.upload.CsvLog") as MockCsvLog:
+            self.model_admin.upload_file(request)
+
+            # Verify CsvLog.objects.create was called
+            self.assertTrue(MockCsvLog.objects.create.called)
+
+            # Check the arguments
+            call_kwargs = MockCsvLog.objects.create.call_args[1]
+            self.assertIn("Dummy Upload Model:", call_kwargs.get("comment", ""))
 
 
 @pytest.mark.unit

@@ -64,7 +64,7 @@ class SfdGroupAdmin(UploadMixin, DownloadMixin, ModelAdminMixin, GroupAdmin):
             "permissions__content_type__model": "Model",
         }
 
-    def post_upload(self, request) -> None:
+    def post_upload(self, request, cleaned_data=None) -> None:
         for uploaded in GroupUpload.objects.all():
             group, created = Group.objects.get_or_create(name=uploaded.name)
             if uploaded.app_label and uploaded.model and uploaded.codename:

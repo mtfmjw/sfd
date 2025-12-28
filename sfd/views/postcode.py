@@ -227,7 +227,7 @@ class PostcodeAdmin(BaseModelAdmin):
 
         return converted
 
-    def post_upload(self, request) -> None:  # pragma: no cover
+    def post_upload(self, request, cleaned_data=None) -> None:  # pragma: no cover
         """unique key単位で重複したものは除外してpostcodeテーブルに登録する"""
 
         with_clause_sql = """

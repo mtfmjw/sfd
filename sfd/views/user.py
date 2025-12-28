@@ -121,7 +121,7 @@ class SfdUserAdmin(UploadMixin, DownloadMixin, ModelAdminMixin, UserAdmin):
             "user_permissions__content_type__model": _("Model"),
         }
 
-    def post_upload(self, request) -> None:
+    def post_upload(self, request, cleaned_data=None) -> None:
         for uploaded in UserUpload.objects.all():
             user, created = User.objects.get_or_create(username=uploaded.username)
             user.set_password(user.username)
