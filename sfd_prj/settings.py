@@ -100,11 +100,11 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": config("DB_NAME"),
-            "USER": config("DB_USER"),
-            "PASSWORD": config("DB_PASSWORD"),
-            "HOST": config("DB_HOST", default="localhost"),
-            "PORT": config("DB_PORT", default="5432"),
+            "NAME": config("PGDATABASE"),
+            "USER": config("PGUSER"),
+            "PASSWORD": config("PGPASSWORD"),
+            "HOST": config("PGHOST", default="localhost"),
+            "PORT": config("PGPORT", default="5432"),
             "CONN_MAX_AGE": 60,  # Keep connections alive for 60 seconds
             "TEST": {
                 "NAME": "test_default",
@@ -112,11 +112,11 @@ else:
         },
         "postgres": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": config("DB_NAME"),
-            "USER": config("DB_USER"),
-            "PASSWORD": config("DB_PASSWORD"),
-            "HOST": config("DB_HOST", default="localhost"),
-            "PORT": config("DB_PORT", default="5432"),
+            "NAME": config("PGDATABASE"),
+            "USER": config("PGUSER"),
+            "PASSWORD": config("PGPASSWORD"),
+            "HOST": config("PGHOST", default="localhost"),
+            "PORT": config("PGPORT", default="5432"),
             "CONN_MAX_AGE": 60,  # Keep connections alive for 60 seconds
             "TEST": {
                 "NAME": "test_default",
