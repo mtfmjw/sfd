@@ -30,7 +30,10 @@ DEBUG=False
 ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
 
 # Database
+# If running on the same server:
 DATABASE_URL=postgresql://user:password@localhost:5432/sfd_production
+# If running in a container updates:
+# DATABASE_URL=postgresql://user:password@db:5432/sfd_production
 
 # Email
 EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend

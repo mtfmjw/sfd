@@ -65,7 +65,7 @@ class MunicipalityAdmin(BasePdfMixin, MasterModelAdmin):
         "municipality_name_kana",
     )
 
-    def sheet_reader(self, file, sheet_name) -> Generator[dict[str, Any]]:
+    def sheet_reader(self, file, sheet_name, request, cleaned_data=None) -> Generator[dict[str, Any]]:
         df = pd.read_excel(file, sheet_name=sheet_name, keep_default_na=False)
         for _a, row in df.iterrows():
             municipality_code = str(row.iloc[0]).zfill(6)[:5]
@@ -78,9 +78,9 @@ class MunicipalityAdmin(BasePdfMixin, MasterModelAdmin):
             }
             yield data
 
-    def excel_upload(self, request, excel_file) -> None:
-        self.upload_data(request, self.sheet_reader, excel_file, 0)
-        self.upload_data(request, self.sheet_reader, excel_file, 1)
+    def excel_upload(self, excel_file, request, cleaned_data=None) -> None:
+        self.upload_data(self.sheet_reader, excel_file, 0, request, cleaned_data)
+        self.upload_data(self.sheet_reader, excel_file, 1, request, cleaned_data)
 
     def create_pdf_files(self, request, queryset) -> list[str]:
         pdf_files = []

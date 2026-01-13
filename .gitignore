@@ -33,7 +33,7 @@ logs/*
 
 # Environment variables
 .env
-.env.*
+env.bat
 
 # Virtual environment
 .venv/

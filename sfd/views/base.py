@@ -23,7 +23,7 @@ class SfdModelAdmin(UploadMixin, DownloadMixin, ModelAdminMixin, ModelAdmin):
     pass
 
 
-class BaseModelAdmin(BaseModelUploadMixin, BaseModelDownloadMixin, BaseModelAdminMixin, SfdModelAdmin):
+class BaseModelAdmin(BaseModelUploadMixin, BaseModelDownloadMixin, BaseModelAdminMixin, ModelAdmin):
     """Base class for sfd model admin classes.
 
     This base admin class provides common functionality and settings for all
@@ -56,7 +56,7 @@ class BaseModelAdmin(BaseModelUploadMixin, BaseModelDownloadMixin, BaseModelAdmi
     """
 
 
-class MasterModelAdmin(MasterModelUploadMixin, MasterModelDownloadMixin, MasterModelAdminMixin, BaseModelAdmin):
+class MasterModelAdmin(MasterModelUploadMixin, MasterModelDownloadMixin, MasterModelAdminMixin, ModelAdmin):
     """Base class for MasterModel admin classes.
 
     This class combines MasterModel-specific functionality with standard SFD admin

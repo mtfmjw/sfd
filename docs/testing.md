@@ -58,9 +58,9 @@ pytest --cov=sfd --cov-report=html
 ```
 
 View coverage report:
-```bash
-start htmlcov\index.html
-```
+
+*   **Windows:** `start htmlcov\index.html`
+*   **Dev Container / Linux:** Open `htmlcov/index.html` in your browser (using VS Code Live Server or similar).
 
 ### Run Tests Matching Pattern
 
@@ -69,7 +69,9 @@ pytest -k "person"  # Run tests with 'person' in name
 pytest -k "not slow"  # Skip tests marked as slow
 ```
 
-### Using Batch Scripts
+### Using Batch Scripts (Windows)
+
+The project includes batch scripts for Windows users. In the Dev Container, simply use `pytest`.
 
 ```bash
 # Run tests for specific module

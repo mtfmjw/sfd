@@ -1,6 +1,0 @@
-setx PGDATABASE "sfd"
-setx PGHOST "localhost"
-setx PGPASSWORD "P09olp09ol"
-setx PGPATH "C:\Program Files\PostgreSQL\18\bin"
-setx PGPORT "5432"
-setx PGUSER "sfd"

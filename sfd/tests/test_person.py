@@ -170,7 +170,7 @@ class PersonAdminTest(BaseTestMixin, TestCase):
         upload_fields = Mock()
         mock_super.return_value.convert2upload_fields.return_value = {"gender": "unknown"}
 
-        converted = self.admin.convert2upload_fields(self.request, row, upload_fields)
+        converted = self.admin.convert2upload_fields(row, upload_fields, self.request)
 
         self.assertEqual(converted["gender"], GenderType.OTHER)
         self.assertEqual(converted["postcode"].postcode, "1234567")
@@ -186,7 +186,7 @@ class PersonAdminTest(BaseTestMixin, TestCase):
         municipality = Municipality.objects.create(municipality_code="13001", municipality_name="新宿区", prefecture_name="東京都")
         Postcode.objects.create(postcode="2345678", municipality=municipality, town_name="西新宿", town_name_kana="セントラル")
 
-        converted = self.admin.convert2upload_fields(self.request, row, upload_fields)
+        converted = self.admin.convert2upload_fields(row, upload_fields, self.request)
 
         self.assertEqual(converted["gender"], GenderType.OTHER)
         self.assertEqual(converted["postcode"].postcode, "2345678")
@@ -200,7 +200,7 @@ class PersonAdminTest(BaseTestMixin, TestCase):
         upload_fields = Mock()
         mock_super.return_value.convert2upload_fields.return_value = {}
 
-        converted = self.admin.convert2upload_fields(self.request, row, upload_fields)
+        converted = self.admin.convert2upload_fields(row, upload_fields, self.request)
 
         self.assertEqual(converted["gender"], GenderType.OTHER)
         self.assertEqual(converted["postcode"].postcode, "1234567")
@@ -216,7 +216,7 @@ class PersonAdminTest(BaseTestMixin, TestCase):
         municipality = Municipality.objects.create(municipality_code="27001", municipality_name="大阪市", prefecture_name="大阪府")
         Postcode.objects.create(postcode="2345678", municipality=municipality, town_name="北区", town_name_kana="キタク")
 
-        converted = self.admin.convert2upload_fields(self.request, row, upload_fields)
+        converted = self.admin.convert2upload_fields(row, upload_fields, self.request)
 
         self.assertEqual(converted["gender"], GenderType.OTHER)
         self.assertEqual(converted["postcode"].postcode, "2345678")
@@ -232,7 +232,7 @@ class PersonAdminTest(BaseTestMixin, TestCase):
         municipality = Municipality.objects.create(municipality_code="26001", municipality_name="京都市", prefecture_name="京都府")
         Postcode.objects.create(postcode="2345678", municipality=municipality, town_name="中京区", town_name_kana="チュウキョウク")
 
-        converted = self.admin.convert2upload_fields(self.request, row, upload_fields)
+        converted = self.admin.convert2upload_fields(row, upload_fields, self.request)
 
         self.assertEqual(converted["gender"], GenderType.OTHER)
         self.assertEqual(converted["postcode"].postcode, "2345678")
@@ -248,7 +248,7 @@ class PersonAdminTest(BaseTestMixin, TestCase):
         municipality = Municipality.objects.create(municipality_code="12001", municipality_name="千葉市", prefecture_name="千葉県")
         Postcode.objects.create(postcode="2345678", municipality=municipality, town_name="中央区", town_name_kana="チュウオウク")
 
-        converted = self.admin.convert2upload_fields(self.request, row, upload_fields)
+        converted = self.admin.convert2upload_fields(row, upload_fields, self.request)
 
         self.assertEqual(converted["gender"], GenderType.OTHER)
         self.assertEqual(converted["postcode"].postcode, "2345678")
@@ -264,7 +264,7 @@ class PersonAdminTest(BaseTestMixin, TestCase):
         municipality = Municipality.objects.create(municipality_code="12001", municipality_name="千葉市", prefecture_name="千葉県")
         Postcode.objects.create(postcode="2345678", municipality=municipality, town_name="中央区", town_name_kana="チュウオウク")
 
-        converted = self.admin.convert2upload_fields(self.request, row, upload_fields)
+        converted = self.admin.convert2upload_fields(row, upload_fields, self.request)
 
         self.assertEqual(converted["gender"], GenderType.OTHER)
         self.assertEqual(converted["postcode"].postcode, "2345678")
@@ -282,7 +282,7 @@ class PersonAdminTest(BaseTestMixin, TestCase):
         other_municipality = Municipality.objects.create(municipality_code="23001", municipality_name="名古屋市", prefecture_name="愛知県")
         other_postcode = Postcode.objects.create(postcode="9999999", municipality=other_municipality, town_name="中区", town_name_kana="ナカク")
 
-        converted = self.admin.convert2upload_fields(self.request, row, upload_fields)
+        converted = self.admin.convert2upload_fields(row, upload_fields, self.request)
 
         # Should fall back to first postcode in the prefecture
         self.assertEqual(converted["postcode"], other_postcode)
@@ -301,7 +301,7 @@ class PersonAdminTest(BaseTestMixin, TestCase):
         municipality = Municipality.objects.create(municipality_code="13001", municipality_name="新宿区", prefecture_name="東京都")
         postcode = Postcode.objects.create(postcode="1112222", municipality=municipality, town_name="西新宿", town_name_kana="ニシシンジュク")
 
-        converted = self.admin.convert2upload_fields(self.request, row, upload_fields)
+        converted = self.admin.convert2upload_fields(row, upload_fields, self.request)
 
         # Should find the municipality by name and use its postcode
         self.assertEqual(converted["postcode"], postcode)
@@ -319,7 +319,7 @@ class PersonAdminTest(BaseTestMixin, TestCase):
         municipality = Municipality.objects.create(municipality_code="40001", municipality_name="福岡市", prefecture_name="福岡県")
         postcode = Postcode.objects.create(postcode="8000000", municipality=municipality, town_name="中央区", town_name_kana="チュウオウク")
 
-        converted = self.admin.convert2upload_fields(self.request, row, upload_fields)
+        converted = self.admin.convert2upload_fields(row, upload_fields, self.request)
 
         # Should fall back to first postcode in the prefecture
         self.assertEqual(converted["postcode"], postcode)
@@ -334,7 +334,7 @@ class PersonAdminTest(BaseTestMixin, TestCase):
         upload_fields = Mock()
         mock_super.return_value.convert2upload_fields.return_value = {}
 
-        converted = self.admin.convert2upload_fields(self.request, row, upload_fields)
+        converted = self.admin.convert2upload_fields(row, upload_fields, self.request)
 
         # Should set postcode and municipality to None and keep full address
         self.assertIsNone(converted["postcode"])
@@ -348,7 +348,7 @@ class PersonAdminTest(BaseTestMixin, TestCase):
         upload_fields = Mock()
         mock_super.return_value.convert2upload_fields.return_value = {}
 
-        converted = self.admin.convert2upload_fields(self.request, row, upload_fields)
+        converted = self.admin.convert2upload_fields(row, upload_fields, self.request)
 
         # Should find postcode but address_detail should be empty
         self.assertEqual(converted["postcode"].postcode, "1234567")
@@ -362,7 +362,7 @@ class PersonAdminTest(BaseTestMixin, TestCase):
         upload_fields = Mock()
         mock_super.return_value.convert2upload_fields.return_value = {"gender": GenderType.MALE}
 
-        converted = self.admin.convert2upload_fields(self.request, row, upload_fields)
+        converted = self.admin.convert2upload_fields(row, upload_fields, self.request)
 
         # Should preserve valid gender value
         self.assertEqual(converted["gender"], GenderType.MALE)
@@ -378,7 +378,7 @@ class PersonAdminTest(BaseTestMixin, TestCase):
         municipality = Municipality.objects.create(municipality_code="14001", municipality_name="横浜市", prefecture_name="神奈川県")
         postcode = Postcode.objects.create(postcode="2310000", municipality=municipality, town_name="中区", town_name_kana="ナカク")
 
-        converted = self.admin.convert2upload_fields(self.request, row, upload_fields)
+        converted = self.admin.convert2upload_fields(row, upload_fields, self.request)
 
         # Should correctly parse prefecture ending with 県
         self.assertEqual(converted["postcode"], postcode)
@@ -396,7 +396,7 @@ class PersonAdminTest(BaseTestMixin, TestCase):
         municipality = Municipality.objects.create(municipality_code="13999", municipality_name="実在しない区", prefecture_name="東京都")
         postcode = Postcode.objects.create(postcode="9998888", municipality=municipality, town_name="不明", town_name_kana="フメイ")
 
-        converted = self.admin.convert2upload_fields(self.request, row, upload_fields)
+        converted = self.admin.convert2upload_fields(row, upload_fields, self.request)
 
         # Should fall back to first postcode in prefecture
         self.assertEqual(converted["postcode"], postcode)
@@ -415,7 +415,7 @@ class PersonAdminTest(BaseTestMixin, TestCase):
         municipality = Municipality.objects.create(municipality_code="13999", municipality_name="", prefecture_name="東京都")
         Postcode.objects.create(postcode="9998888", municipality=municipality, town_name="不明", town_name_kana="フメイ")
 
-        converted = self.admin.convert2upload_fields(self.request, row, upload_fields)
+        converted = self.admin.convert2upload_fields(row, upload_fields, self.request)
 
         # Should handle empty municipality name gracefully
         self.assertIsNone(converted["postcode"])
@@ -429,7 +429,7 @@ class PersonAdminTest(BaseTestMixin, TestCase):
         upload_fields = Mock()
         mock_super.return_value.convert2upload_fields.return_value = {}
 
-        converted = self.admin.convert2upload_fields(self.request, row, upload_fields)
+        converted = self.admin.convert2upload_fields(row, upload_fields, self.request)
 
         # Should set everything to None/original address
         self.assertIsNone(converted["postcode"])
@@ -455,6 +455,50 @@ class PersonAdminTest(BaseTestMixin, TestCase):
             ("postcode_search", "municipality_display", "address_detail"),
         )
         self.assertEqual(fieldsets[1][1]["fields"], expected)
+
+    def test_postcode_search(self):
+        """Test postcode_search method."""
+        self.assertEqual(self.admin.postcode_search(self.person), "123-4567")
+
+    def test_postcode_search_none(self):
+        """Test postcode_search method with no postcode."""
+        self.person.postcode = None
+        self.assertIsNone(self.admin.postcode_search(self.person))
+
+    def test_municipality_display(self):
+        """Test municipality_display method."""
+        self.assertEqual(self.admin.municipality_display(self.person), str(self.municipality))
+
+    def test_municipality_display_none(self):
+        """Test municipality_display method with no municipality."""
+        self.person.municipality = None
+        self.assertIsNone(self.admin.municipality_display(self.person))
+
+    def test_changelist_view_context_data(self):
+        """Test changelist_view context data modifications."""
+        from django.template.response import TemplateResponse
+
+        # Create a mock response with context_data
+        mock_response = TemplateResponse(self.request, "template.html", context={"upload_url": "url", "download_url": "url"})
+
+        with patch("django.contrib.admin.ModelAdmin.changelist_view", return_value=mock_response):
+            # Case 1: No Permission
+            # We must ensure the user object supports has_perm mocking or check.
+            # self.user from setUp might be a Mock object (from TestUserFactory) or a real user if django test client.
+            # In BaseTestMixin, self.user is from self.user_factory.create_user(), which returns a Mock.
+
+            # Since self.user is a Mock, we can configure it.
+            self.request.user.has_perm.return_value = False
+            response = self.admin.changelist_view(self.request)
+            self.assertEqual(response.context_data["upload_url"], "")
+            self.assertEqual(response.context_data["download_url"], "")
+
+            # Case 2: With Permission
+            mock_response.context_data = {"upload_url": "url", "download_url": "url"}  # Reset context
+            self.request.user.has_perm.return_value = True
+            response = self.admin.changelist_view(self.request)
+            self.assertEqual(response.context_data["upload_url"], "url")
+            self.assertEqual(response.context_data["download_url"], "url")
 
 
 @pytest.mark.unit

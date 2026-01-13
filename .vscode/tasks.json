@@ -8,6 +8,46 @@
 			"group": "build",
 			"isBackground": false,
 			"problemMatcher": []
+		},
+		{
+			"label": "Run Migrations",
+			"type": "shell",
+			"command": "C:/Users/33724/.git/silos/sfd/.venv/Scripts/python.exe manage.py",
+			"args": [
+				"migrate"
+			],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Create Superuser",
+			"type": "shell",
+			"command": "set DJANGO_SUPERUSER_PASSWORD=P09olp09ol && C:/Users/33724/.git/silos/sfd/.venv/Scripts/python.exe manage.py createsuperuser --no-input --username admin --email admin@example.com",
+			"args": [],
+			"isBackground": false,
+			"group": "build"
+		},
+		{
+			"label": "Check Superuser",
+			"type": "shell",
+			"command": "C:/Users/33724/.git/silos/sfd/.venv/Scripts/python.exe",
+			"args": [
+				"check_superuser.py"
+			],
+			"isBackground": false,
+			"group": "test"
+		},
+		{
+			"label": "Delete Check Script",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"del",
+				"check_superuser.py"
+			],
+			"isBackground": false,
+			"group": "clean"
 		}
 	]
 }

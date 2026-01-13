@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 
+import dj_database_url
 from decouple import config
 
 from .settings_log import LOGGING
@@ -31,7 +32,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=True, cast=bool)
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1", cast=lambda v: [s.strip() for s in v.split(",")])
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1,sfd-3m43.onrender.com", cast=lambda v: [s.strip() for s in v.split(",")])
 
 
 # Application definition
@@ -85,12 +86,17 @@ WSGI_APPLICATION = "sfd_prj.wsgi.application"
 # Base configuration - PostgreSQL as default database
 if "DATABASE_URL" in os.environ:
     # 1. Use the environment variable if it exists (i.e., when on Render)
+    db_config = dj_database_url.config(
+        default=config("DATABASE_URL"),  # type: ignore
+        conn_max_age=600,  # Optional: Sets connection age for persistent connections
+        ssl_require=config("DB_SSL_REQUIRE", default=not DEBUG, cast=bool),
+    )
     DATABASES = {
-        "default": dj_database_url.config(
-            default=config("DATABASE_URL"),
-            conn_max_age=600,  # Optional: Sets connection age for persistent connections
-            ssl_require=True,  # Crucial for Render's PostgreSQL connection
-        )
+        "default": db_config,
+        "postgres": db_config.copy(),
+    }
+    DATABASES["postgres"]["TEST"] = {
+        "MIRROR": "default",
     }
     # Optional: If you want to log the connection being used
     print("Using Production Database from DATABASE_URL")
@@ -99,11 +105,11 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": config("DB_NAME"),
-            "USER": config("DB_USER"),
-            "PASSWORD": config("DB_PASSWORD"),
-            "HOST": config("DB_HOST", default="localhost"),
-            "PORT": config("DB_PORT", default="5432"),
+            "NAME": config("PGDATABASE"),
+            "USER": config("PGUSER"),
+            "PASSWORD": config("PGPASSWORD"),
+            "HOST": config("PGHOST", default="localhost"),
+            "PORT": config("PGPORT", default="5432"),
             "CONN_MAX_AGE": 60,  # Keep connections alive for 60 seconds
             "TEST": {
                 "NAME": "test_default",
@@ -111,14 +117,14 @@ else:
         },
         "postgres": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": config("DB_NAME"),
-            "USER": config("DB_USER"),
-            "PASSWORD": config("DB_PASSWORD"),
-            "HOST": config("DB_HOST", default="localhost"),
-            "PORT": config("DB_PORT", default="5432"),
+            "NAME": config("PGDATABASE"),
+            "USER": config("PGUSER"),
+            "PASSWORD": config("PGPASSWORD"),
+            "HOST": config("PGHOST", default="localhost"),
+            "PORT": config("PGPORT", default="5432"),
             "CONN_MAX_AGE": 60,  # Keep connections alive for 60 seconds
             "TEST": {
-                "NAME": "test_default",
+                "MIRROR": "default",
             },
         },
     }

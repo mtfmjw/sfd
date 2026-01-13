@@ -2,7 +2,44 @@
 
 This guide will help you set up the SFD project for local development.
 
-## Prerequisites
+## Development Options
+
+You can set up the project using either **Dev Containers** (recommended) or a **Local Windows Environment**.
+
+## Option 1: Dev Container (Recommended)
+
+The project is configured for VS Code Dev Containers, providing a pre-configured environment with Python, PostgreSQL, and tools.
+
+### Prerequisites
+
+- Docker Desktop (or equivalent)
+- VS Code
+- [Dev Containers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+
+### Setup
+
+1. Open the project in VS Code.
+2. Click **Reopen in Container** when prompted, or use the Command Palette (`Ctrl+Shift+P`) > `Dev Containers: Reopen in Container`.
+3. The container will build and install dependencies automatically.
+
+### Database Access
+
+A PostgreSQL instance runs alongside the app container.
+
+- **Host (Code/Internal):** `db`
+- **Host (External/Tools):** `localhost`
+- **Port:** `5432`
+- **Database:** `devdb`
+- **User:** `devuser`
+- **Password:** `devpass`
+
+> **Important:** The database uses the PostgreSQL protocol. It is **not** accessible via a web browser at `http://localhost:5432`. Use the pre-installed **SQLTools** extension in VS Code or a client like DBeaver.
+
+---
+
+## Option 2: Local Windows Installation
+
+### Prerequisites
 
 - Python 3.13 or higher
 - Git
@@ -66,6 +103,7 @@ batch\create_database.bat
 ```
 
 This script will:
+
 - Run migrations to create database tables
 - Set up initial schema
 
@@ -172,7 +210,7 @@ class YourModel(BaseModel):
         ]
 ```
 
-### 2. Register in Models __init__.py
+### 2. Register in Models **init**.py
 
 ```python
 # sfd/models/__init__.py

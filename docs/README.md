@@ -5,6 +5,7 @@ Welcome to the SFD (Simplified Framework for Django) project documentation. This
 ## Documentation Structure
 
 ### Getting Started
+
 - **[Getting Started](getting-started.md)** - Installation, setup, and first steps for new developers
   - Prerequisites and installation
   - Environment configuration
@@ -13,6 +14,7 @@ Welcome to the SFD (Simplified Framework for Django) project documentation. This
   - Development workflow
 
 ### Core Documentation
+
 - **[Architecture](architecture.md)** - System architecture, design patterns, and data flow
   - Layered architecture overview
   - Design patterns (inheritance, mixins, temporal data)
@@ -44,6 +46,7 @@ Welcome to the SFD (Simplified Framework for Django) project documentation. This
   - Email and caching helpers
 
 ### Development
+
 - **[Testing](testing.md)** - Testing strategy, tools, and best practices
   - Running tests with pytest
   - Unit, integration, and view tests
@@ -57,6 +60,7 @@ Welcome to the SFD (Simplified Framework for Django) project documentation. This
   - Common imports and examples
 
 ### Deployment
+
 - **[Deployment](deployment.md)** - Production deployment and configuration
   - Environment setup
   - Web server configuration

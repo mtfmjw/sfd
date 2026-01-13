@@ -1,14 +1,31 @@
 from django.db.models.functions import Length
+from django.template.response import TemplateResponse
 from django.utils.translation import gettext_lazy as _
 
+from sfd.common.encrypted import generate_search_hash
 from sfd.forms.person import PersonAdminForm
 from sfd.models.municipality import Municipality
 from sfd.models.person import GenderType
 from sfd.models.postcode import Postcode
 from sfd.views.base import MasterModelAdmin
+from sfd.views.common.encrypted_mixin import EncryptedFieldAdminMixin
 
 
-class PersonAdmin(MasterModelAdmin):
+class PersonAdmin(EncryptedFieldAdminMixin, MasterModelAdmin):
+    encrypted_fields = [
+        "family_name_kana",
+        "name_kana",
+        "family_name_romaji",
+        "name_romaji",
+        "birthday",
+        "email",
+        "phone_number",
+        "mobile_number",
+        "address_detail",
+        "full_name_kana",
+        "full_name_romaji",
+    ]
+    encrypted_view_permission = "sfd.view_personal_info"
     form = PersonAdminForm
     list_display = [
         "full_name",
@@ -112,6 +129,20 @@ class PersonAdmin(MasterModelAdmin):
     municipality_link.short_description = _("Municipality Name")  # type: ignore[attr-defined]
     municipality_link.admin_order_field = "municipality__municipality_name"  # type: ignore[attr-defined]
 
+    def postcode_search(self, obj):
+        if obj.postcode:
+            return f"{obj.postcode.postcode[:3]}-{obj.postcode.postcode[3:]}"
+        return None
+
+    postcode_search.short_description = _("Postcode")  # type: ignore[attr-defined]
+
+    def municipality_display(self, obj):
+        if obj.municipality:
+            return str(obj.municipality)
+        return None
+
+    municipality_display.short_description = _("Municipality")  # type: ignore[attr-defined]
+
     def get_search_results(self, request, queryset, search_term):
         """Override search to use hash-based search for encrypted fields.
 
@@ -122,7 +153,6 @@ class PersonAdmin(MasterModelAdmin):
             return queryset, False
 
         # Generate hash for the search term
-        from sfd.common.encrypted import generate_search_hash
 
         search_hash = generate_search_hash(search_term)
 
@@ -160,9 +190,9 @@ class PersonAdmin(MasterModelAdmin):
         ),
     ]
 
-    def convert2upload_fields(self, request, row_dict, upload_fields) -> dict[str, object]:
+    def convert2upload_fields(self, row_dict, upload_fields, request, cleaned_data=None) -> dict[str, object]:
         """Convert row data to match the upload fields."""
-        converted = super().convert2upload_fields(request, row_dict, upload_fields)
+        converted = super().convert2upload_fields(row_dict, upload_fields, request, cleaned_data)
 
         if converted.get("gender") not in GenderType.values:
             converted["gender"] = GenderType.OTHER
@@ -210,4 +240,30 @@ class PersonAdmin(MasterModelAdmin):
                 converted["postcode"] = None
                 converted["municipality"] = None
                 converted["address_detail"] = address
+
+        # Generate hashes for searchable fields
+        hash_fields = [
+            "family_name",
+            "name",
+            "family_name_kana",
+            "name_kana",
+            "family_name_romaji",
+            "name_romaji",
+            "email",
+            "phone_number",
+            "mobile_number",
+        ]
+
+        for field in hash_fields:
+            if field in converted and converted[field]:
+                converted[f"{field}_hash"] = generate_search_hash(converted[field])
+
         return converted
+
+    def changelist_view(self, request, extra_context=None) -> TemplateResponse:
+        response = super().changelist_view(request, extra_context=extra_context)  # type: ignore[misc]
+        if hasattr(response, "context_data") and not request.user.has_perm("sfd.view_personal_info"):
+            response.context_data["upload_url"] = ""
+            response.context_data["download_url"] = ""
+
+        return response

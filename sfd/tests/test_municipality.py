@@ -249,7 +249,7 @@ class MunicipalityAdminTest(BaseTestMixin, TestCase):
         # The buffer now contains the raw bytes of an Excel file.
         # We need to reset its "cursor" to the beginning to be read.
         output_buffer.seek(0)
-        results = list(self.admin.sheet_reader(output_buffer, sheet_name="TestSheet"))
+        results = list(self.admin.sheet_reader(output_buffer, "TestSheet", self.request))
 
         self.assertEqual(len(results), 4)
 
@@ -283,7 +283,7 @@ class MunicipalityAdminTest(BaseTestMixin, TestCase):
         mock_file = Mock()
 
         # Act
-        self.admin.excel_upload(self.request, mock_file)
+        self.admin.excel_upload(mock_file, self.request)
 
         # Assert
         self.assertEqual(mock_upload_data.call_count, 2)
