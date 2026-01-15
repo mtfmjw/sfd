@@ -18,6 +18,16 @@
   - **Server**: Run via `batch/run_server.bat`.
   - **Migrations**: `batch/makemigrations.bat` and `batch/migrate.bat`.
 
+## Critical Developer Workflows (Dev Container / Linux)
+- **Shell Scripts**: Located in `shell/`.
+  - **Testing**: Use `shell/pytest_selective.sh` or run `pytest` directly.
+  - **Migrations**: Use `shell/migrate.sh`.
+  - **Superuser**: Use `shell/create_superuser.sh`.
+- **Common Tasks**:
+  - **Server**: Run `python manage.py runserver 0.0.0.0:8000`.
+  - **Commits**: Standard `git commit` commands work correctly in this environment (no need for special scripts).
+  - **Migrations**: Run `python manage.py makemigrations` directly.
+
 ## Project Conventions & Patterns
 - **Directory Structure**: Modules are split into packages (e.g., `models/`, `views/`, `forms/`) rather than monolithic files.
 - **Code Style**:

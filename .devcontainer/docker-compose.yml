@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ..:/workspaces/${localWorkspaceFolderBasename}:cached
+      - ..:/workspaces/${localWorkspaceFolderBasename}:z
     
     # Keeps the container running so VS Code can stay connected
     command: sleep infinity 

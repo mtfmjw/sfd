@@ -22,7 +22,12 @@
         "yzhang.markdown-all-in-one",
         "mhutchie.git-graph",
         "github.copilot-chat"
-      ]
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "sqltools.useNodeRuntime": false,
+        "sqltools.disableNodeDetectNotifications": true
+      }
     }
   },
 
