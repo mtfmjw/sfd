@@ -1026,6 +1026,7 @@ class MasterModelAdminMixin(BaseModelAdminMixin):
         """
         # Check if delete button was clicked
         if request.method == "POST" and "_delete" in request.POST:
+            self._is_delete_action = True  # Explicitly set this for validations relying on it
             # Get the object and form to validate before deleting
             obj = self.get_object(request, object_id) if object_id else None  # type: ignore[attr-defined]
             ModelForm = self.get_form(request, obj)

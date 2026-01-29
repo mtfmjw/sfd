@@ -40,7 +40,7 @@ class FilterPrefecture(admin.SimpleListFilter):
 
 
 class MunicipalityAdmin(BasePdfMixin, MasterModelAdmin):
-    is_readonly = True
+    # is_readonly = True
     list_filter = (FilterPrefecture,)
     search_fields = ("municipality_code", "municipality_name", "prefecture_name")
     upload_type = UploadType.EXCEL
