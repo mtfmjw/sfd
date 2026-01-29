@@ -18,13 +18,11 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path
-from django.views.generic import RedirectView
 
 from sfd.admin import admin_site
 
 urlpatterns = [
-    path("", RedirectView.as_view(url="/admin/", permanent=False)),  # Redirect root URL to admin
-    path("admin/", admin_site.urls),
+    path("", admin_site.urls),
     path("sfd/", include("sfd.urls")),  # Include sfd app URLs
 ]
 
