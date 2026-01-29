@@ -41,9 +41,9 @@ class SfdAdminSite(AdminSite):
         - Japanese localization support through gettext_lazy
     """
 
-    site_header = _("sfd")
-    site_title = _("sfd Admin")
-    index_title = _("sfd Administration")
+    site_header = _("Site Header")
+    site_title = _("Site Title")
+    index_title = _("Site Index Title")
 
     login_template = "registration/login.html"
 
@@ -76,6 +76,9 @@ class SfdAdminSite(AdminSite):
         if request.user.is_authenticated:
             return HttpResponseRedirect(reverse_lazy("admin:index"))
 
+        extra_context = extra_context or {}
+        extra_context["title"] = "Login"
+
         # If they are not authenticated, display the login form.
         # We are essentially using the standard LoginView, but within our custom admin site.
         return LoginView.as_view(
@@ -93,11 +96,6 @@ admin_site = SfdAdminSite(name="sfdadmin")
 # Set the default admin site to our custom one
 admin.site = admin_site
 admin.sites.site = admin_site
-
-# Customize the default admin site as well (fallback)
-admin.site.site_header = "sfd"
-admin.site.site_title = "sfd Admin"
-admin.site.index_title = "sfd Administration"
 
 # Register default Django models with our custom admin site
 admin_site.register(Group, SfdGroupAdmin)

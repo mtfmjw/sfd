@@ -32,7 +32,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=True, cast=bool)
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1,sfd-3m43.onrender.com", cast=lambda v: [s.strip() for s in v.split(",")])
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1,sfd-whqr.onrender.com", cast=lambda v: [s.strip() for s in v.split(",")])
 
 
 # Application definition
@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -195,6 +196,9 @@ DATETIME_INPUT_FORMATS = [
 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Enable WhiteNoise's GZip compression of static assets.
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"

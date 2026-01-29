@@ -1,11 +1,16 @@
 {
     "recommendations": [
-        "charliermarsh.ruff",
         "ms-python.python",
-        "ms-python.debugpy",
+        "ms-python.vscode-pylance",
         "batisteo.vscode-django",
-        "ms-vscode.vscode-json",
-        "DavidAnson.vscode-markdownlint",
-        "yzhang.markdown-all-in-one"
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-pg",
+        "charliermarsh.ruff",
+        "davidanson.vscode-markdownlint",
+        "yzhang.markdown-all-in-one",
+        "mhutchie.git-graph",
+        "charliermarsh.ruff",
+        "ms-python.debugpy",
+        "ms-vscode.vscode-json"
     ]
 }

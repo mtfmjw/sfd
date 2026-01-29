@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SFD 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 08:30+0900\n"
+"POT-Creation-Date: 2026-01-15 13:45+0900\n"
 "PO-Revision-Date: 2025-08-05 16:45+0900\n"
 "Last-Translator: SFD Project <dev@sfd.local>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -16,350 +16,560 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgid "sfd"
-msgstr "sfd"
+#: sfd/admin.py:44
+msgid "Site Header"
+msgstr "Simple Fact Data"
 
-msgid "sfd Admin"
-msgstr "sfd 管理"
+#: sfd/admin.py:45
+msgid "Site Title"
+msgstr "Simple Fact Data"
 
-msgid "sfd Administration"
-msgstr "sfd 管理画面"
+#: sfd/admin.py:46
+msgid "Site Index Title"
+msgstr "SFD"
 
+#: sfd/forms/person.py:28 sfd/models/person.py:83 sfd/models/postcode.py:10
+#: sfd/models/postcode.py:16 sfd/tests/test_person.py:559
+#: sfd/tests/test_postcode.py:144 sfd/views/person.py:128
+#: sfd/views/person.py:137
 msgid "Postcode"
 msgstr "郵便番号"
 
+#: sfd/forms/person.py:28 sfd/tests/test_person.py:561
 msgid "Search and select postcode, town name, and municipality."
 msgstr ""
 "郵便番号検索、検索結果より郵便番号、市区町村名と住所詳細の一部が自動セットさ"
 "れます。"
 
+#: sfd/forms/person.py:32 sfd/forms/postcode.py:64
+#: sfd/models/municipality.py:22 sfd/models/person.py:84
+#: sfd/models/postcode.py:11 sfd/tests/test_person.py:568
+#: sfd/views/person.py:144
 msgid "Municipality"
 msgstr "市区町村"
 
+#: sfd/forms/person.py:81 sfd/tests/test_person.py:777
 msgid "Search postcode..."
 msgstr "郵便番号の検索"
 
+#: sfd/forms/person.py:114 sfd/tests/test_person.py:721
 msgid "Selected postcode does not exist."
 msgstr "選択された郵便番号は存在しません。"
 
+#: sfd/forms/postcode.py:48 sfd/views/postcode.py:190
 msgid "Prefecture"
 msgstr "都道府県"
 
+#: sfd/forms/postcode.py:49 sfd/forms/postcode.py:98
 msgid "Select Prefecture"
 msgstr "都道府県選択"
 
+#: sfd/forms/postcode.py:158 sfd/tests/test_postcode.py:450
 msgid "Selected municipality does not belong to the selected prefecture."
 msgstr "入力した市区町村の都道府県が間違っております。"
 
+#: sfd/forms/postcode.py:164 sfd/models/municipality.py:15
+#: sfd/tests/test_postcode.py:890 sfd/views/person.py:129
+#: sfd/views/postcode.py:137 sfd/views/postcode.py:213
 msgid "Municipality Name"
 msgstr "市区町村名"
 
+#: sfd/forms/postcode.py:165 sfd/models/municipality.py:16
+#: sfd/tests/test_postcode.py:899
 msgid "Municipality Name Kana"
 msgstr "市区町村名カナ"
 
+#: sfd/forms/search.py:12 sfd/tests/common/test_search_form_mixin.py:46
 msgid "delete"
 msgstr "削除"
 
+#: sfd/models/base.py:24
 msgid "Created By"
 msgstr "作成者"
 
+#: sfd/models/base.py:25
 msgid "Created At"
 msgstr "作成日時"
 
+#: sfd/models/base.py:26
 msgid "Updated By"
 msgstr "更新者"
 
+#: sfd/models/base.py:27 sfd/views/common/mixins.py:668
 msgid "Updated At"
 msgstr "更新日時"
 
+#: sfd/models/base.py:28
 msgid "Delete Flag"
 msgstr "削除フラグ"
 
+#: sfd/models/base.py:73
 msgid "Valid From"
 msgstr "有効開始日"
 
+#: sfd/models/base.py:74
 msgid "Valid To"
 msgstr "有効終了日"
 
+#: sfd/models/base.py:114
 msgid "Valid To must be greater than or equal to Valid From"
 msgstr "有効開始日は有終了日以後を設定してください。"
 
+#: sfd/models/csv_log.py:11 sfd/views/common/upload.py:149
+#: sfd/views/common/upload.py:150 sfd/views/common/upload.py:552
 msgid "Upload"
 msgstr "アップロード"
 
+#: sfd/models/csv_log.py:12 sfd/views/common/download.py:371
 msgid "Download"
 msgstr "ダウンロード"
 
+#: sfd/models/csv_log.py:18
 msgid "Success"
 msgstr "成功"
 
+#: sfd/models/csv_log.py:19
 msgid "Failure"
 msgstr "失敗"
 
+#: sfd/models/csv_log.py:20
 msgid "No Data"
 msgstr "データなし"
 
+#: sfd/models/csv_log.py:26
 msgid "Process ID"
 msgstr "プロセスID"
 
+#: sfd/models/csv_log.py:27
 msgid "Process Type"
 msgstr "プロセスタイプ"
 
+#: sfd/models/csv_log.py:32
 msgid "Process Result"
 msgstr "プロセス結果"
 
+#: sfd/models/csv_log.py:34
 msgid "App Name"
 msgstr "アプリ名"
 
+#: sfd/models/csv_log.py:35
 msgid "Processed By"
 msgstr "処理者"
 
+#: sfd/models/csv_log.py:36
 msgid "Processed At"
 msgstr "処理日時"
 
+#: sfd/models/csv_log.py:37
 msgid "IP Address"
 msgstr "IPアドレス"
 
+#: sfd/models/csv_log.py:38 sfd/views/common/csv_log.py:35
 msgid "File Name"
 msgstr "ファイル名"
 
+#: sfd/models/csv_log.py:39
 msgid "Total Lines"
 msgstr "合計行数"
 
+#: sfd/models/csv_log.py:40
 msgid "Comment"
 msgstr "コメント"
 
+#: sfd/models/csv_log.py:43
 msgid "CSV Log"
 msgstr "CSVログ"
 
+#: sfd/models/csv_log.py:44
 msgid "CSV Logs"
 msgstr "CSVログ一覧"
 
+#: sfd/models/holiday.py:10 sfd/tests/test_holiday.py:34
 msgid "National Holiday"
 msgstr "祝日"
 
+#: sfd/models/holiday.py:11 sfd/tests/test_holiday.py:35
 msgid "Substitute Holiday"
 msgstr "振替休日"
 
+#: sfd/models/holiday.py:12 sfd/tests/test_holiday.py:36
 msgid "Other Holiday"
 msgstr "その他の休日"
 
+#: sfd/models/holiday.py:18
 msgid "date"
 msgstr "日付"
 
+#: sfd/models/holiday.py:19
 msgid "name"
 msgstr "名称"
 
+#: sfd/models/holiday.py:20
 msgid "holiday type"
 msgstr "休日タイプ"
 
+#: sfd/models/holiday.py:21
 msgid "comment"
 msgstr "コメント"
 
+#: sfd/models/holiday.py:21
 msgid "Additional information about the holiday"
 msgstr "祝日・休日の追加説明"
 
+#: sfd/models/holiday.py:25
 msgid "holiday"
 msgstr "祝日・休日"
 
+#: sfd/models/holiday.py:26
 msgid "holidays"
 msgstr "祝日・休日"
 
+#: sfd/models/municipality.py:14
 msgid "Municipality Code"
 msgstr "市区町村コード"
 
+#: sfd/models/municipality.py:17 sfd/views/municipality.py:29
+#: sfd/views/postcode.py:23
 msgid "Prefecture Name"
 msgstr "都道府県名"
 
+#: sfd/models/municipality.py:18
 msgid "Prefecture Name Kana"
 msgstr "都道府県名カナ"
 
+#: sfd/models/municipality.py:23
 msgid "Municipalities"
 msgstr "市区町村"
 
+#: sfd/models/person.py:19 sfd/tests/test_person.py:27
 msgid "Male"
 msgstr "男性"
 
+#: sfd/models/person.py:20 sfd/tests/test_person.py:28
 msgid "Female"
 msgstr "女性"
 
+#: sfd/models/person.py:21 sfd/tests/test_person.py:29
 msgid "Other"
 msgstr "その他"
 
+#: sfd/models/person.py:63
 msgid "Family Name"
 msgstr "苗字"
 
+#: sfd/models/person.py:66
 msgid "Family Name Kana"
 msgstr "苗字カナ"
 
+#: sfd/models/person.py:69
 msgid "Family Name Romaji"
 msgstr "苗字ロマ字"
 
+#: sfd/models/person.py:71
 msgid "Name"
 msgstr "名前"
 
+#: sfd/models/person.py:72
 msgid "Name Kana"
 msgstr "名前カナ"
 
+#: sfd/models/person.py:73
 msgid "Name Romaji"
 msgstr "名前ロマ字"
 
+#: sfd/models/person.py:74
 msgid "Birthday"
 msgstr "誕生日"
 
+#: sfd/models/person.py:75
 msgid "Gender"
 msgstr "性別"
 
+#: sfd/models/person.py:76 sfd/tests/test_user.py:196 sfd/views/user.py:113
 msgid "Email"
 msgstr "Eメール"
 
+#: sfd/models/person.py:78
 msgid "Phone Number"
 msgstr "電話番号"
 
+#: sfd/models/person.py:81
 msgid "Mobile Number"
 msgstr "携帯番号"
 
+#: sfd/models/person.py:85
 msgid "Address Detail"
 msgstr "住所詳細"
 
+#: sfd/models/person.py:88
+#, fuzzy
+#| msgid "Family Name"
+msgid "Family Name Hash"
+msgstr "苗字"
+
+#: sfd/models/person.py:89
+#, fuzzy
+#| msgid "Family Name Kana"
+msgid "Family Name Kana Hash"
+msgstr "苗字カナ"
+
+#: sfd/models/person.py:90
+#, fuzzy
+#| msgid "Family Name Romaji"
+msgid "Family Name Romaji Hash"
+msgstr "苗字ロマ字"
+
+#: sfd/models/person.py:91
+#, fuzzy
+#| msgid "Name Kana"
+msgid "Name Hash"
+msgstr "名前カナ"
+
+#: sfd/models/person.py:92
+#, fuzzy
+#| msgid "Name Kana"
+msgid "Name Kana Hash"
+msgstr "名前カナ"
+
+#: sfd/models/person.py:93
+#, fuzzy
+#| msgid "Name Romaji"
+msgid "Name Romaji Hash"
+msgstr "名前ロマ字"
+
+#: sfd/models/person.py:94
+#, fuzzy
+#| msgid "Email"
+msgid "Email Hash"
+msgstr "Eメール"
+
+#: sfd/models/person.py:95
+#, fuzzy
+#| msgid "Phone Number"
+msgid "Phone Number Hash"
+msgstr "電話番号"
+
+#: sfd/models/person.py:96
+#, fuzzy
+#| msgid "Mobile Number"
+msgid "Mobile Number Hash"
+msgstr "携帯番号"
+
+#: sfd/models/person.py:101 sfd/tests/test_person.py:95
 msgid "Person"
-msgstr "個人"
+msgstr "ダミー個人情報"
 
+#: sfd/models/person.py:102 sfd/tests/test_person.py:96
 msgid "People"
-msgstr "個人"
+msgstr "ダミー個人情報"
 
+#: sfd/models/postcode.py:12
 msgid "Town Name"
 msgstr "町域名"
 
+#: sfd/models/postcode.py:13
 msgid "Town Name Kana"
 msgstr "町域名カナ"
 
+#: sfd/models/postcode.py:17 sfd/tests/test_postcode.py:145
 msgid "Postcodes"
 msgstr "郵便番号"
 
+#: sfd/templates/admin/base.html:29
+#: sfd/templates/admin/django_original/base.html:28
 msgid "Skip to main content"
 msgstr "メインコンテンツにスキップ"
 
+#: sfd/templates/admin/base.html:44
+#: sfd/templates/admin/django_original/base.html:43
 msgid "Welcome,"
 msgstr "ようこそ、"
 
+#: sfd/templates/admin/base.html:49
+#: sfd/templates/admin/django_original/base.html:48
 msgid "View site"
 msgstr "サイトを表示"
 
+#: sfd/templates/admin/base.html:54 sfd/templates/admin/base_site.html:23
+#: sfd/templates/admin/django_original/base.html:53
 msgid "Documentation"
 msgstr "ドキュメント"
 
+#: sfd/templates/admin/base.html:58 sfd/templates/admin/base_site.html:27
+#: sfd/templates/admin/django_original/base.html:57
 msgid "Change password"
 msgstr "パスワード変更"
 
+#: sfd/templates/admin/base.html:62 sfd/templates/admin/base_site.html:31
+#: sfd/templates/admin/django_original/base.html:61
 msgid "Log out"
 msgstr "ログアウト"
 
+#: sfd/templates/admin/base.html:74
+#: sfd/templates/admin/django_original/base.html:73
 msgid "Breadcrumbs"
 msgstr "パンくずリスト"
 
+#: sfd/templates/admin/base.html:77 sfd/templates/admin/change_list.html:32
+#: sfd/templates/admin/django_original/base.html:76
+#: sfd/templates/admin/django_original/change_form.html:18
+#: sfd/templates/admin/django_original/change_list.html:32
+#: sfd/templates/sfd/change_form.html:24
 msgid "Home"
 msgstr "ホーム"
 
+#: sfd/templates/admin/base_site.html:10
+#: sfd/templates/admin/django_original/base_site.html:3
 msgid "Django site admin"
 msgstr "Django サイト管理"
 
+#: sfd/templates/admin/change_list.html:52
+#: sfd/templates/admin/django_original/change_form.html:44
+#: sfd/templates/admin/django_original/change_list.html:52
+#: sfd/templates/registration/login.html:23
+#: sfd/templates/sfd/change_form.html:59
 msgid "Please correct the error below."
 msgid_plural "Please correct the errors below."
 msgstr[0] "下記のエラーを修正してください。"
 
+#: sfd/templates/admin/change_list.html:77
+#: sfd/templates/admin/django_original/change_list.html:77
 msgid "Filter"
 msgstr "フィルター"
 
+#: sfd/templates/admin/change_list.html:80
+#: sfd/templates/admin/django_original/change_list.html:84
 msgid "Clear all filters"
 msgstr "全てのフィルターをクリアする"
 
+#: sfd/templates/admin/django_original/base_site.html:6
 msgid "Django administration"
 msgstr "Django 管理画面"
 
+#: sfd/templates/admin/django_original/change_form.html:21
+#: sfd/templates/sfd/change_form.html:27
 #, python-format
 msgid "Add %(name)s"
 msgstr "%(name)s追加"
 
+#: sfd/templates/admin/django_original/change_list.html:80
 msgid "Hide counts"
 msgstr "数量を非表示"
 
+#: sfd/templates/admin/django_original/change_list.html:81
 msgid "Show counts"
 msgstr "数量を表示する"
 
+#: sfd/templates/admin/django_original/related_widget_wrapper.html:11
 #, python-format
 msgid "Change selected %(model)s"
 msgstr "選択した%(model)sを変更"
 
+#: sfd/templates/admin/django_original/related_widget_wrapper.html:19
 #, python-format
 msgid "Add another %(model)s"
 msgstr "他の%(model)s追加"
 
+#: sfd/templates/admin/django_original/related_widget_wrapper.html:27
 #, python-format
 msgid "Delete selected %(model)s"
 msgstr "選択した%(model)sを削除"
 
+#: sfd/templates/admin/django_original/related_widget_wrapper.html:34
 #, python-format
 msgid "View selected %(model)s"
 msgstr "選択した%(model)sを参照"
 
+#: sfd/templates/admin/django_original/search_form.html:7
+#: sfd/templates/admin/search_form.html:8 sfd/templates/sfd/search.html:21
+#: sfd/templates/sfd/search.html:29
 msgid "Search"
 msgstr "検索"
 
+#: sfd/templates/admin/django_original/search_form.html:9
+#: sfd/templates/admin/search_form.html:10
 #, python-format
 msgid "%(counter)s result"
 msgid_plural "%(counter)s results"
 msgstr[0] "%(counter)s 件の結果"
 
+#: sfd/templates/admin/django_original/search_form.html:9
+#: sfd/templates/admin/search_form.html:10
 #, python-format
 msgid "%(full_result_count)s total"
 msgstr "合計 %(full_result_count)s 件"
 
+#: sfd/templates/admin/django_original/search_form.html:9
+#: sfd/templates/admin/search_form.html:10
 msgid "Show all"
 msgstr "すべて表示"
 
+#: sfd/templates/admin/django_original/submit_line.html:4
+#: sfd/templates/admin/submit_line.html:11
+#: sfd/templates/admin/submit_line.html:13
 msgid "Save"
 msgstr "保存"
 
+#: sfd/templates/admin/django_original/submit_line.html:5
 msgid "Save as new"
 msgstr "新規保存"
 
+#: sfd/templates/admin/django_original/submit_line.html:6
+#: sfd/templates/admin/submit_line.html:12
 msgid "Save and add another"
 msgstr "保存して続けて追加"
 
+#: sfd/templates/admin/django_original/submit_line.html:7
+#: sfd/templates/admin/submit_line.html:14
 msgid "Save and continue editing"
 msgstr "保存して編集を続ける"
 
+#: sfd/templates/admin/django_original/submit_line.html:7
+#: sfd/templates/admin/submit_line.html:14
 msgid "Save and view"
 msgstr "保存して表示"
 
+#: sfd/templates/admin/django_original/submit_line.html:10
+#: sfd/templates/admin/submit_line.html:5 sfd/templates/sfd/change_form.html:82
+#: sfd/templates/sfd/search.html:32
 msgid "Close"
 msgstr "閉じる"
 
+#: sfd/templates/admin/django_original/submit_line.html:14
+#: sfd/templates/admin/submit_line.html:27
+#: sfd/templates/sfd/delete_confirmation.html:44
 msgid "Delete"
 msgstr "削除"
 
+#: sfd/templates/admin/submit_line.html:8
 msgid "Refresh"
 msgstr "再読込"
 
+#: sfd/templates/admin/submit_line.html:13
 msgid "Copy"
 msgstr "コピー新規"
 
+#: sfd/templates/admin/submit_line.html:23
 msgid "Undelete"
 msgstr "削除の取消"
 
+#: sfd/templates/admin/submit_line.html:24
 msgid "Confirm undelete"
 msgstr "削除取消の確認"
 
+#: sfd/templates/admin/submit_line.html:25
 msgid "Are you sure you want to undelete this item?"
 msgstr "削除を取消しますか？"
 
+#: sfd/templates/admin/submit_line.html:28
 msgid "Confirm deletion"
 msgstr "削除の確認"
 
+#: sfd/templates/admin/submit_line.html:29
 msgid "Are you sure you want to delete this item?"
 msgstr "削除しますか？"
 
+#: sfd/templates/registration/login.html:39
 #, python-format
 msgid ""
 "You are authenticated as %(username)s, but are not authorized to access this "
@@ -368,15 +578,19 @@ msgstr ""
 "%(username)s として認証されていますが、このページにアクセスする権限がありませ"
 "ん。別のアカウントでログインしますか？"
 
+#: sfd/templates/registration/login.html:59
 msgid "Forgotten your password or username?"
 msgstr "パスワードまたはユーザー名をお忘れですか？"
 
+#: sfd/templates/registration/login.html:63
 msgid "Log in"
 msgstr "ログイン"
 
+#: sfd/templates/sfd/delete_confirmation.html:4
 msgid "Confirm Deletion"
 msgstr "削除の確認"
 
+#: sfd/templates/sfd/delete_confirmation.html:14
 #, python-format
 msgid "You are about to delete %(counter)s %(opts.verbose_name)s."
 msgid_plural ""
@@ -384,39 +598,54 @@ msgid_plural ""
 msgstr[0] ""
 "下記の%(counter)s件の%(opts.verbose_name_plural)sデータを削除しますか？"
 
+#: sfd/templates/sfd/delete_confirmation.html:17
+#: sfd/templates/sfd/update_confirmation.html:18
 msgid "Selected objects:"
 msgstr "選択された項目："
 
+#: sfd/templates/sfd/delete_confirmation.html:46
+#: sfd/templates/sfd/update_confirmation.html:80
+#: sfd/templates/sfd/upload.html:20
 msgid "Cancel"
 msgstr "キャンセル"
 
+#: sfd/templates/sfd/index.html:39
 msgid "Django Application Successfully Created!"
 msgstr "Djangoアプリケーションが正常に作成されました！"
 
+#: sfd/templates/sfd/index.html:41
 msgid "Project"
 msgstr "プロジェクト"
 
+#: sfd/templates/sfd/index.html:42
 msgid "App"
 msgstr "アプリ"
 
+#: sfd/templates/sfd/index.html:43
 msgid "Database"
 msgstr "データベース"
 
+#: sfd/templates/sfd/index.html:43
 msgid "PostgreSQL configured"
 msgstr "PostgreSQL設定済み"
 
+#: sfd/templates/sfd/index.html:44
 msgid "Environment"
 msgstr "環境"
 
+#: sfd/templates/sfd/index.html:44
 msgid "Virtual environment active"
 msgstr "仮想環境アクティブ"
 
+#: sfd/templates/sfd/index.html:45
 msgid "Linting"
 msgstr "リンティング"
 
+#: sfd/templates/sfd/index.html:45
 msgid "Ruff configured"
 msgstr "Ruff設定済み"
 
+#: sfd/templates/sfd/index.html:48
 msgid ""
 "Your Django application is ready for development. Don't forget to run "
 "migrations!"
@@ -424,27 +653,35 @@ msgstr ""
 "Djangoアプリケーションの開発準備が完了しました。マイグレーションの実行をお忘"
 "れなく！"
 
+#: sfd/templates/sfd/popup_window_static.html:13
 msgid "Yes"
 msgstr "はい"
 
+#: sfd/templates/sfd/popup_window_static.html:14
 msgid "No"
 msgstr "いいえ"
 
+#: sfd/templates/sfd/search.html:31 sfd/views/common/search.py:32
 msgid "Select"
 msgstr "選択"
 
+#: sfd/templates/sfd/search.html:42
 msgid "Search results:"
 msgstr "検索結果："
 
+#: sfd/templates/sfd/search.html:98
 msgid "No results found, try adjusting your search criteria."
 msgstr "検索結果がありません、条件を変えて検索してください。"
 
+#: sfd/templates/sfd/search.html:102
 msgid "Enter search criteria above to search for records."
 msgstr "条件を入力して検索してください。"
 
+#: sfd/templates/sfd/update_confirmation.html:4
 msgid "Confirm Update"
 msgstr "更新の確認"
 
+#: sfd/templates/sfd/update_confirmation.html:14
 #, python-format
 msgid "You are about to update %(counter)s %(opts.verbose_name)s."
 msgid_plural ""
@@ -452,140 +689,183 @@ msgid_plural ""
 msgstr[0] ""
 "下記の%(counter)s件の%(opts.verbose_name_plural)sデータを更新しますか？"
 
+#: sfd/templates/sfd/update_confirmation.html:27
 msgid "Update settings:"
 msgstr "更新の設定："
 
+#: sfd/templates/sfd/update_confirmation.html:31
 msgid "Field to update:"
 msgstr "更新対象項目"
 
+#: sfd/templates/sfd/update_confirmation.html:34
 msgid "-- Select a field --"
 msgstr "-- 項目を選択 --"
 
+#: sfd/templates/sfd/update_confirmation.html:43
 msgid "New value:"
 msgstr "新しい値"
 
+#: sfd/templates/sfd/update_confirmation.html:47
 msgid "Enter the new value"
 msgstr "新しい値を入力してください。"
 
+#: sfd/templates/sfd/update_confirmation.html:52
 msgid "Note:"
 msgstr "注意："
 
+#: sfd/templates/sfd/update_confirmation.html:53
 msgid ""
 "The selected field will be updated to the specified value for all selected "
 "objects."
 msgstr "すべての選択行が新しい値に更新されます。"
 
+#: sfd/templates/sfd/update_confirmation.html:78
 msgid "Update"
 msgstr "更新"
 
+#: sfd/templates/sfd/update_confirmation.html:92 sfd/views/common/mixins.py:336
 msgid "Please select a field to update."
 msgstr "更新対象項目を選択してください。"
 
+#: sfd/templates/sfd/update_confirmation.html:98 sfd/views/common/mixins.py:339
 msgid "Please provide a value."
 msgstr "新しい値を入力してください。"
 
+#: sfd/templates/sfd/update_confirmation.html:103
 msgid "Are you sure you want to update the selected objects?"
 msgstr "選択行を更新しますか？"
 
+#: sfd/templates/sfd/upload.html:34
 msgid "Uploading..."
 msgstr "アップロード中..."
 
+#: sfd/tests/common/test_pdf.py:75 sfd/tests/common/test_pdf.py:723
+#: sfd/tests/common/test_pdf.py:1606 sfd/views/common/pdf.py:25
 msgid "Generate PDF for selected rows"
 msgstr "選択された行のPDFを生成"
 
+#: sfd/tests/common/test_pdf.py:1263 sfd/tests/common/test_pdf.py:1992
+#: sfd/views/common/pdf.py:394
 msgid "No data available for PDF generation."
 msgstr "PDF作成対象となるデータがありません。"
 
+#: sfd/tests/common/test_pdf.py:1457 sfd/tests/common/test_pdf.py:2009
+#: sfd/views/common/pdf.py:402
 msgid "No PDFs were created. Please check the related data."
 msgstr ""
 "PDFファイルが作成されませんでした。作成対象データの有無を再確認してください。"
 
+#: sfd/tests/test_holiday.py:244 sfd/views/holiday.py:46
 msgid "year, name"
 msgstr "年、名称"
 
+#: sfd/tests/test_index.py:69 sfd/tests/test_index.py:87 sfd/views/index.py:70
 msgid "SFD - Django Application"
 msgstr "SFD - Djangoアプリケーション"
 
+#: sfd/tests/test_municipality.py:324 sfd/views/municipality.py:189
 msgid "Select Prefecture first"
 msgstr "都道府県を先に選択してください。"
 
+#: sfd/tests/test_municipality.py:334 sfd/tests/test_municipality.py:351
+#: sfd/views/municipality.py:199
 msgid "Select Municipality"
 msgstr "市区町村選択"
 
+#: sfd/tests/test_postcode.py:257 sfd/views/postcode.py:216
 msgid "Postcode, Municipality Name, Town Name."
 msgstr "郵便番号、市区町村名、町域名"
 
+#: sfd/tests/test_user.py:192 sfd/views/user.py:109
 msgid "Username"
 msgstr "ユーザー名"
 
+#: sfd/tests/test_user.py:193 sfd/views/user.py:110
 msgid "First Name"
 msgstr "名前"
 
+#: sfd/tests/test_user.py:194 sfd/views/user.py:111
 msgid "Last Name"
 msgstr "苗字"
 
+#: sfd/tests/test_user.py:195 sfd/views/user.py:112
 msgid "Last Login"
 msgstr "最終ログイン"
 
+#: sfd/tests/test_user.py:197 sfd/views/user.py:114
 msgid "Is Superuser"
 msgstr "スーパーユーザー"
 
+#: sfd/tests/test_user.py:198 sfd/views/user.py:115
 msgid "Is Staff"
 msgstr "スタッフ"
 
+#: sfd/tests/test_user.py:199 sfd/views/user.py:116
 msgid "Is Active"
 msgstr "有効状態"
 
+#: sfd/tests/test_user.py:200 sfd/views/user.py:117
 msgid "Date Joined"
 msgstr "加入日付"
 
+#: sfd/tests/test_user.py:201 sfd/views/user.py:118
 msgid "Group Name"
 msgstr "グループ名"
 
+#: sfd/tests/test_user.py:202 sfd/views/user.py:119
 msgid "Permission Codename"
 msgstr "権限コード"
 
+#: sfd/tests/test_user.py:203 sfd/views/user.py:120
 msgid "App Label"
 msgstr "アプリ名"
 
+#: sfd/tests/test_user.py:204 sfd/views/user.py:121
 msgid "Model"
 msgstr "データモデル"
 
+#: sfd/views/common/download.py:20
 msgid "Download Selected Rows"
 msgstr "選択行をダウンロード"
 
+#: sfd/views/common/download.py:237
 msgid "No data rows were written to the CSV file."
 msgstr "CSVファイルにデータ行が書き込まれませんでした。"
 
-#, python-brace-format
-msgid "Total {total_lines} data rows were written to the {log_file_name} file."
-msgstr "合計{total_lines}行のデータが{log_file_name}ファイルに書き込まれました。"
-
+#: sfd/views/common/download.py:369
 #, python-brace-format
 msgid "Download {label} File"
 msgstr "{label}ファイルダウンロード"
 
+#: sfd/views/common/download.py:370
 msgid "Are you sure you want to download the file?"
 msgstr "ファイルをダウンロードしてもよろしいですか？"
 
+#: sfd/views/common/mixins.py:50 sfd/views/common/mixins.py:51
+#: sfd/views/common/mixins.py:506
 msgid "No changes detected."
 msgstr "変更がありません。"
 
+#: sfd/views/common/mixins.py:82
 msgid "Delete selected items"
 msgstr "選択行を削除"
 
+#: sfd/views/common/mixins.py:87
 msgid "Update selected items"
 msgstr "選択行を更新"
 
+#: sfd/views/common/mixins.py:114
 #, python-brace-format
 msgid "You have no permission to delete the following {model_name}: {objects}."
 msgstr "削除する権限がありません。{model_name}: {objects}"
 
+#: sfd/views/common/mixins.py:123
 #, python-brace-format
 msgid ""
 "Cannot delete the following {model_name} due to related objects: {objects}"
 msgstr "{model_name}は{objects}より参照されているので削除できません。"
 
+#: sfd/views/common/mixins.py:130 sfd/views/common/mixins.py:287
 #, python-brace-format
 msgid ""
 "Some data of {model_name} could be updated by other users, please refresh "
@@ -594,69 +874,89 @@ msgstr ""
 "一部の{model_name}データが他のユーザーにより更新されたようです。一覧画面を再"
 "読み込みしてください。"
 
+#: sfd/views/common/mixins.py:153
 #, python-brace-format
 msgid "Successfully deleted {count} {model_name}."
 msgstr "{model_name}データを{count}件削除しました。"
 
+#: sfd/views/common/mixins.py:161
 msgid "No data was deleted."
 msgstr "データは削除されませんでした。"
 
+#: sfd/views/common/mixins.py:210 sfd/views/common/mixins.py:789
 #, python-brace-format
 msgid "Concurrent update detected for {obj}."
 msgstr ""
 "他のユーザーが{obj}を更新した可能性があります。処理を再実行してください。"
 
+#: sfd/views/common/mixins.py:216
 #, python-brace-format
 msgid "Field '{field_name}' does not exist."
 msgstr "'{field_name}'という項目はありません。"
 
+#: sfd/views/common/mixins.py:279
 #, python-brace-format
 msgid "You have no permission to update the following {model_name}: {objects}."
 msgstr "更新する権限がありません。{model_name}: {objects}"
 
+#: sfd/views/common/mixins.py:350
 #, python-brace-format
 msgid "Invalid value for field '{field_name}': {error}"
 msgstr "無効な値です。'{field_name}': {error}"
 
+#: sfd/views/common/mixins.py:357
 #, python-brace-format
 msgid "Successfully updated {count} {model_name}."
 msgstr "{model_name}データを{count}件更新しました。"
 
+#: sfd/views/common/mixins.py:368
 #, python-brace-format
 msgid "Error updating records: {error}"
 msgstr "データ更新エラー：{error}"
 
+#: sfd/views/common/mixins.py:444 sfd/views/person.py:179
 msgid "Basic Information"
 msgstr "基本情報"
 
+#: sfd/views/common/mixins.py:550
 #, python-brace-format
 msgid "You can search and filter by {fields}."
 msgstr "{fields}で検索できます。"
 
+#: sfd/views/common/mixins.py:554
 #, python-brace-format
 msgid "List of {model_name}"
 msgstr "{model_name}一覧"
 
+#: sfd/views/common/mixins.py:584 sfd/views/common/mixins.py:590
+#: sfd/views/common/mixins.py:655
 msgid "Deleted"
 msgstr "削除済"
 
+#: sfd/views/common/mixins.py:589
 msgid "Not Deleted"
 msgstr "未削除"
 
+#: sfd/views/common/mixins.py:701
 msgid ""
 "This record has been modified by another user. Please reload and try again."
 msgstr ""
 "他のユーザーによりデータが変更されています。もう一回読み込んでください。"
 
+#: sfd/views/common/mixins.py:704
 msgid "This record has been deleted by another user."
 msgstr "他のユーザーにより当該データが削除されました。"
 
+#: sfd/views/common/mixins.py:723 sfd/views/common/mixins.py:727
+#: sfd/views/common/mixins.py:885
 msgid "Edit Info"
 msgstr "編集情報"
 
+#: sfd/views/common/mixins.py:898
 msgid "Validation Info"
 msgstr "有効状態"
 
+#: sfd/views/common/mixins.py:926
 msgid ""
 "Master data that has already been effective cannot be edited but we can "
 "update it by copying to a new record with a future start date."
@@ -664,64 +964,81 @@ msgstr ""
 "すでに運用中のマスタデータは変更できませんが、発効日を新たに設定することで内"
 "容を変更することができます。"
 
+#: sfd/views/common/mixins.py:938
 msgid "Master data that has already been effective cannot be deleted."
 msgstr "すでに運用中（有効開始日が今日以前）のマスタデータは削除できません。"
 
+#: sfd/views/common/mixins.py:942
 msgid "Master data that has already been effective cannot be changed."
 msgstr "すでに運用中（有効開始日が今日以前）のマスタデータは変更できません。"
 
+#: sfd/views/common/mixins.py:950
 msgid ""
 "There is already master data effective in the past. Please set a future "
 "start date."
 msgstr ""
 "既に有効なマスタデータが存在します。有効開始は未来日を設定してください。"
 
+#: sfd/views/common/mixins.py:998
 #, python-brace-format
 msgid "The {obj_name} was deleted successfully."
 msgstr "{obj_name}を削除しました。"
 
+#: sfd/views/common/pdf.py:439
 #, python-format
 msgid "Issue Date: %s"
 msgstr "印刷日: %s"
 
+#: sfd/views/common/pdf.py:440
 #, python-format
 msgid "Page: %s"
 msgstr "ページ: %s"
 
+#: sfd/views/common/pdf.py:586
 #, python-brace-format
 msgid "Generate {model_name} PDF"
 msgstr "{model_name}のPDFファイル生成"
 
+#: sfd/views/common/pdf.py:587
 msgid "Are you sure you want to generate the PDF file?"
 msgstr "PDFファイルを生成してもよろしいですか？"
 
+#: sfd/views/common/pdf.py:588
 msgid "Generate PDF"
 msgstr "PDF生成"
 
+#: sfd/views/common/upload.py:29
 msgid "CSV"
 msgstr "CSV"
 
+#: sfd/views/common/upload.py:30
 msgid "Excel"
 msgstr "Excel"
 
+#: sfd/views/common/upload.py:31
 msgid "ZIP"
 msgstr "ZIP"
 
+#: sfd/views/common/upload.py:40
 msgid "Select File"
 msgstr "ファイル選択"
 
+#: sfd/views/common/upload.py:41
 msgid "Upload Type"
 msgstr "アップロードタイプ"
 
+#: sfd/views/common/upload.py:42
 msgid "Encoding"
 msgstr "エンコーディング"
 
+#: sfd/views/common/upload.py:200
 #, python-format
 msgid ""
 "Upload completed. Inserted: %(inserted)s rows, Updated: %(updated)s rows."
 msgstr ""
 "アップロードが完了しました。挿入: %(inserted)s 行、更新: %(updated)s 行。"
 
+#: sfd/views/common/upload.py:243
 #, python-format
 msgid ""
 "An unexpected error has occurred. Please contact your system administrator "
@@ -730,20 +1047,26 @@ msgstr ""
 "予期しないエラーが発生しました。システム管理者に連絡し、このエラーキー "
 "[%(error_key)s] をお伝えください。"
 
+#: sfd/views/common/upload.py:318
 msgid "No CSV files found in the ZIP archive."
 msgstr "ZIPファイルの中に処理対象となるCSVファイルがありません。"
 
+#: sfd/views/common/upload.py:380
 msgid "No valid data found in the row."
 msgstr "読み込んだ行データに対象データが含まれておりません。"
 
+#: sfd/views/holiday.py:24
 msgid "year"
 msgstr "年"
 
+#: sfd/views/person.py:125
 msgid "Full Name"
 msgstr "名前"
 
+#: sfd/views/person.py:126
 msgid "Full Name (Kana)"
 msgstr "名前(カナ)"
 
+#: sfd/views/person.py:127
 msgid "Full Name (Romaji)"
 msgstr "名前(ロマ字)"

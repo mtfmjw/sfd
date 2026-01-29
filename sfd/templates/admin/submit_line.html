@@ -10,7 +10,8 @@
     {% if not original or not original.deleted_flg %}
       {% if show_save and not is_not_savable %}<input type="submit" value="{% translate 'Save' %}" class="default" name="_save">{% endif %}
       {% if show_save_and_add_another and not is_not_savable %}<input type="submit" value="{% translate 'Save and add another' %}" name="_addanother">{% endif %}
-      {% if show_save_as_new %}<input type="submit" value={% if show_save %}"{% translate 'Copy' %}"{% else %} {% translate 'Save' %}{% endif %} name="_saveasnew">{% endif %}
+      {% url opts|admin_urlname:'add' as add_url %}
+      {% if show_save_as_new %}<input type="button" onclick="location.href='{% add_preserved_filters add_url %}?source_id={{ original.pk }}'" value="{% translate 'Copy' %}" >{% endif %}
       {% if show_save_and_continue and not is_not_savable %}<input type="submit" value="{% if can_change %}{% translate 'Save and continue editing' %}{% else %}{% translate 'Save and view' %}{% endif %}" name="_continue">{% endif %}
     {% endif %}
     {% if show_delete_link and original %}

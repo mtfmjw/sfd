@@ -90,6 +90,37 @@ class PersonAdminForm(forms.ModelForm):
             if self.instance.municipality:
                 self.initial["municipality_display"] = str(self.instance.municipality)
 
+        # Also populate from initial data if present (for copy mode)
+        if "postcode" in self.initial and self.initial["postcode"]:
+            try:
+                # Handle both ID and object if somehow passed (though typically ID in copy)
+                postcode_val = self.initial["postcode"]
+                postcode_obj = None
+                if isinstance(postcode_val, int) or isinstance(postcode_val, str):  # ID
+                    postcode_obj = Person._meta.get_field("postcode").related_model.objects.get(pk=postcode_val)
+                else:
+                    postcode_obj = postcode_val  # Object
+
+                if postcode_obj:
+                    p_code = postcode_obj.postcode
+                    self.initial["postcode_search"] = f"{p_code[0:3]}-{p_code[3:]}"
+            except Exception:
+                pass  # Fail silently if ID not found or error
+
+        if "municipality" in self.initial and self.initial["municipality"]:
+            try:
+                municipality_val = self.initial["municipality"]
+                municipality_obj = None
+                if isinstance(municipality_val, int) or isinstance(municipality_val, str):  # ID
+                    municipality_obj = Person._meta.get_field("municipality").related_model.objects.get(pk=municipality_val)
+                else:
+                    municipality_obj = municipality_val  # Object
+
+                if municipality_obj:
+                    self.initial["municipality_display"] = str(municipality_obj)
+            except Exception:
+                pass
+
     def clean(self):
         """Validate form data.
 
@@ -107,8 +138,11 @@ class PersonAdminForm(forms.ModelForm):
         if postcode:
             try:
                 postcode_instance = Person._meta.get_field("postcode").related_model.objects.get(postcode=postcode)  # type: ignore
-                self.instance.postcode = postcode_instance
-                self.instance.municipality = postcode_instance.municipality
+                cleaned_data["postcode"] = postcode_instance
+                cleaned_data["municipality"] = postcode_instance.municipality
+                if hasattr(self, "instance"):
+                    self.instance.postcode = postcode_instance
+                    self.instance.municipality = postcode_instance.municipality
 
             except Person._meta.get_field("postcode").related_model.DoesNotExist as e:  # type: ignore
                 raise forms.ValidationError(_("Selected postcode does not exist.")) from e
