@@ -15,7 +15,7 @@ from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.translation import gettext as _
 
-from sfd.models.base import BaseModel, MasterModel
+from sfd.models.base import BaseModel, MasterModel, default_valid_from_date, default_valid_to_date
 
 logger = logging.getLogger(__name__)
 
@@ -928,6 +928,15 @@ class MasterModelAdminMixin(BaseModelAdminMixin):
 
             def clean(self):
                 cleaned_data = super().clean()
+
+                # Fix for "Save as new" creating immutable past records
+                if request.method == "POST" and "_saveasnew" in request.POST:
+                    cleaned_data["valid_from"] = default_valid_from_date()
+                    cleaned_data["valid_to"] = default_valid_to_date()
+                    # Also update instance to ensure subsequent checks pass
+                    if hasattr(self, "instance"):
+                        self.instance.valid_from = cleaned_data["valid_from"]
+                        self.instance.valid_to = cleaned_data["valid_to"]
 
                 valid_from = cleaned_data.get("valid_from")
 

@@ -357,11 +357,11 @@ msgstr "携帯番号"
 
 #: sfd/models/person.py:101 sfd/tests/test_person.py:95
 msgid "Person"
-msgstr "個人"
+msgstr "ダミー個人情報"
 
 #: sfd/models/person.py:102 sfd/tests/test_person.py:96
 msgid "People"
-msgstr "個人"
+msgstr "ダミー個人情報"
 
 #: sfd/models/postcode.py:12
 msgid "Town Name"

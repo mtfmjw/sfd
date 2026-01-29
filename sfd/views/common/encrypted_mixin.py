@@ -84,19 +84,17 @@ class EncryptedFieldAdminMixin:
         return form
 
     def has_add_permission(self, request):
-        if not self.has_view_encrypted_permission(request):
-            return False
-        return super().has_add_permission(request)  # type: ignore
+        permission = self.has_view_encrypted_permission(request) & super().has_add_permission(request)  # type: ignore
+        return permission
 
     def has_change_permission(self, request, obj=None):
-        if not self.has_view_encrypted_permission(request):
-            return False
-        return super().has_change_permission(request, obj)  # type: ignore
+        permission = self.has_view_encrypted_permission(request) & super().has_change_permission(request, obj)  # type: ignore
+        return permission
 
     def has_delete_permission(self, request, obj=None):
-        if not self.has_view_encrypted_permission(request):
-            return False
-        return super().has_delete_permission(request, obj)  # type: ignore
+        permission = self.has_view_encrypted_permission(request) & super().has_delete_permission(request, obj)  # type: ignore
+
+        return permission
 
     def get_actions(self, request):
         actions = super().get_actions(request)  # type: ignore

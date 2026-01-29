@@ -107,8 +107,11 @@ class PersonAdminForm(forms.ModelForm):
         if postcode:
             try:
                 postcode_instance = Person._meta.get_field("postcode").related_model.objects.get(postcode=postcode)  # type: ignore
-                self.instance.postcode = postcode_instance
-                self.instance.municipality = postcode_instance.municipality
+                cleaned_data["postcode"] = postcode_instance
+                cleaned_data["municipality"] = postcode_instance.municipality
+                if hasattr(self, "instance"):
+                    self.instance.postcode = postcode_instance
+                    self.instance.municipality = postcode_instance.municipality
 
             except Person._meta.get_field("postcode").related_model.DoesNotExist as e:  # type: ignore
                 raise forms.ValidationError(_("Selected postcode does not exist.")) from e
