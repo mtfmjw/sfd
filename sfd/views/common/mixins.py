@@ -898,6 +898,29 @@ class MasterModelAdminMixin(BaseModelAdminMixin):
         validation_info = [(_("Validation Info"), {"fields": (("valid_from", "valid_to"),)})]
         return validation_info + fieldsets
 
+    def get_changeform_initial_data(self, request):
+        """Pre-populate default validity period for new records."""
+        initial = super().get_changeform_initial_data(request)  # type: ignore[misc]
+
+        if "source_id" in request.GET:
+            source_id = request.GET.get("source_id")
+            try:
+                obj = self.model.objects.get(pk=source_id)
+                from django.forms.models import model_to_dict
+
+                # Exclude primary keys, audit fields, and validity period
+                exclude = ["id", "pk", "created_by", "created_at", "updated_by", "updated_at", "deleted_flg", "valid_from", "valid_to"]
+                data = model_to_dict(obj, exclude=exclude)
+                initial.update(data)
+            except self.model.DoesNotExist:
+                pass
+
+        if "valid_from" not in initial:
+            initial["valid_from"] = default_valid_from_date()
+        if "valid_to" not in initial:
+            initial["valid_to"] = default_valid_to_date()
+        return initial
+
     def get_list_display(self, request) -> list[str]:
         list_display = super().get_list_display(request)  # type: ignore[misc]
         field_names = ["valid_from", "valid_to"]
@@ -915,8 +938,13 @@ class MasterModelAdminMixin(BaseModelAdminMixin):
         form_class = super().get_form(request, obj=obj, change=change, **kwargs)  # type: ignore[misc]
 
         class MasterModelForm(form_class):
+            source_id = forms.CharField(widget=forms.HiddenInput(), required=False)
+
             def __init__(self, *args, **kwargs):
                 super().__init__(*args, **kwargs)
+
+                if "source_id" in request.GET:
+                    self.fields["source_id"].initial = request.GET.get("source_id")
 
                 # 有効開始日が過去日（今日も含む）の場合、編集不可の旨をヘルプテキストに表示
                 if "instance" in kwargs and kwargs["instance"]:
@@ -961,6 +989,24 @@ class MasterModelAdminMixin(BaseModelAdminMixin):
                 return cleaned_data
 
         return MasterModelForm
+
+    def save_model(self, request, obj, form, change) -> None:
+        """Override save_model to update valid_to of source record during copy."""
+        super().save_model(request, obj, form, change)  # type: ignore[misc]
+
+        if not change:
+            source_id = form.cleaned_data.get("source_id")
+            if source_id:
+                try:
+                    previous = self.model.objects.get(pk=source_id)
+                    if previous.pk != obj.pk and previous.valid_to >= obj.valid_from:
+                        # Update the source record's valid_to to be the day before the new record's valid_from(obj.valid_from)
+                        previous.valid_to = obj.valid_from - timezone.timedelta(days=1)
+                        previous.updated_by = request.user.username
+                        previous.updated_at = timezone.now()
+                        previous.save()  # type: ignore[misc]
+                except self.model.DoesNotExist:
+                    pass
 
     def changeform_view(self, request, object_id=None, form_url="", extra_context=None) -> TemplateResponse:
         """Override changeform view to handle delete button clicks.
